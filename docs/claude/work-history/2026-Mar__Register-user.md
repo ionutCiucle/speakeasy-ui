@@ -120,3 +120,14 @@ Hook at the same level as `useAuthActions`. Exports async actions with `useCallb
 ### Step 4 — Update `LoginPage` and `RegisterPage` ✅
 
 Both components now use `useAuthAsyncActions`. No direct `AuthAPI` or `saveToken` calls in components. Navigation and error display driven by the returned boolean.
+
+---
+
+## BE compatibility fixes
+
+Cross-checked against `speakeasy-be` auth controller. Two mismatches found and fixed:
+
+1. **Login field name** — `LoginPage` was sending `username`; BE expects `email`. Renamed state, field, and async action arg to `email`.
+2. **Response shape** — BE returns `{ token, user: { id, email } }`, not `{ token, userId }`. Updated `AuthResponse` interface in `asyncActions.ts` and mapped `data.user.id` → `userId` in both login and register dispatch payloads.
+
+JWT payload uses `userId` claim (not `sub`) — matches `useAuthTokenRehydration` which already reads `payload.userId`.

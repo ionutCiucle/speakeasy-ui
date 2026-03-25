@@ -11,7 +11,7 @@ import { Color, flex } from '../../styles';
 import { useAuthAsyncActions } from '../../state-management/auth';
 
 export function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuthAsyncActions();
@@ -19,13 +19,13 @@ export function LoginPage() {
 
   const handleLogin = useCallback(async () => {
     setError(null);
-    const success = await login({ username, password });
+    const success = await login({ email, password });
     if (success) {
       navigate('/home');
     } else {
       setError('Login failed. Please check your credentials.');
     }
-  }, [username, password, login, navigate]);
+  }, [email, password, login, navigate]);
 
   const handleGoogleLogin = useCallback(() => {
     // TODO: implement Google login
@@ -42,11 +42,12 @@ export function LoginPage() {
       <View style={styles.form}>
         <TextInput
           style={styles.input}
-          placeholder="Username"
+          placeholder="Email"
           placeholderTextColor={Color.RaisinBlackLight}
           autoCapitalize="none"
-          value={username}
-          onChangeText={setUsername}
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
         />
 
         <TextInput

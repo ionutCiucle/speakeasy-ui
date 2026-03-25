@@ -3,23 +3,23 @@ import { AppAction } from '../store';
 import { AuthActionType } from './enums';
 import { AuthAPI, saveToken, removeToken } from '../../services';
 
-interface AuthPayload {
-  userId: string;
+interface AuthResponse {
   token: string;
+  user: { id: string; email: string };
 }
 
 export const loginAsyncAction = (dispatch: Dispatch<AppAction>) => async ({
-  username,
+  email,
   password,
 }: {
-  username: string;
+  email: string;
   password: string;
 }) => {
   dispatch({ type: AuthActionType.LoginPending });
   try {
-    const { data } = await AuthAPI.post<AuthPayload>('/login', { username, password });
+    const { data } = await AuthAPI.post<AuthResponse>('/login', { email, password });
     await saveToken(data.token);
-    dispatch({ type: AuthActionType.LoginSuccess, payload: data });
+    dispatch({ type: AuthActionType.LoginSuccess, payload: { userId: data.user.id, token: data.token } });
     return true;
   } catch {
     dispatch({ type: AuthActionType.LoginFailure });
@@ -41,9 +41,9 @@ export const registerAsyncAction = (dispatch: Dispatch<AppAction>) => async ({
 }) => {
   dispatch({ type: AuthActionType.RegisterPending });
   try {
-    const { data } = await AuthAPI.post<AuthPayload>('/register', { email, password });
+    const { data } = await AuthAPI.post<AuthResponse>('/register', { email, password });
     await saveToken(data.token);
-    dispatch({ type: AuthActionType.RegisterSuccess, payload: data });
+    dispatch({ type: AuthActionType.RegisterSuccess, payload: { userId: data.user.id, token: data.token } });
     return true;
   } catch {
     dispatch({ type: AuthActionType.RegisterFailure });
