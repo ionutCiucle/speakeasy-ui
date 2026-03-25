@@ -13,17 +13,32 @@ Custom Redux-like state management using React Context and `useReducer`. No exte
 | `useAppSelector` | `useSelector` | `providerHooks.ts` |
 | `useAppDispatch` | `useDispatch` | `providerHooks.ts` |
 
+## Conventions
+
+### Action type casing
+
+Action type enum entries use **PascalCase**, prefixed with the **PascalCase slice name**:
+
+```ts
+export enum AuthActionType {
+  SetUsername = 'Auth/SetUsername',
+}
+```
+
+Pattern: `'SliceName/ActionName'` — both parts PascalCase, separated by `/`.
+
 ## Slice structure
 
 Each feature domain gets a directory under `src/state-management/`:
 
 ```
 <slice>/
-  enums.ts     - ActionType enum (prefix: 'SLICE_NAME/')
-  types.ts     - SliceState, individual action interfaces, SliceAction union
-  reducer.ts   - sliceReducer + sliceInitialState
-  actions.ts   - action creator functions  (to be added)
-  index.ts     - re-exports everything above
+  enums.ts        - ActionType enum
+  types.ts        - SliceState, individual action interfaces, SliceAction union
+  reducer.ts      - sliceReducer + sliceInitialState
+  hooks/
+    use<Slice>Actions.ts  - action dispatch hook (see below)
+  index.ts        - re-exports everything above
 ```
 
 ### Adding a new slice
@@ -38,6 +53,38 @@ Each feature domain gets a directory under `src/state-management/`:
 
 ## Hooks
 
+### `use<Slice>Actions`
+
+Each slice exposes a dedicated actions hook in `<slice>/hooks/use<Slice>Actions.ts`. This is the **only way consumers should dispatch actions** — they never call `useAppDispatch` directly or construct raw action objects.
+
+```ts
+// src/state-management/auth/hooks/useAuthActions.ts
+export function useAuthActions() {
+  const dispatch = useAppDispatch();
+
+  const setUsername = useCallback(
+    (username: string) => {
+      dispatch({ type: AuthActionType.SetUsername, payload: username });
+    },
+    [dispatch],
+  );
+
+  return { setUsername };
+}
+```
+
+Consumer usage:
+
+```ts
+const { setUsername } = useAuthActions();
+setUsername('alice');
+```
+
+Rules:
+- Wrap every action in a `useCallback` with `[dispatch]` as the dependency (dispatch is stable).
+- Return all actions as a plain object.
+- Export from the slice's `index.ts`.
+
 ### `useAppSelector`
 
 ```ts
@@ -48,14 +95,9 @@ Memoizes the selected value via `useRef`. The component only re-renders when the
 
 ### `useAppDispatch`
 
-```ts
-const dispatch = useAppDispatch();
-dispatch({ type: AuthActionType.SET_USERNAME, payload: 'alice' });
-```
+Internal hook — not for direct use in components. Use a slice's `use<Slice>Actions` hook instead.
 
 ## Known limitations / planned improvements
 
 - `useAppSelector` equality check: replace `JSON.stringify` with `shallowEqual`.
-- Action creators (`actions.ts`) not yet added to the `auth` slice.
-- State and dispatch contexts should be split so dispatch-only consumers don't re-render on state changes.
 - Sub-reducer `as SliceAction` casts in `store.ts` should be replaced with `SliceAction | { type: string }` signatures to avoid unsafe narrowing.

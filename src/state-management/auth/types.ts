@@ -5,7 +5,7 @@ export interface AuthState {
 }
 
 export interface SetUsernameAction {
-  type: AuthActionType.SET_USERNAME;
+  type: AuthActionType.SetUsername;
   payload: string;
 }
 

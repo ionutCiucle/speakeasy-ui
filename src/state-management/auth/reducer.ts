@@ -7,7 +7,7 @@ export const authInitialState: AuthState = {
 
 export function authReducer(state: AuthState = authInitialState, action: AuthAction): AuthState {
   switch (action.type) {
-    case AuthActionType.SET_USERNAME:
+    case AuthActionType.SetUsername:
       return { ...state, username: action.payload };
     default:
       return state;
