@@ -7,19 +7,24 @@ import { useAuthAsyncActions } from '../../state-management/auth';
 export function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const { register } = useAuthAsyncActions();
   const navigate = useNavigate();
 
   const handleRegister = useCallback(async () => {
     setError(null);
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
     const success = await register({ email, password });
     if (success) {
       navigate('/home');
     } else {
       setError('Registration failed. Please try again.');
     }
-  }, [email, password, register, navigate]);
+  }, [email, password, confirmPassword, register, navigate]);
 
   return (
     <View style={styles.container}>
@@ -43,6 +48,15 @@ export function RegisterPage() {
           secureTextEntry
           value={password}
           onChangeText={setPassword}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm password"
+          placeholderTextColor={Color.RaisinBlackLight}
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
         />
 
         {error && <Text style={styles.error}>{error}</Text>}
