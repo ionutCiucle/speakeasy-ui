@@ -24,6 +24,7 @@ export function useAuthTokenRehydration() {
       if (token && !isTokenExpired(token)) {
         const payload = JSON.parse(atob(token.split('.')[1]));
         registerSuccess(payload.sub ?? payload.userId, token);
+        navigate('/home');
       } else {
         await removeToken();
         navigate('/');

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { useNavigate } from 'react-router-native';
+import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '../../styles';
 import { useAuthAsyncActions } from '../../state-management/auth';
 
@@ -78,6 +78,10 @@ export function LoginPage() {
         <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
           <Text style={styles.googleButtonText}>Log in with Google</Text>
         </TouchableOpacity>
+
+        <Link to="/register" style={styles.createAccount}>
+          <Text style={styles.createAccountText}>Don't have an account? Create one</Text>
+        </Link>
       </View>
     </View>
   );
@@ -157,5 +161,13 @@ const styles = StyleSheet.create({
     color: Color.RaisinBlack,
     fontSize: 16,
     fontWeight: '600',
+  },
+  createAccount: {
+    marginTop: 24,
+    alignItems: 'center',
+  },
+  createAccountText: {
+    color: Color.RaisinBlackLight,
+    fontSize: 14,
   },
 });

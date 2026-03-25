@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-native';
 import { LoginPage } from './features/Auth/LoginPage';
 import { RegisterPage } from './features/Auth/RegisterPage';
+import { HomePage } from './features/Home/HomePage';
 import { useAuthTokenRehydration } from './features/Auth/hooks/useAuthTokenRehydration';
 
 export function AppRoutes() {
@@ -14,6 +15,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/home" element={<HomePage />} />
     </Routes>
   );
 }
