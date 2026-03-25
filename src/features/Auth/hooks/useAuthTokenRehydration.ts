@@ -27,7 +27,6 @@ export function useAuthTokenRehydration() {
         navigate('/home');
       } else {
         await removeToken();
-        navigate('/');
       }
     } finally {
       setIsReady(true);
