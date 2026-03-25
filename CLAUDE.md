@@ -18,7 +18,7 @@ React Native mobile app built with Expo.
 
 `App.tsx` → `src/Root.tsx`
 
-`Root.tsx` sets up the navigation shell (`NavigationContainer` + `NativeRouter`) and is where routes are registered.
+`Root.tsx` sets up the navigation shell (`NavigationContainer` + `NativeRouter`) and renders `<AppRoutes />`. Routes are registered in `AppRoutes.tsx`, not `Root.tsx`.
 
 ### State management
 
@@ -74,5 +74,8 @@ src/
 
 - [State Management](docs/claude/state-management.md)
 - [Services](docs/claude/services.md)
+- [Navigation](docs/claude/navigation.md)
+- [Styling](docs/claude/styling.md)
 - [Best Practices](docs/claude/best-practices.md)
+- [Contributing](docs/claude/contributing.md)
 - [Work History](docs/claude/work-history/)
