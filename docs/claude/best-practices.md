@@ -32,3 +32,16 @@ import { useAuthAsyncActions } from './hooks/useAuthAsyncActions';
 ```
 
 This applies everywhere: `hooks/`, `services/`, slice directories, etc.
+
+## Always use `Color.*` tokens for colours
+
+Import colours from `src/styles.ts` — never hardcode hex values or named CSS colours in stylesheets.
+
+```ts
+// ✅ correct
+color: Color.Flame
+
+// ❌ wrong
+color: '#e4572e'
+color: 'red'
+```
