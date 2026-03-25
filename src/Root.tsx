@@ -1,16 +1,14 @@
-import { NativeRouter, Route, Routes } from 'react-router-native';
+import { NativeRouter } from 'react-router-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppProvider } from './state-management/Provider';
-import { LoginPage } from './features/Auth/LoginPage';
+import { AppRoutes } from './AppRoutes';
 
 export const Root = () => {
   return (
     <AppProvider>
       <NavigationContainer>
         <NativeRouter>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-          </Routes>
+          <AppRoutes />
         </NativeRouter>
       </NavigationContainer>
     </AppProvider>

@@ -93,9 +93,35 @@ const username = useAppSelector(state => state.auth.username);
 
 Memoizes the selected value via `useRef`. The component only re-renders when the selected value changes. Currently uses `JSON.stringify` for equality — a `shallowEqual` utility is planned (see work history).
 
+### `use<Slice>AsyncActions`
+
+Each slice that makes API calls exposes an async actions hook in `<slice>/hooks/use<Slice>AsyncActions.ts`. Components use this instead of calling APIs directly.
+
+Async action creators live in `<slice>/asyncActions.ts` and follow the curried pattern `(dispatch) => async (args) => { ... }`. Each dispatches three actions — pending, success, failure — directly via `dispatch({ type, payload })`. They return `true`/`false` so the component can react (e.g. navigate on success, show error on failure).
+
+The hook wires dispatch in using `useCallback(asyncAction(dispatch), [dispatch])`:
+
+```ts
+// src/state-management/auth/hooks/useAuthAsyncActions.ts
+export function useAuthAsyncActions() {
+  const dispatch = useAppDispatch();
+
+  const login = useCallback(loginAsyncAction(dispatch), [dispatch]);
+  const register = useCallback(registerAsyncAction(dispatch), [dispatch]);
+
+  return { login, register };
+}
+```
+
+Rules:
+- Components never import `AuthAPI` or call `saveToken` directly — async actions own that.
+- Each async action must dispatch pending before the call and success/failure after.
+- Every async action type needs a Pending variant in the slice's enum, and the reducer must handle it (typically sets `isLoading: true`).
+- Export from the slice's `index.ts`.
+
 ### `useAppDispatch`
 
-Internal hook — not for direct use in components. Use a slice's `use<Slice>Actions` hook instead.
+Internal hook — not for direct use in components. Use a slice's `use<Slice>Actions` or `use<Slice>AsyncActions` hook instead.
 
 ## Known limitations / planned improvements
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -6,23 +6,34 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { useNavigate } from 'react-router-native';
 import { Color, flex } from '../../styles';
+import { useAuthAsyncActions } from '../../state-management/auth';
 
 export function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const { login } = useAuthAsyncActions();
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // TODO: implement login
-  };
+  const handleLogin = useCallback(async () => {
+    setError(null);
+    const success = await login({ username, password });
+    if (success) {
+      navigate('/home');
+    } else {
+      setError('Login failed. Please check your credentials.');
+    }
+  }, [username, password, login, navigate]);
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = useCallback(() => {
     // TODO: implement Google login
-  };
+  }, []);
 
-  const handleForgotPassword = () => {
+  const handleForgotPassword = useCallback(() => {
     // TODO: implement forgot password
-  };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -46,6 +57,8 @@ export function LoginPage() {
           value={password}
           onChangeText={setPassword}
         />
+
+        {error && <Text style={styles.error}>{error}</Text>}
 
         <TouchableOpacity onPress={handleForgotPassword}>
           <Text style={styles.forgotPassword}>Forgot my password</Text>
@@ -84,6 +97,11 @@ const styles = StyleSheet.create({
   },
   form: {
     width: '100%',
+  },
+  error: {
+    color: 'red',
+    fontSize: 14,
+    marginBottom: 12,
   },
   input: {
     borderWidth: 1,

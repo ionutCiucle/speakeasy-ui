@@ -1,4 +1,4 @@
-# 2026-Mar — State Management Foundation
+# 2026-Mar__State-management-foundation
 
 ## What was done
 
