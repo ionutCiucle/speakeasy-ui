@@ -137,6 +137,48 @@ Label + `TextInput` combo, always rendered together.
 - Input: `Color.Ivory` background, `Color.Sand` border, Inter Regular 15px, `Color.Espresso` text
 - `marginBottom: 16` included in the component
 
+### `BracketContainer`
+
+Wraps screen content between the gold top/bottom bars and renders all 8 bracket corner pieces internally. Replaces 10 Views and 11 style definitions per screen.
+
+```tsx
+<BracketContainer bracketSize={35}>
+  {/* screen content */}
+</BracketContainer>
+```
+
+- `bracketSize` defaults to `25`. SplashPage uses `35`.
+- Bracket thickness and offset (20px from edge) are fixed.
+- Absolute positioning is an internal implementation detail — screens don't need to know about it.
+
+### `Logo`
+
+The stylised "S" with three decorative gold dots. Dot sizes and positions scale proportionally from the 112px base.
+
+```tsx
+<Logo />                          // 112px — SplashPage
+<Logo size={52} marginBottom={8} /> // 52px  — LoginPage
+```
+
+- `size` defaults to `112`
+- `marginBottom` is optional
+
+---
+
+## Directory conventions
+
+### `src/features/Auth/index.ts`
+
+Re-exports all Auth screen components. Consumers import from the directory, never from individual files:
+
+```ts
+// ✅ correct
+import { SplashPage, LoginPage, RegisterPage, ForgotPasswordPage } from './features/Auth';
+
+// ❌ wrong
+import { LoginPage } from './features/Auth/LoginPage';
+```
+
 ---
 
 ## Packages installed
