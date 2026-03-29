@@ -28,8 +28,8 @@ export function LoginPage() {
   }, [email, password, login, navigate]);
 
   const handleForgotPassword = useCallback(() => {
-    // TODO: implement forgot password
-  }, []);
+    navigate('/forgot-password');
+  }, [navigate]);
 
   return (
     <View style={styles.container}>
