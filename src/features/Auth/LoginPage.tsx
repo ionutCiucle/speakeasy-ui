@@ -35,8 +35,18 @@ export function LoginPage() {
     <View style={styles.container}>
       <View style={styles.topBar} />
 
+      <View style={styles.cornerBracketTopLeft} />
+      <View style={styles.cornerBracketTopLeftVertical} />
+      <View style={styles.cornerBracketTopRight} />
+      <View style={styles.cornerBracketTopRightVertical} />
+
       <View style={styles.content}>
-        <Text style={styles.logo}>S</Text>
+        <View style={styles.logoContainer}>
+          <Text style={styles.logo}>S</Text>
+          <View style={styles.dotLarge} />
+          <View style={styles.dotMedium} />
+          <View style={styles.dotSmall} />
+        </View>
 
         <Text style={styles.title}>Welcome Back</Text>
 
@@ -50,7 +60,7 @@ export function LoginPage() {
           <TextInput
             style={styles.input}
             placeholder="your@email.com"
-            placeholderTextColor={Color.RaisinBlackLight}
+            placeholderTextColor={Color.Sand}
             autoCapitalize="none"
             keyboardType="email-address"
             value={email}
@@ -60,8 +70,8 @@ export function LoginPage() {
           <Text style={styles.label}>PASSWORD</Text>
           <TextInput
             style={styles.input}
-            placeholder="••••••••••"
-            placeholderTextColor={Color.RaisinBlackLight}
+            placeholder="••••••••"
+            placeholderTextColor={Color.Sand}
             secureTextEntry
             value={password}
             onChangeText={setPassword}
@@ -92,15 +102,15 @@ export function LoginPage() {
         </View>
       </View>
 
+      <View style={styles.bottomBar} />
+
       <View style={styles.cornerBracketBottomLeft} />
+      <View style={styles.cornerBracketBottomLeftVertical} />
       <View style={styles.cornerBracketBottomRight} />
+      <View style={styles.cornerBracketBottomRightVertical} />
     </View>
   );
 }
-
-const BRACKET_SIZE = 24;
-const BRACKET_THICKNESS = 2;
-const BRACKET_MARGIN = 16;
 
 const styles = StyleSheet.create({
   container: {
@@ -111,22 +121,126 @@ const styles = StyleSheet.create({
     height: 4,
     backgroundColor: Color.Gold,
   },
+  bottomBar: {
+    height: 4,
+    backgroundColor: Color.Gold,
+  },
+  // Top-left bracket
+  cornerBracketTopLeft: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    width: 25,
+    height: 1.5,
+    backgroundColor: Color.Gold,
+  },
+  cornerBracketTopLeftVertical: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    width: 1.5,
+    height: 25,
+    backgroundColor: Color.Gold,
+  },
+  // Top-right bracket
+  cornerBracketTopRight: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    width: 25,
+    height: 1.5,
+    backgroundColor: Color.Gold,
+  },
+  cornerBracketTopRightVertical: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    width: 1.5,
+    height: 25,
+    backgroundColor: Color.Gold,
+  },
+  // Bottom-left bracket
+  cornerBracketBottomLeft: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    width: 25,
+    height: 1.5,
+    backgroundColor: Color.Gold,
+  },
+  cornerBracketBottomLeftVertical: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    width: 1.5,
+    height: 25,
+    backgroundColor: Color.Gold,
+  },
+  // Bottom-right bracket
+  cornerBracketBottomRight: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 25,
+    height: 1.5,
+    backgroundColor: Color.Gold,
+  },
+  cornerBracketBottomRightVertical: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 1.5,
+    height: 25,
+    backgroundColor: Color.Gold,
+  },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: 31.5,
     paddingTop: 48,
     alignItems: 'center',
   },
-  logo: {
-    fontSize: 56,
-    fontStyle: 'italic',
-    color: Color.Gold,
+  logoContainer: {
+    position: 'relative',
     marginBottom: 8,
   },
+  logo: {
+    fontFamily: 'CormorantGaramond_700Bold',
+    fontSize: 52,
+    lineHeight: 63,
+    color: Color.Gold,
+  },
+  dotLarge: {
+    position: 'absolute',
+    width: 5.72,
+    height: 5.72,
+    borderRadius: 2.86,
+    backgroundColor: Color.Gold,
+    top: 11,
+    left: 19,
+  },
+  dotMedium: {
+    position: 'absolute',
+    width: 3.89,
+    height: 3.89,
+    borderRadius: 1.95,
+    backgroundColor: Color.Gold,
+    top: 6,
+    left: 28,
+  },
+  dotSmall: {
+    position: 'absolute',
+    width: 2.4,
+    height: 2.4,
+    borderRadius: 1.2,
+    backgroundColor: Color.Gold,
+    top: 2,
+    left: 34,
+  },
   title: {
-    fontSize: 32,
-    fontWeight: '600',
-    color: Color.RaisinBlack,
+    fontFamily: 'CormorantGaramond_600SemiBold',
+    fontSize: 30,
+    lineHeight: 36,
+    color: Color.Espresso,
     marginBottom: 4,
   },
   subtitleContainer: {
@@ -134,60 +248,69 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   subtitle: {
-    fontSize: 13,
-    fontWeight: '600',
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 11,
+    lineHeight: 13,
     color: Color.Gold,
     letterSpacing: 4,
-    marginBottom: 6,
+    marginBottom: 8,
   },
   subtitleUnderline: {
-    width: 120,
+    width: 100,
     height: 1,
-    backgroundColor: Color.Gold,
+    backgroundColor: Color.Sand,
   },
   form: {
     width: '100%',
   },
   label: {
+    fontFamily: 'Inter_500Medium',
     fontSize: 11,
-    fontWeight: '600',
-    color: Color.RaisinBlack,
+    lineHeight: 13,
+    color: Color.WarmBrown,
     letterSpacing: 1.5,
     marginBottom: 6,
   },
   input: {
-    backgroundColor: Color.White,
+    backgroundColor: Color.Ivory,
     borderWidth: 1,
-    borderColor: Color.Cream,
-    borderRadius: 8,
+    borderColor: Color.Sand,
+    borderRadius: 10,
     paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
-    color: Color.RaisinBlack,
+    paddingVertical: 17,
+    fontFamily: 'Inter_400Regular',
+    fontSize: 15,
+    lineHeight: 18,
+    color: Color.Espresso,
     marginBottom: 16,
   },
   forgotPassword: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 13,
+    lineHeight: 16,
     color: Color.Gold,
-    fontSize: 14,
     textAlign: 'right',
-    marginBottom: 24,
+    marginBottom: 28,
   },
   error: {
     color: 'red',
+    fontFamily: 'Inter_400Regular',
     fontSize: 14,
     marginBottom: 12,
   },
   loginButton: {
     backgroundColor: Color.Gold,
-    borderRadius: 8,
-    paddingVertical: 16,
+    borderRadius: 10,
+    paddingVertical: 17,
     alignItems: 'center',
     marginBottom: 20,
   },
   loginButtonText: {
-    color: Color.White,
+    fontFamily: 'Inter_600SemiBold',
     fontSize: 16,
-    fontWeight: '600',
+    lineHeight: 19,
+    letterSpacing: 0.5,
+    color: Color.White,
   },
   divider: {
     ...flex('row', 'center', 'center'),
@@ -197,41 +320,27 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Color.RaisinBlackLight,
+    backgroundColor: Color.Sand,
   },
   dividerText: {
-    color: Color.RaisinBlack,
-    fontSize: 14,
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    lineHeight: 16,
+    color: Color.WarmBrown,
   },
   createAccountRow: {
     ...flex('row', 'center', 'center'),
   },
   createAccountText: {
-    color: Color.RaisinBlack,
+    fontFamily: 'Inter_400Regular',
     fontSize: 14,
+    lineHeight: 17,
+    color: Color.WarmBrown,
   },
   createAccountLink: {
-    color: Color.Gold,
+    fontFamily: 'Inter_400Regular',
     fontSize: 14,
-  },
-  cornerBracketBottomLeft: {
-    position: 'absolute',
-    bottom: BRACKET_MARGIN,
-    left: BRACKET_MARGIN,
-    width: BRACKET_SIZE,
-    height: BRACKET_SIZE,
-    borderLeftWidth: BRACKET_THICKNESS,
-    borderBottomWidth: BRACKET_THICKNESS,
-    borderColor: Color.Gold,
-  },
-  cornerBracketBottomRight: {
-    position: 'absolute',
-    bottom: BRACKET_MARGIN,
-    right: BRACKET_MARGIN,
-    width: BRACKET_SIZE,
-    height: BRACKET_SIZE,
-    borderRightWidth: BRACKET_THICKNESS,
-    borderBottomWidth: BRACKET_THICKNESS,
-    borderColor: Color.Gold,
+    lineHeight: 17,
+    color: Color.WarmBrown,
   },
 });
