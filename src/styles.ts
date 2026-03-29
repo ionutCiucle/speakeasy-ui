@@ -6,6 +6,8 @@ export const Color = {
   Vetrdgris: '#17bebb',
   Flame: '#e4572e',
   White: '#ffffff',
+  Cream: '#ede8df',
+  Gold: '#b8963e',
 };
 
 export const flex = (
