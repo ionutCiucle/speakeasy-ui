@@ -103,6 +103,42 @@ New screen at `/forgot-password`.
 
 ---
 
+## Shared components (`src/features/components/`)
+
+Extracted reusable components from the auth screens to eliminate duplicated styling. All auth screens import from the directory index — never from individual files directly.
+
+### `Button`
+
+Primary gold call-to-action button used on all auth screens.
+
+```tsx
+<Button label="Sign In" onPress={handleLogin} style={styles.button} />
+```
+
+- Fixed styling: `Color.Gold` background, `borderRadius: 10`, `paddingVertical: 17`, Inter SemiBold 16px white text
+- Optional `style` prop for per-screen layout overrides (e.g. `marginBottom`)
+
+### `Input`
+
+Label + `TextInput` combo, always rendered together.
+
+```tsx
+<Input
+  label="EMAIL"
+  placeholder="your@email.com"
+  value={email}
+  onChangeText={setEmail}
+  autoCapitalize="none"
+  keyboardType="email-address"
+/>
+```
+
+- Label: Inter Medium 11px, `Color.WarmBrown`, `letterSpacing: 1.5`
+- Input: `Color.Ivory` background, `Color.Sand` border, Inter Regular 15px, `Color.Espresso` text
+- `marginBottom: 16` included in the component
+
+---
+
 ## Packages installed
 
 - `@expo-google-fonts/inter`
