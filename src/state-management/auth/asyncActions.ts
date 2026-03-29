@@ -35,13 +35,15 @@ export const logoutAsyncAction = (dispatch: Dispatch<AppAction>) => async () => 
 export const registerAsyncAction = (dispatch: Dispatch<AppAction>) => async ({
   email,
   password,
+  username,
 }: {
   email: string;
   password: string;
+  username: string;
 }) => {
   dispatch({ type: AuthActionType.RegisterPending });
   try {
-    const { data } = await AuthAPI.post<AuthResponse>('/register', { email, password });
+    const { data } = await AuthAPI.post<AuthResponse>('/register', { email, password, username });
     await saveToken(data.token);
     dispatch({ type: AuthActionType.RegisterSuccess, payload: { userId: data.user.id, token: data.token } });
     return true;
