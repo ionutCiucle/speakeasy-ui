@@ -15,8 +15,10 @@ AppRoutes.tsx     - all route definitions, runs useAuthTokenRehydration on mount
 
 | Path | Component | Notes |
 |---|---|---|
-| `/` | `LoginPage` | Unauthenticated entry point |
+| `/` | `SplashPage` | Entry point — shown on first launch and after logout |
+| `/login` | `LoginPage` | Login form |
 | `/register` | `RegisterPage` | Registration form |
+| `/forgot-password` | `ForgotPasswordPage` | Password reset request |
 | `/home` | `HomePage` | Authenticated entry point |
 
 ## Adding a new route
@@ -48,6 +50,6 @@ import { Link } from 'react-router-native';
 `AppRoutes` renders `null` until `useAuthTokenRehydration` completes. The hook:
 - Reads the stored JWT on mount
 - If valid → restores auth state + navigates to `/home`
-- If expired or missing → clears token + navigates to `/`
+- If expired or missing → clears token, stays at `/` (SplashPage)
 
 There is currently no route-level auth guard component — gating is handled entirely by the rehydration hook on startup.
