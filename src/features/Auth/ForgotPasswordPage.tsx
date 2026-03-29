@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { Color } from '../../styles';
-import { BracketContainer, Button, Input } from '../components';
+import { BracketContainer, Button, Input } from '../../components';
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');

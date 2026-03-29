@@ -6,7 +6,7 @@ import {
   StyleSheet,
   KeyboardTypeOptions,
 } from 'react-native';
-import { Color } from '../../styles';
+import { Color } from '../styles';
 
 interface Props {
   label: string;

@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '../../styles';
-import { BracketContainer, Button, Input } from '../components';
+import { BracketContainer, Button, Input } from '../../components';
 import { useAuthAsyncActions } from '../../state-management/auth';
 
 export function RegisterPage() {
