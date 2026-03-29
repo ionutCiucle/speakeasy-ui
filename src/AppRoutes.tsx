@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-native';
+import { SplashPage } from './features/Auth/SplashPage';
 import { LoginPage } from './features/Auth/LoginPage';
 import { RegisterPage } from './features/Auth/RegisterPage';
 import { HomePage } from './features/Home/HomePage';
@@ -13,7 +14,8 @@ export function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<SplashPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/home" element={<HomePage />} />
     </Routes>

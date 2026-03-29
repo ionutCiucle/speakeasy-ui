@@ -114,7 +114,7 @@ export function RegisterPage() {
 
           <View style={styles.signInRow}>
             <Text style={styles.signInText}>Already a member? </Text>
-            <Link to="/">
+            <Link to="/login">
               <Text style={styles.signInText}>Sign In</Text>
             </Link>
           </View>

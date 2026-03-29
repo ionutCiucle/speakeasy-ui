@@ -9,6 +9,7 @@ import {
   Inter_500Medium,
   Inter_600SemiBold,
 } from '@expo-google-fonts/inter';
+import { PlayfairDisplay_400Regular_Italic } from '@expo-google-fonts/playfair-display';
 import { useFonts } from 'expo-font';
 import { AppProvider } from './state-management/Provider';
 import { AppRoutes } from './AppRoutes';
@@ -20,6 +21,7 @@ export const Root = () => {
     Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
+    PlayfairDisplay_400Regular_Italic,
   });
 
   if (!fontsLoaded) {
