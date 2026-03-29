@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '../../styles';
+import { Button } from '../components';
 
 export function SplashPage() {
   const navigate = useNavigate();
@@ -38,9 +39,7 @@ export function SplashPage() {
           <View style={styles.ornamentLine} />
         </View>
 
-        <TouchableOpacity style={styles.getStartedButton} onPress={handleGetStarted}>
-          <Text style={styles.getStartedButtonText}>Get Started</Text>
-        </TouchableOpacity>
+        <Button label="Get Started" onPress={handleGetStarted} style={styles.button} />
 
         <Link to="/login">
           <Text style={styles.signInText}>Already a member? Sign In</Text>
@@ -202,7 +201,6 @@ const styles = StyleSheet.create({
     ...flex('row', 'center', 'center'),
     width: '100%',
     marginBottom: 48,
-    gap: 0,
   },
   ornamentLine: {
     flex: 1,
@@ -215,20 +213,8 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Gold,
     marginHorizontal: 12,
   },
-  getStartedButton: {
-    width: '100%',
-    backgroundColor: Color.Gold,
-    borderRadius: 10,
-    paddingVertical: 17,
-    alignItems: 'center',
+  button: {
     marginBottom: 20,
-  },
-  getStartedButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    lineHeight: 19,
-    letterSpacing: 0.5,
-    color: Color.White,
   },
   signInText: {
     fontFamily: 'Inter_400Regular',

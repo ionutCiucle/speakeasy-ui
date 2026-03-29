@@ -1,13 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate } from 'react-router-native';
-import { Color, flex } from '../../styles';
+import { Color } from '../../styles';
+import { Button, Input } from '../components';
 
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -45,20 +40,16 @@ export function ForgotPasswordPage() {
         </Text>
 
         <View style={styles.form}>
-          <Text style={styles.label}>EMAIL</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label="EMAIL"
             placeholder="your@email.com"
-            placeholderTextColor={Color.Sand}
-            autoCapitalize="none"
-            keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
           />
 
-          <TouchableOpacity style={styles.sendButton} onPress={handleSendResetLink}>
-            <Text style={styles.sendButtonText}>Send Reset Link</Text>
-          </TouchableOpacity>
+          <Button label="Send Reset Link" onPress={handleSendResetLink} style={styles.button} />
 
           <TouchableOpacity onPress={handleBack}>
             <Text style={styles.backToSignIn}>Back to Sign In</Text>
@@ -196,43 +187,10 @@ const styles = StyleSheet.create({
   form: {
     width: '100%',
   },
-  label: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 11,
-    lineHeight: 13,
-    color: Color.WarmBrown,
-    letterSpacing: 1.5,
-    marginBottom: 6,
-  },
-  input: {
-    backgroundColor: Color.Ivory,
-    borderWidth: 1.5,
-    borderColor: Color.Sand,
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 17,
-    fontFamily: 'Inter_400Regular',
-    fontSize: 15,
-    lineHeight: 18,
-    color: Color.Espresso,
-    marginBottom: 16,
-  },
-  sendButton: {
-    backgroundColor: Color.Gold,
-    borderRadius: 10,
-    paddingVertical: 17,
-    alignItems: 'center',
+  button: {
     marginBottom: 20,
   },
-  sendButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    lineHeight: 19,
-    letterSpacing: 0.3,
-    color: Color.White,
-  },
   backToSignIn: {
-    ...flex('row', 'center', 'center'),
     fontFamily: 'Inter_400Regular',
     fontSize: 14,
     lineHeight: 17,

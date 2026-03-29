@@ -1,13 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '../../styles';
+import { Button, Input } from '../components';
 import { useAuthAsyncActions } from '../../state-management/auth';
 
 export function LoginPage() {
@@ -56,25 +51,21 @@ export function LoginPage() {
         </View>
 
         <View style={styles.form}>
-          <Text style={styles.label}>EMAIL</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label="EMAIL"
             placeholder="your@email.com"
-            placeholderTextColor={Color.Sand}
-            autoCapitalize="none"
-            keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
           />
 
-          <Text style={styles.label}>PASSWORD</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label="PASSWORD"
             placeholder="••••••••"
-            placeholderTextColor={Color.Sand}
-            secureTextEntry
             value={password}
             onChangeText={setPassword}
+            secureTextEntry
           />
 
           <TouchableOpacity onPress={handleForgotPassword}>
@@ -83,9 +74,7 @@ export function LoginPage() {
 
           {error && <Text style={styles.error}>{error}</Text>}
 
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Sign In</Text>
-          </TouchableOpacity>
+          <Button label="Sign In" onPress={handleLogin} style={styles.button} />
 
           <View style={styles.divider}>
             <View style={styles.dividerLine} />
@@ -125,7 +114,6 @@ const styles = StyleSheet.create({
     height: 4,
     backgroundColor: Color.Gold,
   },
-  // Top-left bracket
   cornerBracketTopLeft: {
     position: 'absolute',
     top: 20,
@@ -142,7 +130,6 @@ const styles = StyleSheet.create({
     height: 25,
     backgroundColor: Color.Gold,
   },
-  // Top-right bracket
   cornerBracketTopRight: {
     position: 'absolute',
     top: 20,
@@ -159,7 +146,6 @@ const styles = StyleSheet.create({
     height: 25,
     backgroundColor: Color.Gold,
   },
-  // Bottom-left bracket
   cornerBracketBottomLeft: {
     position: 'absolute',
     bottom: 20,
@@ -176,7 +162,6 @@ const styles = StyleSheet.create({
     height: 25,
     backgroundColor: Color.Gold,
   },
-  // Bottom-right bracket
   cornerBracketBottomRight: {
     position: 'absolute',
     bottom: 20,
@@ -263,27 +248,6 @@ const styles = StyleSheet.create({
   form: {
     width: '100%',
   },
-  label: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 11,
-    lineHeight: 13,
-    color: Color.WarmBrown,
-    letterSpacing: 1.5,
-    marginBottom: 6,
-  },
-  input: {
-    backgroundColor: Color.Ivory,
-    borderWidth: 1,
-    borderColor: Color.Sand,
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 17,
-    fontFamily: 'Inter_400Regular',
-    fontSize: 15,
-    lineHeight: 18,
-    color: Color.Espresso,
-    marginBottom: 16,
-  },
   forgotPassword: {
     fontFamily: 'Inter_500Medium',
     fontSize: 13,
@@ -298,19 +262,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 12,
   },
-  loginButton: {
-    backgroundColor: Color.Gold,
-    borderRadius: 10,
-    paddingVertical: 17,
-    alignItems: 'center',
+  button: {
     marginBottom: 20,
-  },
-  loginButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    lineHeight: 19,
-    letterSpacing: 0.5,
-    color: Color.White,
   },
   divider: {
     ...flex('row', 'center', 'center'),

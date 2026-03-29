@@ -1,13 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '../../styles';
+import { Button, Input } from '../components';
 import { useAuthAsyncActions } from '../../state-management/auth';
 
 export function RegisterPage() {
@@ -61,45 +56,37 @@ export function RegisterPage() {
         </View>
 
         <View style={styles.form}>
-          <Text style={styles.label}>USERNAME</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label="USERNAME"
             placeholder="@yourname"
-            placeholderTextColor={Color.Sand}
-            autoCapitalize="none"
             value={username}
             onChangeText={setUsername}
+            autoCapitalize="none"
           />
 
-          <Text style={styles.label}>EMAIL</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label="EMAIL"
             placeholder="your@email.com"
-            placeholderTextColor={Color.Sand}
-            autoCapitalize="none"
-            keyboardType="email-address"
             value={email}
             onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
           />
 
-          <Text style={styles.label}>PASSWORD</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label="PASSWORD"
             placeholder="••••••••"
-            placeholderTextColor={Color.Sand}
-            secureTextEntry
             value={password}
             onChangeText={setPassword}
+            secureTextEntry
           />
 
-          <Text style={styles.label}>CONFIRM PASSWORD</Text>
-          <TextInput
-            style={styles.input}
+          <Input
+            label="CONFIRM PASSWORD"
             placeholder="••••••••"
-            placeholderTextColor={Color.Sand}
-            secureTextEntry
             value={confirmPassword}
             onChangeText={setConfirmPassword}
+            secureTextEntry
           />
 
           {error && <Text style={styles.error}>{error}</Text>}
@@ -108,9 +95,7 @@ export function RegisterPage() {
             By registering you agree to our Terms of Service and Privacy Policy.
           </Text>
 
-          <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-            <Text style={styles.registerButtonText}>Create Account</Text>
-          </TouchableOpacity>
+          <Button label="Create Account" onPress={handleRegister} style={styles.button} />
 
           <View style={styles.signInRow}>
             <Text style={styles.signInText}>Already a member? </Text>
@@ -254,27 +239,6 @@ const styles = StyleSheet.create({
   form: {
     width: '100%',
   },
-  label: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 11,
-    lineHeight: 13,
-    color: Color.WarmBrown,
-    letterSpacing: 1.5,
-    marginBottom: 6,
-  },
-  input: {
-    backgroundColor: Color.Ivory,
-    borderWidth: 1,
-    borderColor: Color.Sand,
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 17,
-    fontFamily: 'Inter_400Regular',
-    fontSize: 15,
-    lineHeight: 18,
-    color: Color.Espresso,
-    marginBottom: 16,
-  },
   error: {
     color: 'red',
     fontFamily: 'Inter_400Regular',
@@ -288,19 +252,8 @@ const styles = StyleSheet.create({
     color: Color.WarmBrown,
     marginBottom: 16,
   },
-  registerButton: {
-    backgroundColor: Color.Gold,
-    borderRadius: 10,
-    paddingVertical: 17,
-    alignItems: 'center',
+  button: {
     marginBottom: 20,
-  },
-  registerButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    lineHeight: 19,
-    letterSpacing: 0.5,
-    color: Color.White,
   },
   signInRow: {
     ...flex('row', 'center', 'center'),
