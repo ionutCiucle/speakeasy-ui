@@ -1,8 +1,5 @@
 import { Routes, Route } from 'react-router-native';
-import { SplashPage } from './features/Auth/SplashPage';
-import { LoginPage } from './features/Auth/LoginPage';
-import { RegisterPage } from './features/Auth/RegisterPage';
-import { ForgotPasswordPage } from './features/Auth/ForgotPasswordPage';
+import { SplashPage, LoginPage, RegisterPage, ForgotPasswordPage } from './features/Auth';
 import { HomePage } from './features/Home/HomePage';
 import { useAuthTokenRehydration } from './features/Auth/hooks/useAuthTokenRehydration';
 
