@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
-import { Color, flex } from '../../styles';
-import { BracketContainer, Button, Logo } from '../../components';
+import { Color, flex } from '@/styles';
+import { BracketContainer, Button, Logo } from '@/components';
 
 export function SplashPage() {
   const navigate = useNavigate();

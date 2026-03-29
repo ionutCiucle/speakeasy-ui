@@ -11,8 +11,8 @@ import {
 } from '@expo-google-fonts/inter';
 import { PlayfairDisplay_400Regular_Italic } from '@expo-google-fonts/playfair-display';
 import { useFonts } from 'expo-font';
-import { AppProvider } from './state-management/Provider';
-import { AppRoutes } from './AppRoutes';
+import { AppProvider } from '@/state-management/Provider';
+import { AppRoutes } from '@/AppRoutes';
 
 export const Root = () => {
   const [fontsLoaded] = useFonts({

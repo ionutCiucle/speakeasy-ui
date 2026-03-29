@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useAppDispatch } from '../../providerHooks';
-import { loginAsyncAction, logoutAsyncAction, registerAsyncAction } from '../asyncActions';
+import { useAppDispatch } from '@/state-management/providerHooks';
+import { loginAsyncAction, logoutAsyncAction, registerAsyncAction } from '@/state-management/auth/asyncActions';
 
 export function useAuthAsyncActions() {
   const dispatch = useAppDispatch();

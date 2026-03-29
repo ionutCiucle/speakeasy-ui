@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
-import { AppAction } from '../store';
+import { AppAction } from '@/state-management/store';
 import { AuthActionType } from './enums';
-import { AuthAPI, saveToken, removeToken } from '../../services';
+import { AuthAPI, saveToken, removeToken } from '@/services';
 
 interface AuthResponse {
   token: string;

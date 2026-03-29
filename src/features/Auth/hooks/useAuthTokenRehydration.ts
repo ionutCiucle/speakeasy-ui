@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-native';
-import { getToken, removeToken } from '../../../services';
-import { useAuthActions } from '../../../state-management/auth';
+import { getToken, removeToken } from '@/services';
+import { useAuthActions } from '@/state-management/auth';
 
 function isTokenExpired(token: string): boolean {
   try {

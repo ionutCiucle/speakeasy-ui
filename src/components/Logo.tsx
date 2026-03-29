@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Color } from '../styles';
+import { Color } from '@/styles';
 
 interface Props {
   size?: number;

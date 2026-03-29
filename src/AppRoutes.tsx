@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-native';
-import { SplashPage, LoginPage, RegisterPage, ForgotPasswordPage } from './features/Auth';
-import { HomePage } from './features/Home/HomePage';
-import { useAuthTokenRehydration } from './features/Auth/hooks/useAuthTokenRehydration';
+import { SplashPage, LoginPage, RegisterPage, ForgotPasswordPage } from '@/features/Auth';
+import { HomePage } from '@/features/Home/HomePage';
+import { useAuthTokenRehydration } from '@/features/Auth/hooks/useAuthTokenRehydration';
 
 export function AppRoutes() {
   const { isReady } = useAuthTokenRehydration();
