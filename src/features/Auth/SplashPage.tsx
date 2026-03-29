@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '../../styles';
-import { Button } from '../components';
+import { BracketContainer, Button } from '../components';
 
 export function SplashPage() {
   const navigate = useNavigate();
@@ -12,14 +12,7 @@ export function SplashPage() {
   }, [navigate]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topBar} />
-
-      <View style={styles.cornerBracketTopLeft} />
-      <View style={styles.cornerBracketTopLeftVertical} />
-      <View style={styles.cornerBracketTopRight} />
-      <View style={styles.cornerBracketTopRightVertical} />
-
+    <BracketContainer bracketSize={35}>
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <Text style={styles.logo}>S</Text>
@@ -45,94 +38,11 @@ export function SplashPage() {
           <Text style={styles.signInText}>Already a member? Sign In</Text>
         </Link>
       </View>
-
-      <View style={styles.bottomBar} />
-
-      <View style={styles.cornerBracketBottomLeft} />
-      <View style={styles.cornerBracketBottomLeftVertical} />
-      <View style={styles.cornerBracketBottomRight} />
-      <View style={styles.cornerBracketBottomRightVertical} />
-    </View>
+    </BracketContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Color.Cream,
-  },
-  topBar: {
-    height: 4,
-    backgroundColor: Color.Gold,
-  },
-  bottomBar: {
-    height: 4,
-    backgroundColor: Color.Gold,
-  },
-  cornerBracketTopLeft: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    width: 35,
-    height: 1.5,
-    backgroundColor: Color.Gold,
-  },
-  cornerBracketTopLeftVertical: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    width: 1.5,
-    height: 35,
-    backgroundColor: Color.Gold,
-  },
-  cornerBracketTopRight: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    width: 35,
-    height: 1.5,
-    backgroundColor: Color.Gold,
-  },
-  cornerBracketTopRightVertical: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    width: 1.5,
-    height: 35,
-    backgroundColor: Color.Gold,
-  },
-  cornerBracketBottomLeft: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    width: 35,
-    height: 1.5,
-    backgroundColor: Color.Gold,
-  },
-  cornerBracketBottomLeftVertical: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    width: 1.5,
-    height: 35,
-    backgroundColor: Color.Gold,
-  },
-  cornerBracketBottomRight: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    width: 35,
-    height: 1.5,
-    backgroundColor: Color.Gold,
-  },
-  cornerBracketBottomRightVertical: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    width: 1.5,
-    height: 35,
-    backgroundColor: Color.Gold,
-  },
   content: {
     flex: 1,
     alignItems: 'center',
