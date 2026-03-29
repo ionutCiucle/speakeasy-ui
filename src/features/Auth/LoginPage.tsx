@@ -1,14 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
-import { Color, flex } from '../../styles';
-import { useAuthAsyncActions } from '../../state-management/auth';
+import { Color, flex } from '@/styles';
+import { BracketContainer, Button, Input, Logo } from '@/components';
+import { useAuthAsyncActions } from '@/state-management/auth';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -27,147 +22,146 @@ export function LoginPage() {
     }
   }, [email, password, login, navigate]);
 
-  const handleGoogleLogin = useCallback(() => {
-    // TODO: implement Google login
-  }, []);
-
   const handleForgotPassword = useCallback(() => {
-    // TODO: implement forgot password
-  }, []);
+    navigate('/forgot-password');
+  }, [navigate]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign in</Text>
+    <BracketContainer>
+      <View style={styles.content}>
+        <Logo size={52} marginBottom={8} />
 
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor={Color.RaisinBlackLight}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
-        />
+        <Text style={styles.title}>Welcome Back</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor={Color.RaisinBlackLight}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-
-        {error && <Text style={styles.error}>{error}</Text>}
-
-        <TouchableOpacity onPress={handleForgotPassword}>
-          <Text style={styles.forgotPassword}>Forgot my password</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>Log in</Text>
-        </TouchableOpacity>
-
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>or</Text>
-          <View style={styles.dividerLine} />
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.subtitle}>SPEAKEASY</Text>
+          <View style={styles.subtitleUnderline} />
         </View>
 
-        <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
-          <Text style={styles.googleButtonText}>Log in with Google</Text>
-        </TouchableOpacity>
+        <View style={styles.form}>
+          <Input
+            label="EMAIL"
+            placeholder="your@email.com"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
 
-        <Link to="/register" style={styles.createAccount}>
-          <Text style={styles.createAccountText}>Don't have an account? Create one</Text>
-        </Link>
+          <Input
+            label="PASSWORD"
+            placeholder="••••••••"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+
+          <TouchableOpacity onPress={handleForgotPassword}>
+            <Text style={styles.forgotPassword}>Forgot Password?</Text>
+          </TouchableOpacity>
+
+          {error && <Text style={styles.error}>{error}</Text>}
+
+          <Button label="Sign In" onPress={handleLogin} style={styles.button} />
+
+          <View style={styles.divider}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>or</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          <View style={styles.createAccountRow}>
+            <Text style={styles.createAccountText}>Don't have an account? </Text>
+            <Link to="/register">
+              <Text style={styles.createAccountLink}>Create one</Text>
+            </Link>
+          </View>
+        </View>
       </View>
-    </View>
+    </BracketContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  content: {
     flex: 1,
-    backgroundColor: Color.White,
-    ...flex('column', 'center', 'center'),
-    paddingHorizontal: 24,
+    paddingHorizontal: 31.5,
+    paddingTop: 48,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: Color.RaisinBlack,
+    fontFamily: 'CormorantGaramond_600SemiBold',
+    fontSize: 30,
+    lineHeight: 36,
+    color: Color.Espresso,
+    marginBottom: 4,
+  },
+  subtitleContainer: {
+    alignItems: 'center',
     marginBottom: 32,
+  },
+  subtitle: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 11,
+    lineHeight: 13,
+    color: Color.Gold,
+    letterSpacing: 4,
+    marginBottom: 8,
+  },
+  subtitleUnderline: {
+    width: 100,
+    height: 1,
+    backgroundColor: Color.Sand,
   },
   form: {
     width: '100%',
   },
+  forgotPassword: {
+    fontFamily: 'Inter_500Medium',
+    fontSize: 13,
+    lineHeight: 16,
+    color: Color.Gold,
+    textAlign: 'right',
+    marginBottom: 28,
+  },
   error: {
     color: 'red',
+    fontFamily: 'Inter_400Regular',
     fontSize: 14,
     marginBottom: 12,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: Color.RaisinBlackLight,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: Color.RaisinBlack,
-    marginBottom: 12,
-  },
-  forgotPassword: {
-    color: Color.Vetrdgris,
-    fontSize: 14,
-    textAlign: 'right',
-    marginBottom: 24,
-  },
-  loginButton: {
-    backgroundColor: Color.KellyGreen,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  loginButtonText: {
-    color: Color.White,
-    fontSize: 16,
-    fontWeight: '600',
+  button: {
+    marginBottom: 20,
   },
   divider: {
     ...flex('row', 'center', 'center'),
-    marginBottom: 24,
+    marginBottom: 20,
     gap: 12,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: Color.RaisinBlackLight,
+    backgroundColor: Color.Sand,
   },
   dividerText: {
-    color: Color.RaisinBlackLight,
-    fontSize: 14,
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    lineHeight: 16,
+    color: Color.WarmBrown,
   },
-  googleButton: {
-    borderWidth: 1,
-    borderColor: Color.RaisinBlack,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  googleButtonText: {
-    color: Color.RaisinBlack,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  createAccount: {
-    marginTop: 24,
-    alignItems: 'center',
+  createAccountRow: {
+    ...flex('row', 'center', 'center'),
   },
   createAccountText: {
-    color: Color.RaisinBlackLight,
+    fontFamily: 'Inter_400Regular',
     fontSize: 14,
+    lineHeight: 17,
+    color: Color.WarmBrown,
+  },
+  createAccountLink: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    lineHeight: 17,
+    color: Color.WarmBrown,
   },
 });

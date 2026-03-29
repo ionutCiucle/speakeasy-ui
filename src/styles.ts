@@ -6,6 +6,13 @@ export const Color = {
   Vetrdgris: '#17bebb',
   Flame: '#e4572e',
   White: '#ffffff',
+  // Speakeasy brand palette
+  Cream: '#F5F0E8',
+  Gold: '#C9A84C',
+  Espresso: '#2D2416',
+  WarmBrown: '#8B7355',
+  Ivory: '#FDFAF5',
+  Sand: '#D4C9B0',
 };
 
 export const flex = (

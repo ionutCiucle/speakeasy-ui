@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, ReactNode } from 'react';
-import { appReducer, appInitialState, AppState, AppAction } from './store';
+import { appReducer, appInitialState, AppState, AppAction } from '@/state-management/store';
 
 export const AppStateContext = createContext<AppState>(appInitialState);
 export const AppDispatchContext = createContext<React.Dispatch<AppAction>>(() => undefined);

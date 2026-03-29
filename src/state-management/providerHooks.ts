@@ -1,6 +1,6 @@
 import { useContext, useRef } from 'react';
-import { AppStateContext, AppDispatchContext } from './Provider';
-import { AppState, AppAction } from './store';
+import { AppStateContext, AppDispatchContext } from '@/state-management/Provider';
+import { AppState, AppAction } from '@/state-management/store';
 
 export function useAppDispatch(): React.Dispatch<AppAction> {
   return useContext(AppDispatchContext);

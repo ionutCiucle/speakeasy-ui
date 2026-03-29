@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useAppDispatch } from '../../providerHooks';
-import { AuthActionType } from '../enums';
+import { useAppDispatch } from '@/state-management/providerHooks';
+import { AuthActionType } from '@/state-management/auth/enums';
 
 export function useAuthActions() {
   const dispatch = useAppDispatch();

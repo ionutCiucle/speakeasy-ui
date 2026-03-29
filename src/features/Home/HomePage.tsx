@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Color, flex } from '../../styles';
-import { useAuthAsyncActions } from '../../state-management/auth';
+import { Color, flex } from '@/styles';
+import { useAuthAsyncActions } from '@/state-management/auth';
 import { useNavigate } from 'react-router-native';
 
 export function HomePage() {
