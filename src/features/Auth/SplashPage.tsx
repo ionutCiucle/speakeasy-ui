@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '../../styles';
-import { BracketContainer, Button } from '../components';
+import { BracketContainer, Button, Logo } from '../components';
 
 export function SplashPage() {
   const navigate = useNavigate();
@@ -14,12 +14,7 @@ export function SplashPage() {
   return (
     <BracketContainer bracketSize={35}>
       <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logo}>S</Text>
-          <View style={styles.dotLarge} />
-          <View style={styles.dotMedium} />
-          <View style={styles.dotSmall} />
-        </View>
+        <Logo marginBottom={16} />
 
         <Text style={styles.brandName}>SPEAKEASY</Text>
         <View style={styles.brandUnderline} />
@@ -48,43 +43,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 31.5,
-  },
-  logoContainer: {
-    position: 'relative',
-    marginBottom: 16,
-  },
-  logo: {
-    fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 112,
-    lineHeight: 136,
-    color: Color.Gold,
-  },
-  dotLarge: {
-    position: 'absolute',
-    width: 12.32,
-    height: 12.32,
-    borderRadius: 6.16,
-    backgroundColor: Color.Gold,
-    top: 23.52,
-    left: 41.76,
-  },
-  dotMedium: {
-    position: 'absolute',
-    width: 8.38,
-    height: 8.38,
-    borderRadius: 4.19,
-    backgroundColor: Color.Gold,
-    top: 13.66,
-    left: 60.24,
-  },
-  dotSmall: {
-    position: 'absolute',
-    width: 5.17,
-    height: 5.17,
-    borderRadius: 2.585,
-    backgroundColor: Color.Gold,
-    top: 5.04,
-    left: 73.79,
   },
   brandName: {
     fontFamily: 'CormorantGaramond_600SemiBold',

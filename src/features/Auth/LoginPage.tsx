@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '../../styles';
-import { BracketContainer, Button, Input } from '../components';
+import { BracketContainer, Button, Input, Logo } from '../components';
 import { useAuthAsyncActions } from '../../state-management/auth';
 
 export function LoginPage() {
@@ -29,12 +29,7 @@ export function LoginPage() {
   return (
     <BracketContainer>
       <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logo}>S</Text>
-          <View style={styles.dotLarge} />
-          <View style={styles.dotMedium} />
-          <View style={styles.dotSmall} />
-        </View>
+        <Logo size={52} marginBottom={8} />
 
         <Text style={styles.title}>Welcome Back</Text>
 
@@ -93,43 +88,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 31.5,
     paddingTop: 48,
     alignItems: 'center',
-  },
-  logoContainer: {
-    position: 'relative',
-    marginBottom: 8,
-  },
-  logo: {
-    fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 52,
-    lineHeight: 63,
-    color: Color.Gold,
-  },
-  dotLarge: {
-    position: 'absolute',
-    width: 5.72,
-    height: 5.72,
-    borderRadius: 2.86,
-    backgroundColor: Color.Gold,
-    top: 11,
-    left: 19,
-  },
-  dotMedium: {
-    position: 'absolute',
-    width: 3.89,
-    height: 3.89,
-    borderRadius: 1.95,
-    backgroundColor: Color.Gold,
-    top: 6,
-    left: 28,
-  },
-  dotSmall: {
-    position: 'absolute',
-    width: 2.4,
-    height: 2.4,
-    borderRadius: 1.2,
-    backgroundColor: Color.Gold,
-    top: 2,
-    left: 34,
   },
   title: {
     fontFamily: 'CormorantGaramond_600SemiBold',
