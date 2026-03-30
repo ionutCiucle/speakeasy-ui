@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '@/styles';
 import { BracketContainer, Button, Input } from '@/components';
-import { useAuthAsyncActions } from '@/state-management/auth';
+import { useAuthWorkflows } from '@/state-management/auth';
 import { useValidatedEmailField } from './hooks/useValidatedEmailField';
 import { useValidatedTextField } from './hooks/useValidatedTextField';
 
@@ -21,7 +21,7 @@ export function RegisterPage() {
     validateConfirmPassword,
   ] = useValidatedTextField('Confirm password');
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const { register } = useAuthAsyncActions();
+  const { registerAndLogin } = useAuthWorkflows();
   const navigate = useNavigate();
 
   const handleBack = useCallback(() => {
@@ -41,7 +41,7 @@ export function RegisterPage() {
       setSubmitError('Passwords do not match.');
       return;
     }
-    const success = await register({ email, password, username });
+    const success = await registerAndLogin({ email, password, username });
     if (success) {
       navigate('/home');
     } else {
@@ -52,7 +52,7 @@ export function RegisterPage() {
     password,
     confirmPassword,
     username,
-    register,
+    registerAndLogin,
     navigate,
     validateUsername,
     validateEmail,

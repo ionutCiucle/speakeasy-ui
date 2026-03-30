@@ -35,6 +35,7 @@ export const logoutAsyncAction =
     dispatch({ type: AuthActionType.Logout });
   };
 
+// TODO: Save username and email to store after successful registration
 export const registerAsyncAction =
   (dispatch: Dispatch<AppAction>) =>
   async ({
@@ -49,25 +50,9 @@ export const registerAsyncAction =
     dispatch({ type: AuthActionType.RegisterPending });
     try {
       await AuthAPI.post('/register', { email, password, username });
-    } catch {
-      dispatch({ type: AuthActionType.RegisterFailure });
-      return false;
-    }
-    try {
-      const { data } = await AuthAPI.post<AuthResponse>('/login', {
-        email,
-        password,
-      });
-      await saveToken(data.token);
-      dispatch({
-        type: AuthActionType.RegisterSuccess,
-        payload: { userId: data.user.id, token: data.token },
-      });
+      dispatch({ type: AuthActionType.RegisterSuccess });
       return true;
     } catch {
-      console.error(
-        '[registerAsyncAction] Auto-login after registration failed',
-      );
       dispatch({ type: AuthActionType.RegisterFailure });
       return false;
     }

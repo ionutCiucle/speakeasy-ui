@@ -14,7 +14,6 @@ export interface SetUsernameAction {
 
 export interface RegisterSuccessAction {
   type: AuthActionType.RegisterSuccess;
-  payload: { userId: string; token: string };
 }
 
 export interface RegisterFailureAction {
@@ -42,4 +41,12 @@ export interface LogoutAction {
   type: AuthActionType.Logout;
 }
 
-export type AuthAction = SetUsernameAction | RegisterPendingAction | RegisterSuccessAction | RegisterFailureAction | LoginPendingAction | LoginSuccessAction | LoginFailureAction | LogoutAction;
+export type AuthAction =
+  | SetUsernameAction
+  | RegisterPendingAction
+  | RegisterSuccessAction
+  | RegisterFailureAction
+  | LoginPendingAction
+  | LoginSuccessAction
+  | LoginFailureAction
+  | LogoutAction;
