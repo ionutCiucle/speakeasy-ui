@@ -12,12 +12,9 @@ export function useAuthActions() {
     [dispatch],
   );
 
-  const registerSuccess = useCallback(
-    (userId: string, token: string) => {
-      dispatch({ type: AuthActionType.RegisterSuccess, payload: { userId, token } });
-    },
-    [dispatch],
-  );
+  const registerSuccess = useCallback(() => {
+    dispatch({ type: AuthActionType.RegisterSuccess });
+  }, [dispatch]);
 
   const registerFailure = useCallback(() => {
     dispatch({ type: AuthActionType.RegisterFailure });
@@ -25,7 +22,10 @@ export function useAuthActions() {
 
   const loginSuccess = useCallback(
     (userId: string, token: string) => {
-      dispatch({ type: AuthActionType.LoginSuccess, payload: { userId, token } });
+      dispatch({
+        type: AuthActionType.LoginSuccess,
+        payload: { userId, token },
+      });
     },
     [dispatch],
   );
@@ -34,5 +34,11 @@ export function useAuthActions() {
     dispatch({ type: AuthActionType.LoginFailure });
   }, [dispatch]);
 
-  return { setUsername, registerSuccess, registerFailure, loginSuccess, loginFailure };
+  return {
+    setUsername,
+    registerSuccess,
+    registerFailure,
+    loginSuccess,
+    loginFailure,
+  };
 }

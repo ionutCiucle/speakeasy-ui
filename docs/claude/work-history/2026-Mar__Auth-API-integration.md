@@ -66,3 +66,21 @@ Installed `husky` and `lint-staged` to auto-format staged files before every com
 - `husky` registers the pre-commit hook via the `prepare` script (runs on `npm install`)
 - `.husky/pre-commit` calls `npx lint-staged`
 - `lint-staged` config in `package.json` runs `prettier --write` on staged `*.ts` / `*.tsx` files only
+
+---
+
+### Step 7 — Fix TS error: `RegisterSuccessAction` payload / rehydration action mismatch ✅
+
+**Problem:** CI preflight failed with:
+```
+error TS2353: Object literal may only specify known properties,
+and 'payload' does not exist in type 'RegisterSuccessAction'.
+```
+
+`useAuthActions.registerSuccess` was dispatching `{ userId, token }` as a payload, but `RegisterSuccessAction` has no payload field (and the reducer never reads one — it only sets `isLoading: false`).
+
+Separately, `useAuthTokenRehydration` was calling `registerSuccess(userId, token)` to restore session state from a stored JWT, which was semantically wrong and would have silently dropped `userId`/`token` from the store.
+
+**Fix:**
+- `useAuthActions.registerSuccess` — removed arguments and payload from the dispatch; the action only signals success, it carries no data.
+- `useAuthTokenRehydration` — switched from `registerSuccess` to `loginSuccess`, which does set `userId` and `token` in state. Token rehydration is session-restore, not a register event, so `loginSuccess` is the correct action regardless of how the session was originally created.
