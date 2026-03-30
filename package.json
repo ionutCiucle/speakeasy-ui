@@ -10,7 +10,8 @@
     "ts:check": "tsc",
     "lint:check": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@expo-google-fonts/cormorant-garamond": "^0.4.1",
@@ -40,8 +41,13 @@
     "@typescript-eslint/parser": "^6.16.0",
     "babel-plugin-module-resolver": "^5.0.3",
     "eslint": "^8.56.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.1.1",
     "typescript": "^5.3.3"
   },
-  "private": true
+  "private": true,
+  "lint-staged": {
+    "*.{ts,tsx}": "prettier --write"
+  }
 }
