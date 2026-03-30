@@ -2,6 +2,7 @@ import { AuthActionType } from './enums';
 
 export interface AuthState {
   username: string;
+  email: string | null;
   userId: string | null;
   token: string | null;
   isLoading: boolean;
@@ -30,7 +31,7 @@ export interface RegisterPendingAction {
 
 export interface LoginSuccessAction {
   type: AuthActionType.LoginSuccess;
-  payload: { userId: string; token: string };
+  payload: { userId: string; token: string; email: string };
 }
 
 export interface LoginFailureAction {

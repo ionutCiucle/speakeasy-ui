@@ -1,9 +1,21 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
 import { BottomNav, TabReceiptIcon } from './components';
+import { ProfilePage } from '@/features/Profile';
+
+type ActiveTab = 'home' | 'newTab' | 'friends' | 'profile';
+
+const HEADER_TITLES: Record<ActiveTab, string> = {
+  home: 'My Tabs',
+  newTab: 'New Tab',
+  friends: 'Friends',
+  profile: 'Profile',
+};
 
 export function HomePage() {
+  const [activeTab, setActiveTab] = useState<ActiveTab>('home');
+
   const handleStartTab = useCallback(() => {
     // TODO: navigate to start tab flow
   }, []);
@@ -12,36 +24,44 @@ export function HomePage() {
     // TODO: navigate to QR scanner
   }, []);
 
+  const handleTabPress = useCallback((tab: ActiveTab) => {
+    setActiveTab(tab);
+  }, []);
+
   return (
     <View style={styles.screen}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Tabs</Text>
+        <Text style={styles.headerTitle}>{HEADER_TITLES[activeTab]}</Text>
       </View>
       <View style={styles.headerDivider} />
 
-      <View style={styles.emptyState}>
-        <TabReceiptIcon />
-        <Text style={styles.emptyHeading}>No tabs added yet</Text>
-        <Text style={styles.emptySubtitle}>
-          Start one or scan a QR to join a friend's tab
-        </Text>
-        <TouchableOpacity
-          style={styles.primaryButton}
-          onPress={handleStartTab}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.primaryButtonText}>+ Start a Tab</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.secondaryButton}
-          onPress={handleScanQR}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.secondaryButtonText}>Scan QR to Join</Text>
-        </TouchableOpacity>
-      </View>
+      {activeTab === 'profile' ? (
+        <ProfilePage />
+      ) : (
+        <View style={styles.emptyState}>
+          <TabReceiptIcon />
+          <Text style={styles.emptyHeading}>No tabs added yet</Text>
+          <Text style={styles.emptySubtitle}>
+            Start one or scan a QR to join a friend's tab
+          </Text>
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={handleStartTab}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.primaryButtonText}>+ Start a Tab</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={handleScanQR}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.secondaryButtonText}>Scan QR to Join</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
-      <BottomNav />
+      <BottomNav activeTab={activeTab} onTabPress={handleTabPress} />
     </View>
   );
 }

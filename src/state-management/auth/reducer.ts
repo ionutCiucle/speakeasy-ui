@@ -3,6 +3,7 @@ import { AuthActionType } from './enums';
 
 export const authInitialState: AuthState = {
   username: '',
+  email: null,
   userId: null,
   token: null,
   isLoading: false,
@@ -29,9 +30,16 @@ export function authReducer(
         isLoading: false,
         userId: action.payload.userId,
         token: action.payload.token,
+        email: action.payload.email,
       };
     case AuthActionType.LoginFailure:
-      return { ...state, isLoading: false, userId: null, token: null };
+      return {
+        ...state,
+        isLoading: false,
+        userId: null,
+        token: null,
+        email: null,
+      };
     case AuthActionType.Logout:
       return { ...authInitialState };
     default:

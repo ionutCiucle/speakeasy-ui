@@ -55,3 +55,29 @@ Handlers (`handleStartTab`, `handleScanQR`) stubbed with TODO comments for futur
 
 - `src/features/Home/components/index.ts` — re-exports `BottomNav` and `TabReceiptIcon`
 - `src/features/Home/index.ts` — re-exports `HomePage`
+
+---
+
+### Step 5 — ProfilePage + email in auth state ✅
+
+**`src/features/Profile/ProfilePage.tsx`** (new feature directory)
+
+Temporary profile view rendered when the Profile nav tab is active. Shows:
+- Username — from `s.auth.username`
+- Email — from `s.auth.email`
+- Log out button — calls `logoutAsyncAction`, navigates to `/`
+
+**Auth state changes to support email:**
+- `AuthState` — added `email: string | null`
+- `LoginSuccessAction.payload` — added `email: string`
+- `authReducer` — sets `email` on `LoginSuccess`, clears it on `LoginFailure` and `Logout`
+- `loginAsyncAction` — dispatches `data.user.email` from the API response
+- `useAuthActions.loginSuccess` — signature updated to `(userId, token, email)`
+- `useAuthWorkflows.registerAndLogin` — dispatches email from the post-register login response
+- `useAuthTokenRehydration` — extracts `payload.email` from the JWT when rehydrating
+
+**`HomePage` updates:**
+- `activeTab` state (`useState<ActiveTab>`) drives which content is shown and which nav item is highlighted
+- Header title swaps to match the active tab
+- `ProfilePage` renders in the content area when `activeTab === 'profile'`; empty state renders otherwise
+- `handleTabPress` passed to `<BottomNav onTabPress={...} />`

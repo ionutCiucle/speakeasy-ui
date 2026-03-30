@@ -21,10 +21,10 @@ export function useAuthActions() {
   }, [dispatch]);
 
   const loginSuccess = useCallback(
-    (userId: string, token: string) => {
+    (userId: string, token: string, email: string) => {
       dispatch({
         type: AuthActionType.LoginSuccess,
-        payload: { userId, token },
+        payload: { userId, token, email },
       });
     },
     [dispatch],
