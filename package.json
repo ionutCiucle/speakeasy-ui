@@ -11,6 +11,8 @@
     "lint:check": "eslint ./src",
     "lint:fix": "eslint --fix ./src",
     "format": "prettier --write .",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -35,6 +37,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.1.10",
     "@types/react-router-native": "^6.4.0",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
@@ -42,8 +46,10 @@
     "babel-plugin-module-resolver": "^5.0.3",
     "eslint": "^8.56.0",
     "husky": "^8.0.0",
+    "jest-expo": "^55.0.11",
     "lint-staged": "^16.4.0",
     "prettier": "^3.1.1",
+    "react-test-renderer": "^19.1.0",
     "typescript": "^5.3.3"
   },
   "private": true,
