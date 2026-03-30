@@ -1,52 +1,124 @@
 import React, { useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Color, flex } from '@/styles';
-import { useAuthAsyncActions } from '@/state-management/auth';
-import { useNavigate } from 'react-router-native';
+import { Color } from '@/styles';
+import { BottomNav, TabReceiptIcon } from './components';
 
 export function HomePage() {
-  const { logout } = useAuthAsyncActions();
-  const navigate = useNavigate();
+  const handleStartTab = useCallback(() => {
+    // TODO: navigate to start tab flow
+  }, []);
 
-  const handleLogout = useCallback(async () => {
-    await logout();
-    navigate('/');
-  }, [logout, navigate]);
+  const handleScanQR = useCallback(() => {
+    // TODO: navigate to QR scanner
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome</Text>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Log out</Text>
-      </TouchableOpacity>
+    <View style={styles.screen}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>My Tabs</Text>
+      </View>
+      <View style={styles.headerDivider} />
+
+      <View style={styles.emptyState}>
+        <TabReceiptIcon />
+        <Text style={styles.emptyHeading}>No tabs added yet</Text>
+        <Text style={styles.emptySubtitle}>
+          Start one or scan a QR to join a friend's tab
+        </Text>
+        <TouchableOpacity
+          style={styles.primaryButton}
+          onPress={handleStartTab}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.primaryButtonText}>+ Start a Tab</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.secondaryButton}
+          onPress={handleScanQR}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.secondaryButtonText}>Scan QR to Join</Text>
+        </TouchableOpacity>
+      </View>
+
+      <BottomNav />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    backgroundColor: Color.White,
-    ...flex('column', 'center', 'center'),
-    paddingHorizontal: 24,
+    backgroundColor: Color.Cream,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: Color.RaisinBlack,
-    marginBottom: 32,
-  },
-  logoutButton: {
-    borderWidth: 1,
-    borderColor: Color.RaisinBlack,
-    borderRadius: 8,
-    paddingVertical: 14,
-    paddingHorizontal: 32,
+  header: {
+    height: 60,
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  logoutButtonText: {
-    color: Color.RaisinBlack,
+  headerTitle: {
+    fontFamily: 'CormorantGaramond_700Bold',
+    fontSize: 22,
+    lineHeight: 27,
+    color: Color.Espresso,
+  },
+  headerDivider: {
+    height: 1,
+    backgroundColor: Color.Gold,
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+    gap: 16,
+  },
+  emptyHeading: {
+    fontFamily: 'CormorantGaramond_700Bold',
+    fontSize: 26,
+    lineHeight: 31,
+    color: Color.Espresso,
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    lineHeight: 22,
+    color: Color.WarmBrown,
+    textAlign: 'center',
+    maxWidth: 280,
+  },
+  primaryButton: {
+    width: 327,
+    height: 54,
+    backgroundColor: Color.Gold,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  primaryButtonText: {
+    fontFamily: 'Inter_600SemiBold',
     fontSize: 16,
-    fontWeight: '600',
+    lineHeight: 19,
+    letterSpacing: 0.3,
+    color: Color.White,
+  },
+  secondaryButton: {
+    width: 327,
+    height: 54,
+    backgroundColor: Color.Cream,
+    borderWidth: 1.5,
+    borderColor: Color.Gold,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  secondaryButtonText: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 16,
+    lineHeight: 19,
+    letterSpacing: 0.3,
+    color: Color.Gold,
   },
 });
