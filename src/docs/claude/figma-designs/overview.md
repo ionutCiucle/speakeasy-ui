@@ -85,3 +85,11 @@ All screens are designed for **390 × 844 px** (iPhone 14 / standard iOS size).
 - Design is for a **social bar tab app** — users open tabs at venues, invite friends, track spending, and settle up.
 - All screens follow a consistent iPhone form factor (390×844).
 - Deep linking to a specific screen: append `&node-id=<NODE_ID>` to the Figma URL.
+
+---
+
+## Change Log
+
+| Date | Screen | Node | Change |
+|------|--------|------|--------|
+| 2026-03-30 | Create Tab — Step 1 | `36:25` | Currency dropdown header: removed flag circle (Ellipse `36:26`) and "US" label (`36:27`). Header now shows currency code + name only (e.g. **USD  US Dollar**). |
