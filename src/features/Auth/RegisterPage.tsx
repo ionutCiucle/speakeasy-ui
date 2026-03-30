@@ -8,30 +8,18 @@ import { useValidatedEmailField } from './hooks/useValidatedEmailField';
 import { useValidatedTextField } from './hooks/useValidatedTextField';
 
 export function RegisterPage() {
-  const {
-    value: username,
-    onChange: onUsernameChange,
-    error: usernameError,
-    validate: validateUsername,
-  } = useValidatedTextField('Username');
-  const {
-    value: email,
-    onChange: onEmailChange,
-    error: emailError,
-    validate: validateEmail,
-  } = useValidatedEmailField();
-  const {
-    value: password,
-    onChange: onPasswordChange,
-    error: passwordError,
-    validate: validatePassword,
-  } = useValidatedTextField('Password');
-  const {
-    value: confirmPassword,
-    onChange: onConfirmPasswordChange,
-    error: confirmPasswordError,
-    validate: validateConfirmPassword,
-  } = useValidatedTextField('Confirm password');
+  const [username, onUsernameChange, usernameError, validateUsername] =
+    useValidatedTextField('Username');
+  const [email, onEmailChange, emailError, validateEmail] =
+    useValidatedEmailField();
+  const [password, onPasswordChange, passwordError, validatePassword] =
+    useValidatedTextField('Password');
+  const [
+    confirmPassword,
+    onConfirmPasswordChange,
+    confirmPasswordError,
+    validateConfirmPassword,
+  ] = useValidatedTextField('Confirm password');
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { register } = useAuthAsyncActions();
   const navigate = useNavigate();
