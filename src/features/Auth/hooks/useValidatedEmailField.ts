@@ -29,5 +29,5 @@ export function useValidatedEmailField() {
     return true;
   }, [value]);
 
-  return [value, onChange, error, validate] as const;
+  return { value, onChange, error, validate };
 }

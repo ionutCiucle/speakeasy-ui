@@ -23,5 +23,5 @@ export function useValidatedTextField(label: string) {
     return true;
   }, [value, label]);
 
-  return [value, onChange, error, validate] as const;
+  return { value, onChange, error, validate };
 }

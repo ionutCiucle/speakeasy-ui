@@ -8,10 +8,18 @@ import { useValidatedEmailField } from './hooks/useValidatedEmailField';
 import { useValidatedTextField } from './hooks/useValidatedTextField';
 
 export function LoginPage() {
-  const [email, onEmailChange, emailError, validateEmail] =
-    useValidatedEmailField();
-  const [password, onPasswordChange, passwordError, validatePassword] =
-    useValidatedTextField('Password');
+  const {
+    value: email,
+    onChange: onEmailChange,
+    error: emailError,
+    validate: validateEmail,
+  } = useValidatedEmailField();
+  const {
+    value: password,
+    onChange: onPasswordChange,
+    error: passwordError,
+    validate: validatePassword,
+  } = useValidatedTextField('Password');
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { login } = useAuthAsyncActions();
   const navigate = useNavigate();
