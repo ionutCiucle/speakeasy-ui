@@ -12,10 +12,10 @@ Added to `devDependencies`:
 
 | Package | Version | Purpose |
 |---|---|---|
-| `jest-expo` | ^55 | Expo's official Jest preset — handles RN module transforms |
+| `jest-expo` | ~54.0.17 | Expo's official Jest preset — handles RN module transforms (pinned to Expo SDK 49 compatible version) |
 | `@testing-library/react-native` | ^13 | Component rendering + querying |
 | `react-test-renderer` | 19.1.0 | Pinned to match `react@19.1.0` (peer dep) |
-| `@types/jest` | ^30 | TypeScript types for Jest globals |
+| `@types/jest` | 29.5.14 | TypeScript types for Jest globals (pinned to Expo SDK 49 compatible version) |
 
 ---
 
@@ -49,3 +49,13 @@ Added to `package.json`:
 
 1. `npx lint-staged` — Prettier formats staged `.ts`/`.tsx` files
 2. `npm test -- --passWithNoTests` — runs the full test suite; `--passWithNoTests` allows the hook to pass before any test files exist
+
+---
+
+### Fix — Pin jest packages to Expo SDK 49 compatible versions ✅
+
+`expo start` warned that `jest-expo@55` and `@types/jest@30` were incompatible with Expo SDK 49.
+Downgraded both to the expected versions:
+
+- `jest-expo`: `^55.0.11` → `~54.0.17`
+- `@types/jest`: `^30.0.0` → `29.5.14`
