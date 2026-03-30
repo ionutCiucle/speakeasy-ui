@@ -1,25 +1,33 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { Color } from '@/styles';
 
-type TabName = 'home' | 'newTab' | 'friends' | 'profile';
+export type BottomNavTab = 'home' | 'newTab' | 'friends' | 'profile';
 
 interface Props {
-  activeTab?: TabName;
-  onTabPress?: (tab: TabName) => void;
+  activeTab?: BottomNavTab;
+  onTabPress?: (tab: BottomNavTab) => void;
 }
 
-interface NavItem {
-  key: TabName;
-  label: string;
-  iconStyle: object;
+function NavIcon({ tab, color }: { tab: BottomNavTab; color: string }) {
+  switch (tab) {
+    case 'home':
+      return <Feather name="menu" size={20} color={color} />;
+    case 'newTab':
+      return <Feather name="plus" size={22} color={color} />;
+    case 'friends':
+      return <Ionicons name="people-outline" size={22} color={color} />;
+    case 'profile':
+      return <Feather name="user" size={20} color={color} />;
+  }
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { key: 'home', label: 'Home', iconStyle: { width: 18, height: 12 } },
-  { key: 'newTab', label: 'New Tab', iconStyle: { width: 18, height: 18 } },
-  { key: 'friends', label: 'Friends', iconStyle: { width: 22, height: 23.5 } },
-  { key: 'profile', label: 'Profile', iconStyle: { width: 16, height: 24 } },
+const NAV_ITEMS: { key: BottomNavTab; label: string }[] = [
+  { key: 'home', label: 'Home' },
+  { key: 'newTab', label: 'New Tab' },
+  { key: 'friends', label: 'Friends' },
+  { key: 'profile', label: 'Profile' },
 ];
 
 export function BottomNav({ activeTab = 'home', onTabPress }: Props) {
@@ -27,7 +35,7 @@ export function BottomNav({ activeTab = 'home', onTabPress }: Props) {
     <View style={styles.container}>
       <View style={styles.separator} />
       <View style={styles.tabs}>
-        {NAV_ITEMS.map(({ key, label, iconStyle }) => {
+        {NAV_ITEMS.map(({ key, label }) => {
           const isActive = key === activeTab;
           const color = isActive ? Color.Gold : Color.WarmBrown;
           return (
@@ -37,7 +45,7 @@ export function BottomNav({ activeTab = 'home', onTabPress }: Props) {
               onPress={() => onTabPress?.(key)}
               activeOpacity={0.7}
             >
-              <View style={[styles.icon, iconStyle, { borderColor: color }]} />
+              <NavIcon tab={key} color={color} />
               <Text style={[styles.label, { color }]}>{label}</Text>
             </TouchableOpacity>
           );
@@ -63,7 +71,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     flexDirection: 'row',
-    height: 82,
+    height: 62,
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingHorizontal: 16,
@@ -71,10 +79,7 @@ const styles = StyleSheet.create({
   tab: {
     flex: 1,
     alignItems: 'center',
-    gap: 6,
-  },
-  icon: {
-    borderWidth: 1.5,
+    gap: 4,
   },
   label: {
     fontFamily: 'Inter_400Regular',

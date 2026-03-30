@@ -2,11 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
 import { BottomNav, TabReceiptIcon } from './components';
+import { BottomNavTab } from './components/BottomNav';
 import { ProfilePage } from '@/features/Profile';
 
-type ActiveTab = 'home' | 'newTab' | 'friends' | 'profile';
-
-const HEADER_TITLES: Record<ActiveTab, string> = {
+const HEADER_TITLES: Record<BottomNavTab, string> = {
   home: 'My Tabs',
   newTab: 'New Tab',
   friends: 'Friends',
@@ -14,7 +13,7 @@ const HEADER_TITLES: Record<ActiveTab, string> = {
 };
 
 export function HomePage() {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('home');
+  const [activeTab, setActiveTab] = useState<BottomNavTab>('home');
 
   const handleStartTab = useCallback(() => {
     // TODO: navigate to start tab flow
@@ -24,7 +23,7 @@ export function HomePage() {
     // TODO: navigate to QR scanner
   }, []);
 
-  const handleTabPress = useCallback((tab: ActiveTab) => {
+  const handleTabPress = useCallback((tab: BottomNavTab) => {
     setActiveTab(tab);
   }, []);
 
@@ -89,7 +88,8 @@ const styles = StyleSheet.create({
   emptyState: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 79,
     paddingHorizontal: 24,
     gap: 16,
   },
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     lineHeight: 31,
     color: Color.Espresso,
     textAlign: 'center',
+    marginTop: 8,
   },
   emptySubtitle: {
     fontFamily: 'Inter_400Regular',
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 8,
+    marginTop: 16,
   },
   primaryButtonText: {
     fontFamily: 'Inter_600SemiBold',

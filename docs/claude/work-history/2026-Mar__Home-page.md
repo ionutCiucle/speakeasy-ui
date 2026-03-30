@@ -81,3 +81,21 @@ Temporary profile view rendered when the Profile nav tab is active. Shows:
 - Header title swaps to match the active tab
 - `ProfilePage` renders in the content area when `activeTab === 'profile'`; empty state renders otherwise
 - `handleTabPress` passed to `<BottomNav onTabPress={...} />`
+
+---
+
+### Step 6 — Figma polish: icon, nav icons, content positioning ✅
+
+**`TabReceiptIcon`** — replaced the placeholder bordered rectangle with `MaterialCommunityIcons: 'glass-cocktail'` at size 84 / `Color.Gold`, matching the cocktail glass silhouette in the Figma.
+
+**`BottomNav`** — replaced plain bordered `View` placeholders with `@expo/vector-icons` icons:
+| Tab | Icon |
+|---|---|
+| Home | `Feather: 'menu'` (horizontal lines) |
+| New Tab | `Feather: 'plus'` |
+| Friends | `Ionicons: 'people-outline'` |
+| Profile | `Feather: 'user'` |
+
+`BottomNavTab` type extracted and exported from `BottomNav.tsx` so `HomePage` can import it directly (eliminates the local `ActiveTab` alias).
+
+**Empty state layout** — changed from `justifyContent: 'center'` to `justifyContent: 'flex-start'` with `paddingTop: 79` (matching the Figma's 79px gap between the header divider and the icon top). Added explicit `marginTop` values between the heading and the buttons to match Figma spacing.
