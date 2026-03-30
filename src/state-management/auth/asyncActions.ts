@@ -49,6 +49,11 @@ export const registerAsyncAction =
     dispatch({ type: AuthActionType.RegisterPending });
     try {
       await AuthAPI.post('/register', { email, password, username });
+    } catch {
+      dispatch({ type: AuthActionType.RegisterFailure });
+      return false;
+    }
+    try {
       const { data } = await AuthAPI.post<AuthResponse>('/login', {
         email,
         password,
@@ -60,6 +65,9 @@ export const registerAsyncAction =
       });
       return true;
     } catch {
+      console.error(
+        '[registerAsyncAction] Auto-login after registration failed',
+      );
       dispatch({ type: AuthActionType.RegisterFailure });
       return false;
     }
