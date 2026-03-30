@@ -4,13 +4,23 @@ import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '@/styles';
 import { BracketContainer, Button, Input } from '@/components';
 import { useAuthAsyncActions } from '@/state-management/auth';
+import { useValidatedEmailField } from './hooks/useValidatedEmailField';
+import { useValidatedTextField } from './hooks/useValidatedTextField';
 
 export function RegisterPage() {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [username, onUsernameChange, usernameError, validateUsername] =
+    useValidatedTextField('Username');
+  const [email, onEmailChange, emailError, validateEmail] =
+    useValidatedEmailField();
+  const [password, onPasswordChange, passwordError, validatePassword] =
+    useValidatedTextField('Password');
+  const [
+    confirmPassword,
+    onConfirmPasswordChange,
+    confirmPasswordError,
+    validateConfirmPassword,
+  ] = useValidatedTextField('Confirm password');
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const { register } = useAuthAsyncActions();
   const navigate = useNavigate();
 
@@ -19,18 +29,36 @@ export function RegisterPage() {
   }, [navigate]);
 
   const handleRegister = useCallback(async () => {
-    setError(null);
+    setSubmitError(null);
+    const usernameOk = validateUsername();
+    const emailOk = validateEmail();
+    const passwordOk = validatePassword();
+    const confirmOk = validateConfirmPassword();
+    if (!usernameOk || !emailOk || !passwordOk || !confirmOk) {
+      return;
+    }
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setSubmitError('Passwords do not match.');
       return;
     }
     const success = await register({ email, password, username });
     if (success) {
       navigate('/home');
     } else {
-      setError('Registration failed. Please try again.');
+      setSubmitError('Registration failed. Please try again.');
     }
-  }, [email, password, confirmPassword, username, register, navigate]);
+  }, [
+    email,
+    password,
+    confirmPassword,
+    username,
+    register,
+    navigate,
+    validateUsername,
+    validateEmail,
+    validatePassword,
+    validateConfirmPassword,
+  ]);
 
   return (
     <BracketContainer>
@@ -53,42 +81,52 @@ export function RegisterPage() {
             label="USERNAME"
             placeholder="@yourname"
             value={username}
-            onChangeText={setUsername}
+            onChangeText={onUsernameChange}
             autoCapitalize="none"
           />
+          {usernameError && <Text style={styles.error}>{usernameError}</Text>}
 
           <Input
             label="EMAIL"
             placeholder="your@email.com"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={onEmailChange}
             autoCapitalize="none"
             keyboardType="email-address"
           />
+          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
           <Input
             label="PASSWORD"
             placeholder="••••••••"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={onPasswordChange}
             secureTextEntry
           />
+          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
 
           <Input
             label="CONFIRM PASSWORD"
             placeholder="••••••••"
             value={confirmPassword}
-            onChangeText={setConfirmPassword}
+            onChangeText={onConfirmPasswordChange}
             secureTextEntry
           />
+          {confirmPasswordError && (
+            <Text style={styles.error}>{confirmPasswordError}</Text>
+          )}
 
-          {error && <Text style={styles.error}>{error}</Text>}
+          {submitError && <Text style={styles.error}>{submitError}</Text>}
 
           <Text style={styles.terms}>
             By registering you agree to our Terms of Service and Privacy Policy.
           </Text>
 
-          <Button label="Create Account" onPress={handleRegister} style={styles.button} />
+          <Button
+            label="Create Account"
+            onPress={handleRegister}
+            style={styles.button}
+          />
 
           <View style={styles.signInRow}>
             <Text style={styles.signInText}>Already a member? </Text>
