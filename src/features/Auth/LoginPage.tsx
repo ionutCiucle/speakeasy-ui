@@ -4,23 +4,32 @@ import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '@/styles';
 import { BracketContainer, Button, Input, Logo } from '@/components';
 import { useAuthAsyncActions } from '@/state-management/auth';
+import { useValidatedEmailField } from './hooks/useValidatedEmailField';
+import { useValidatedTextField } from './hooks/useValidatedTextField';
 
 export function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [email, onEmailChange, emailError, validateEmail] =
+    useValidatedEmailField();
+  const [password, onPasswordChange, passwordError, validatePassword] =
+    useValidatedTextField('Password');
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const { login } = useAuthAsyncActions();
   const navigate = useNavigate();
 
   const handleLogin = useCallback(async () => {
-    setError(null);
+    setSubmitError(null);
+    const emailOk = validateEmail();
+    const passwordOk = validatePassword();
+    if (!emailOk || !passwordOk) {
+      return;
+    }
     const success = await login({ email, password });
     if (success) {
       navigate('/home');
     } else {
-      setError('Login failed. Please check your credentials.');
+      setSubmitError('Login failed. Please check your credentials.');
     }
-  }, [email, password, login, navigate]);
+  }, [email, password, login, navigate, validateEmail, validatePassword]);
 
   const handleForgotPassword = useCallback(() => {
     navigate('/forgot-password');
@@ -43,24 +52,26 @@ export function LoginPage() {
             label="EMAIL"
             placeholder="your@email.com"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={onEmailChange}
             autoCapitalize="none"
             keyboardType="email-address"
           />
+          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
           <Input
             label="PASSWORD"
             placeholder="••••••••"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={onPasswordChange}
             secureTextEntry
           />
+          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
 
           <TouchableOpacity onPress={handleForgotPassword}>
             <Text style={styles.forgotPassword}>Forgot Password?</Text>
           </TouchableOpacity>
 
-          {error && <Text style={styles.error}>{error}</Text>}
+          {submitError && <Text style={styles.error}>{submitError}</Text>}
 
           <Button label="Sign In" onPress={handleLogin} style={styles.button} />
 
@@ -71,7 +82,9 @@ export function LoginPage() {
           </View>
 
           <View style={styles.createAccountRow}>
-            <Text style={styles.createAccountText}>Don't have an account? </Text>
+            <Text style={styles.createAccountText}>
+              Don't have an account?{' '}
+            </Text>
             <Link to="/register">
               <Text style={styles.createAccountLink}>Create one</Text>
             </Link>

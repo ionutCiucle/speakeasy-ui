@@ -1,15 +1,25 @@
 import React, { createContext, useReducer, ReactNode } from 'react';
-import { appReducer, appInitialState, AppState, AppAction } from '@/state-management/store';
+import {
+  appReducer,
+  appInitialState,
+  AppState,
+  AppAction,
+} from '@/state-management/store';
+import { createLoggerReducer } from '@/state-management/loggerMiddleware';
 
 export const AppStateContext = createContext<AppState>(appInitialState);
-export const AppDispatchContext = createContext<React.Dispatch<AppAction>>(() => undefined);
+export const AppDispatchContext = createContext<React.Dispatch<AppAction>>(
+  () => undefined,
+);
 
 interface AppProviderProps {
   children: ReactNode;
 }
 
+const loggedReducer = createLoggerReducer(appReducer);
+
 export function AppProvider({ children }: AppProviderProps) {
-  const [state, dispatch] = useReducer(appReducer, appInitialState);
+  const [state, dispatch] = useReducer(loggedReducer, appInitialState);
 
   return (
     <AppDispatchContext.Provider value={dispatch}>

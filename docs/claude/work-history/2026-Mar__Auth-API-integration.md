@@ -1,0 +1,86 @@
+# 2026-Mar__Auth-API-integration
+
+## Plan
+
+Wire up the Login and Register screens to the backend API, adding client-side form validation before requests are sent.
+
+---
+
+### Step 1 — Verify API endpoints and env config ✅
+
+- `AuthAPI` base URL: `${EXPO_PUBLIC_API_BASE_URL}/auth` → `http://localhost:4000/api/auth`
+- `loginAsyncAction` → `POST /auth/login`
+- `registerAsyncAction` → `POST /auth/register`
+- `.env` already has `EXPO_PUBLIC_API_BASE_URL=http://localhost:4000/api`
+
+No changes needed.
+
+---
+
+### Step 2 — Add validation hooks ✅
+
+Two hooks in `src/features/Auth/hooks/`, each returning a tuple `[value, onChange, error, validate] as const`:
+
+| Hook | Rules |
+|---|---|
+| `useValidatedEmailField()` | Required + regex email pattern check |
+| `useValidatedTextField(label)` | Not empty / not whitespace-only |
+
+Each hook owns its own state. `onChange` clears the error on keystroke. `validate()` runs the check, sets the error if invalid, and returns a `boolean`.
+
+Usage pattern in components:
+
+```ts
+const [email, onEmailChange, emailError, validateEmail] = useValidatedEmailField();
+const [password, onPasswordChange, passwordError, validatePassword] = useValidatedTextField('Password');
+```
+
+---
+
+### Step 3 — Update `LoginPage` ✅
+
+- Replaced `useState` fields with `useValidatedEmailField` and `useValidatedTextField`.
+- `handleLogin` calls both `validate()` functions before dispatching — both run so all errors surface at once.
+- Per-field inline errors rendered beneath each `Input`; API failure shown as `submitError` below the fields.
+
+---
+
+### Step 4 — Update `RegisterPage` ✅
+
+- Same pattern across all four fields: `username`, `email`, `password`, `confirmPassword`.
+- Password-match check retained after field validation.
+- Per-field inline errors; API failure shown as `submitError`.
+
+---
+
+### Step 5 — ESLint curly rule ✅
+
+Added `"curly": ["error", "all"]` to `.eslintrc` to enforce curly braces on all control flow blocks (including `switch` case branches). Ran `eslint --fix` to resolve the two violations introduced by earlier compact one-liners.
+
+---
+
+### Step 6 — Pre-commit Prettier formatting ✅
+
+Installed `husky` and `lint-staged` to auto-format staged files before every commit.
+
+- `husky` registers the pre-commit hook via the `prepare` script (runs on `npm install`)
+- `.husky/pre-commit` calls `npx lint-staged`
+- `lint-staged` config in `package.json` runs `prettier --write` on staged `*.ts` / `*.tsx` files only
+
+---
+
+### Step 7 — Fix TS error: `RegisterSuccessAction` payload / rehydration action mismatch ✅
+
+**Problem:** CI preflight failed with:
+```
+error TS2353: Object literal may only specify known properties,
+and 'payload' does not exist in type 'RegisterSuccessAction'.
+```
+
+`useAuthActions.registerSuccess` was dispatching `{ userId, token }` as a payload, but `RegisterSuccessAction` has no payload field (and the reducer never reads one — it only sets `isLoading: false`).
+
+Separately, `useAuthTokenRehydration` was calling `registerSuccess(userId, token)` to restore session state from a stored JWT, which was semantically wrong and would have silently dropped `userId`/`token` from the store.
+
+**Fix:**
+- `useAuthActions.registerSuccess` — removed arguments and payload from the dispatch; the action only signals success, it carries no data.
+- `useAuthTokenRehydration` — switched from `registerSuccess` to `loginSuccess`, which does set `userId` and `token` in state. Token rehydration is session-restore, not a register event, so `loginSuccess` is the correct action regardless of how the session was originally created.

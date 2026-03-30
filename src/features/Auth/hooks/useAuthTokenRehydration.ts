@@ -14,7 +14,7 @@ function isTokenExpired(token: string): boolean {
 
 export function useAuthTokenRehydration() {
   const [isReady, setIsReady] = useState(false);
-  const { registerSuccess } = useAuthActions();
+  const { loginSuccess } = useAuthActions();
 
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ export function useAuthTokenRehydration() {
       const token = await getToken();
       if (token && !isTokenExpired(token)) {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        registerSuccess(payload.sub ?? payload.userId, token);
+        loginSuccess(payload.sub ?? payload.userId, token);
         navigate('/home');
       } else {
         await removeToken();
@@ -31,7 +31,7 @@ export function useAuthTokenRehydration() {
     } finally {
       setIsReady(true);
     }
-  }, [registerSuccess, navigate]);
+  }, [loginSuccess, navigate]);
 
   useEffect(() => {
     rehydrate();
