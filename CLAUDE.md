@@ -4,7 +4,7 @@ React Native mobile app built with Expo.
 
 ## Stack
 
-- **Runtime:** React Native 0.72 / Expo SDK 49
+- **Runtime:** React Native 0.83 / Expo SDK 55
 - **Language:** TypeScript 5 (strict mode)
 - **Navigation:** React Navigation v6 (stack) + React Router Native v6
 - **State Management:** React Context + useReducer (custom singleton store)
