@@ -56,3 +56,13 @@ const [password, onPasswordChange, passwordError, validatePassword] = useValidat
 ### Step 5 — ESLint curly rule ✅
 
 Added `"curly": ["error", "all"]` to `.eslintrc` to enforce curly braces on all control flow blocks (including `switch` case branches). Ran `eslint --fix` to resolve the two violations introduced by earlier compact one-liners.
+
+---
+
+### Step 6 — Pre-commit Prettier formatting ✅
+
+Installed `husky` and `lint-staged` to auto-format staged files before every commit.
+
+- `husky` registers the pre-commit hook via the `prepare` script (runs on `npm install`)
+- `.husky/pre-commit` calls `npx lint-staged`
+- `lint-staged` config in `package.json` runs `prettier --write` on staged `*.ts` / `*.tsx` files only
