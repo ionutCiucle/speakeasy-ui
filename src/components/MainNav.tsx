@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
-import { Color } from '@/styles';
+import { Color, flex } from '@/styles';
 
 export type MainNavTab = 'home' | 'newTab' | 'friends' | 'profile';
 
@@ -70,15 +70,13 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Sand,
   },
   tabs: {
-    flexDirection: 'row',
+    ...flex('row', 'space-around', 'center'),
     height: 62,
-    alignItems: 'center',
-    justifyContent: 'space-around',
     paddingHorizontal: 16,
   },
   tab: {
     flex: 1,
-    alignItems: 'center',
+    ...flex('column', 'center', 'center'),
     gap: 4,
   },
   label: {
