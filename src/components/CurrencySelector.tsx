@@ -15,7 +15,7 @@ export function CurrencySelector({
   onPress,
 }: Props) {
   return (
-    <>
+    <View style={styles.container}>
       <Text style={styles.label}>Currency</Text>
       <TouchableOpacity
         style={styles.selector}
@@ -35,18 +35,20 @@ export function CurrencySelector({
         Members see all totals in this currency. You can change it up to the
         first order.
       </Text>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 16,
+  },
   label: {
     fontFamily: 'Inter_500Medium',
     fontSize: 11,
     lineHeight: 13,
     color: Color.WarmBrown,
     marginBottom: 6,
-    marginTop: 16,
   },
   selector: {
     flexDirection: 'row',

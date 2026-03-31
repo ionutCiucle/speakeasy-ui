@@ -1,8 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -13,11 +12,15 @@ import { Color } from '@/styles';
 import {
   Button,
   CurrencySelector,
+  Input,
   LocationSelector,
   Wizard,
 } from '@/components';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
+import { useCreateTabActions } from '@/state-management/createTab';
+import { useAppSelector } from '@/state-management/providerHooks';
+import { useTabDetailsValidation } from './hooks/useTabDetailsValidation';
 
 const TOTAL_STEPS = 4;
 const CURRENT_STEP = 1;
@@ -28,21 +31,40 @@ interface Props {
 
 export function TabDetailsStep({ onContinue }: Props) {
   const { showModal } = useLayoutActions();
-  const [tabName, setTabName] = useState('');
-  const [venue, setVenue] = useState('');
-  const [notes, setNotes] = useState('');
+  const { setTabName, setVenue, setNotes } = useCreateTabActions();
+  const tabName = useAppSelector((state) => state.createTab.tabName);
+  const venue = useAppSelector((state) => state.createTab.venue);
+  const notes = useAppSelector((state) => state.createTab.notes);
+  const currency = useAppSelector((state) => state.createTab.currency);
 
-  const handleTabNameChange = useCallback((text: string) => {
-    setTabName(text);
-  }, []);
+  const handleTabNameChange = useCallback(
+    (text: string) => {
+      setTabName(text);
+    },
+    [setTabName],
+  );
 
-  const handleVenueChange = useCallback((text: string) => {
-    setVenue(text);
-  }, []);
+  const handleVenueChange = useCallback(
+    (text: string) => {
+      setVenue(text);
+    },
+    [setVenue],
+  );
 
-  const handleNotesChange = useCallback((text: string) => {
-    setNotes(text);
-  }, []);
+  const handleNotesChange = useCallback(
+    (text: string) => {
+      setNotes(text);
+    },
+    [setNotes],
+  );
+
+  const { errors, validateAll } = useTabDetailsValidation({ tabName, venue });
+
+  const handleContinue = useCallback(() => {
+    if (validateAll()) {
+      onContinue();
+    }
+  }, [validateAll, onContinue]);
 
   return (
     <View style={styles.screen}>
@@ -68,40 +90,42 @@ export function TabDetailsStep({ onContinue }: Props) {
             <Text style={styles.sectionHeader}>TAB DETAILS</Text>
 
             {/* Tab Name */}
-            <Text style={styles.fieldLabel}>Tab Name</Text>
-            <TextInput
-              style={styles.input}
+            <Input
+              label="Tab Name"
               placeholder="Friday Night Out"
-              placeholderTextColor={Color.Sand}
               value={tabName}
+              size="small"
+              invalid={!!errors.tabName}
+              error={errors.tabName}
               onChangeText={handleTabNameChange}
             />
 
             {/* Venue / Location */}
-            <LocationSelector value={venue} onChangeText={handleVenueChange} />
+            <LocationSelector
+              value={venue}
+              invalid={!!errors.venue}
+              error={errors.venue}
+              onChangeText={handleVenueChange}
+            />
 
             {/* Currency */}
             <CurrencySelector
-              currencyCode="USD"
-              currencyName="US Dollar"
+              currencyCode={currency.code}
+              currencyName={currency.name}
               onPress={() => showModal(ModalId.CurrencyPicker)}
             />
 
             {/* Notes */}
-            <Text style={[styles.fieldLabel, styles.fieldLabelSpaced]}>
-              Notes (optional)
-            </Text>
-            <TextInput
-              style={styles.notesInput}
+            <Input
+              label="Notes (optional)"
               placeholder={
                 'e.g. Jamie\u2019s birthday dinner \u2014 extra napkins please'
               }
-              placeholderTextColor={Color.WarmBrown}
               value={notes}
+              size="small"
               onChangeText={handleNotesChange}
               multiline
               numberOfLines={3}
-              textAlignVertical="top"
             />
 
             {/* Info box */}
@@ -123,7 +147,7 @@ export function TabDetailsStep({ onContinue }: Props) {
               variant="tertiary"
               rightIcon="chevron-right"
               style={styles.continueWrapper}
-              onPress={onContinue}
+              onPress={handleContinue}
             />
           </View>
         </ScrollView>
@@ -152,42 +176,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     color: Color.WarmBrown,
     marginBottom: 12,
-  },
-  fieldLabel: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 11,
-    lineHeight: 13,
-    color: Color.WarmBrown,
-    marginBottom: 6,
-  },
-  fieldLabelSpaced: {
-    marginTop: 16,
-  },
-  input: {
-    backgroundColor: Color.Ivory,
-    borderWidth: 1,
-    borderColor: Color.Sand,
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    height: 44,
-    fontFamily: 'Inter_500Medium',
-    fontSize: 14,
-    lineHeight: 17,
-    color: Color.Espresso,
-  },
-  notesInput: {
-    backgroundColor: Color.Ivory,
-    borderWidth: 1,
-    borderColor: Color.Sand,
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingTop: 14,
-    paddingBottom: 14,
-    height: 80,
-    fontFamily: 'Inter_400Regular',
-    fontSize: 13,
-    lineHeight: 20,
-    color: Color.Espresso,
   },
   infoBox: {
     flexDirection: 'row',

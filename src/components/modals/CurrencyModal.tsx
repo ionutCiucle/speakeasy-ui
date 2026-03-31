@@ -79,16 +79,20 @@ const CURRENCIES: CurrencyEntry[] = [
 ];
 
 interface Props {
+  selectedCode: string;
+  onSelect: (code: string, name: string) => void;
   onDone: () => void;
 }
 
-export function CurrencyModal({ onDone }: Props) {
-  const [selectedCode, setSelectedCode] = useState('USD');
+export function CurrencyModal({ selectedCode, onSelect, onDone }: Props) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSelect = useCallback((code: string) => {
-    setSelectedCode(code);
-  }, []);
+  const handleSelect = useCallback(
+    (code: string, name: string) => {
+      onSelect(code, name);
+    },
+    [onSelect],
+  );
 
   const filtered = searchQuery.trim()
     ? CURRENCIES.filter(
@@ -141,7 +145,7 @@ export function CurrencyModal({ onDone }: Props) {
                 item.code === selectedCode && styles.rowSelected,
               ]}
               activeOpacity={0.7}
-              onPress={() => handleSelect(item.code)}
+              onPress={() => handleSelect(item.code, item.name)}
             >
               <View style={[styles.avatar, { backgroundColor: item.color }]}>
                 <Text style={styles.avatarText}>{item.abbr}</Text>

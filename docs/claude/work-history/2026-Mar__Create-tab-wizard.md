@@ -120,7 +120,38 @@ Three reusable components extracted from `TabDetailsStep` into `src/components/`
 
 ---
 
-### Step 9 — Home screen wiring ✅
+### Step 9 — createTab state slice ✅
+
+**`src/state-management/createTab/`** — new slice following the standard structure:
+
+| Field | Type | Default |
+|---|---|---|
+| `tabName` | `string` | `''` |
+| `venue` | `string` | `''` |
+| `currency` | `{ code: string; name: string }` | `{ code: 'USD', name: 'US Dollar' }` |
+| `notes` | `string` | `''` |
+
+Actions: `SetTabName`, `SetVenue`, `SetCurrency`, `SetNotes` — all string/object payloads.
+Hook: `useCreateTabActions` exposes `setTabName`, `setVenue`, `setCurrency`, `setNotes`.
+
+**`TabDetailsStep`** — replaced all `useState` calls with `useAppSelector` + `useCreateTabActions`. `CurrencySelector` now receives `currency.code` / `currency.name` from the store.
+
+**`CurrencyModal`** — removed local `selectedCode` state; now accepts `selectedCode: string` and `onSelect: (code, name) => void` props. Search query remains local (ephemeral UI state).
+
+**`ModalRoot`** — reads `state.createTab.currency` and passes `setCurrency` as `onSelect` into `CurrencyModal` via `renderContent`.
+
+---
+
+### Step 10 — ESLint: enforce switch-case braces ✅
+
+- Installed `eslint-plugin-unicorn@55` (v64 is ESM-only and incompatible with ESLint v8)
+- Added `"unicorn"` to `plugins` and `"unicorn/switch-case-braces": ["error", "always"]` to rules in `.eslintrc`
+- Ran `--fix` across all reducers and `src/` — all switch cases now wrapped in `{ }` blocks
+- Created `.vscode/settings.json` with `eslint.workingDirectory` + `eslint.nodePath` to ensure the VS Code ESLint extension resolves plugins from the workspace `node_modules`
+
+---
+
+### Step 11 — Home screen wiring ✅
 
 `src/features/Home/HomePage.tsx`:
 
@@ -128,3 +159,41 @@ Three reusable components extracted from `TabDetailsStep` into `src/components/`
 - `handleStartTab` — was a TODO stub; now calls `navigate('/create-tab')`
 - `handleTabPress` — extended: pressing the `newTab` tab calls `navigate('/create-tab')` and returns early instead of calling `setActiveTab`
 - Both handlers updated with `navigate` in their `useCallback` dependency arrays
+
+---
+
+### Step 12 — Input `size` prop + form field consistency ✅
+
+**`src/components/Input/Input.tsx`**:
+- Added `size?: 'default' | 'small'` prop (default `'default'`)
+- `inputSmall` style matches `LocationSelector`/`CurrencySelector` dimensions: `height: 44`, `paddingHorizontal: 14`, `paddingVertical: 0`, `borderRadius: 8`, `fontSize: 14`, `Inter_500Medium`
+- Removed `letterSpacing: 1.5` from label — now visually consistent with the other field labels
+
+**Form field spacing standardised** — all three field components now use a container wrapper with `marginBottom: 16` instead of mixing container bottom-margin with label top-margin:
+
+| Component | Before | After |
+|---|---|---|
+| `Input` | container `marginBottom: 16`, label no `marginTop` | unchanged |
+| `LocationSelector` | label `marginTop: 16`, no container margin | `<View container>` `marginBottom: 16`, label no `marginTop` |
+| `CurrencySelector` | label `marginTop: 16`, no container margin | `<View container>` `marginBottom: 16`, label no `marginTop` |
+
+**`TabDetailsStep`** — Tab Name and Notes inputs now use `size="small"`.
+
+---
+
+### Step 13 — TabDetailsStep continue validation ✅
+
+**`src/features/CreateTab/hooks/useTabDetailsValidation.ts`** — new hook:
+- Accepts `{ tabName, venue }` values
+- Tracks a `submitted` flag; errors are computed reactively so they clear as soon as the user fixes the field
+- `validateAll()` sets `submitted = true`, returns `boolean`
+- Rules: `tabName` and `venue` must be non-empty after trim
+
+**`src/components/LocationSelector.tsx`** — added `invalid?: boolean` and `error?: string` props:
+- `inputWithIconInvalid` style (`borderColor: Color.Flame`) applied when `invalid`
+- Error text rendered below the input row (same style as `Input`'s error)
+
+**`TabDetailsStep`**:
+- `handleContinue` calls `validateAll()` and only invokes `onContinue` if the form is valid
+- Tab Name `<Input>` wired with `invalid` + `error` from hook
+- `<LocationSelector>` wired with `invalid` + `error` from hook

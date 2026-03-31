@@ -14,17 +14,22 @@ export function authReducer(
   action: AuthAction,
 ): AuthState {
   switch (action.type) {
-    case AuthActionType.SetUsername:
+    case AuthActionType.SetUsername: {
       return { ...state, username: action.payload };
-    case AuthActionType.RegisterPending:
+    }
+    case AuthActionType.RegisterPending: {
       return { ...state, isLoading: true };
-    case AuthActionType.RegisterSuccess:
+    }
+    case AuthActionType.RegisterSuccess: {
       return { ...state, isLoading: false };
-    case AuthActionType.RegisterFailure:
+    }
+    case AuthActionType.RegisterFailure: {
       return { ...state, isLoading: false, userId: null, token: null };
-    case AuthActionType.LoginPending:
+    }
+    case AuthActionType.LoginPending: {
       return { ...state, isLoading: true };
-    case AuthActionType.LoginSuccess:
+    }
+    case AuthActionType.LoginSuccess: {
       return {
         ...state,
         isLoading: false,
@@ -32,7 +37,8 @@ export function authReducer(
         token: action.payload.token,
         email: action.payload.email,
       };
-    case AuthActionType.LoginFailure:
+    }
+    case AuthActionType.LoginFailure: {
       return {
         ...state,
         isLoading: false,
@@ -40,9 +46,12 @@ export function authReducer(
         token: null,
         email: null,
       };
-    case AuthActionType.Logout:
+    }
+    case AuthActionType.Logout: {
       return { ...authInitialState };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }

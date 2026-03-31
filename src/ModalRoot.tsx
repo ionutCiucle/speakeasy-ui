@@ -11,6 +11,7 @@ import { Color } from '@/styles';
 import { useAppSelector } from '@/state-management/providerHooks';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
+import { useCreateTabActions } from '@/state-management/createTab';
 import { CurrencyModal } from '@/components/modals/CurrencyModal';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
@@ -18,6 +19,8 @@ const DURATION = 240;
 
 export function ModalRoot() {
   const activeModal = useAppSelector((state) => state.layout.activeModal);
+  const currency = useAppSelector((state) => state.createTab.currency);
+  const { setCurrency } = useCreateTabActions();
   const { hideModal } = useLayoutActions();
 
   // renderedModal trails activeModal so the closing animation fully plays
@@ -96,16 +99,28 @@ export function ModalRoot() {
       {/* Sheet */}
       <Animated.View style={[styles.sheet, { transform: [{ translateY }] }]}>
         <View style={styles.handle} />
-        {renderContent(renderedModal, hideModal)}
+        {renderContent(renderedModal, hideModal, currency, setCurrency)}
       </Animated.View>
     </View>
   );
 }
 
-function renderContent(modalId: ModalId, onDone: () => void): React.ReactNode {
+function renderContent(
+  modalId: ModalId,
+  onDone: () => void,
+  currency: { code: string; name: string },
+  onSelectCurrency: (code: string, name: string) => void,
+): React.ReactNode {
   switch (modalId) {
-    case ModalId.CurrencyPicker:
-      return <CurrencyModal onDone={onDone} />;
+    case ModalId.CurrencyPicker: {
+      return (
+        <CurrencyModal
+          selectedCode={currency.code}
+          onSelect={onSelectCurrency}
+          onDone={onDone}
+        />
+      );
+    }
   }
 }
 

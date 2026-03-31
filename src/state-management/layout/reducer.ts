@@ -10,11 +10,14 @@ export function layoutReducer(
   action: LayoutAction,
 ): LayoutState {
   switch (action.type) {
-    case LayoutActionType.ShowModal:
+    case LayoutActionType.ShowModal: {
       return { ...state, activeModal: action.payload };
-    case LayoutActionType.HideModal:
+    }
+    case LayoutActionType.HideModal: {
       return { ...state, activeModal: null };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 }
