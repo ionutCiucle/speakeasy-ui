@@ -3,14 +3,8 @@ import { render, fireEvent } from '@testing-library/react-native';
 import { MainNav } from '../MainNav';
 
 jest.mock('@expo/vector-icons', () => ({
-  Feather: ({ name, color }: { name: string; color: string }) => {
-    const { Text } = require('react-native');
-    return <Text testID={`feather-${name}`} style={{ color }} />;
-  },
-  Ionicons: ({ name, color }: { name: string; color: string }) => {
-    const { Text } = require('react-native');
-    return <Text testID={`ionicons-${name}`} style={{ color }} />;
-  },
+  Feather: () => null,
+  Ionicons: () => null,
 }));
 
 describe('MainNav', () => {
