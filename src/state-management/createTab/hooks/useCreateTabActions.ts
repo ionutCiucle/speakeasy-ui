@@ -65,6 +65,10 @@ export function useCreateTabActions() {
     [dispatch],
   );
 
+  const reset = useCallback(() => {
+    dispatch({ type: CreateTabActionType.Reset });
+  }, [dispatch]);
+
   return {
     setTabName,
     setVenue,
@@ -74,5 +78,6 @@ export function useCreateTabActions() {
     removeMember,
     addMenuItem,
     removeMenuItem,
+    reset,
   };
 }

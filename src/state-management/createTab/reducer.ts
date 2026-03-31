@@ -45,6 +45,9 @@ export function createTabReducer(
         menuItems: state.menuItems.filter((i) => i.id !== action.payload),
       };
     }
+    case CreateTabActionType.Reset: {
+      return createTabInitialState;
+    }
     default: {
       return state;
     }

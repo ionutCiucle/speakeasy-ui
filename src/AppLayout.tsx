@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
 import { MainNav, MainNavTab, PageHeader } from '@/components';
+import { useCreateTabActions } from '@/state-management/createTab';
 import { ModalRoot } from './ModalRoot';
 
 interface RouteConfig {
@@ -27,6 +28,7 @@ const TAB_ROUTES: Record<MainNavTab, string> = {
 export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { reset } = useCreateTabActions();
   const config =
     ROUTE_CONFIG[location.pathname] ??
     (location.pathname.startsWith('/create-tab')
@@ -39,8 +41,9 @@ export function AppLayout() {
   }, [navigate]);
 
   const handleClose = useCallback(() => {
+    reset();
     navigate('/home');
-  }, [navigate]);
+  }, [reset, navigate]);
 
   const handleTabPress = useCallback(
     (tab: MainNavTab) => {

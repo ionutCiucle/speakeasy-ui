@@ -7,4 +7,5 @@ export enum CreateTabActionType {
   RemoveMember = 'CreateTab/RemoveMember',
   AddMenuItem = 'CreateTab/AddMenuItem',
   RemoveMenuItem = 'CreateTab/RemoveMenuItem',
+  Reset = 'CreateTab/Reset',
 }

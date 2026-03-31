@@ -13,5 +13,6 @@ export type {
   RemoveMemberAction,
   AddMenuItemAction,
   RemoveMenuItemAction,
+  ResetAction,
 } from './types';
 export { useCreateTabActions } from './hooks';

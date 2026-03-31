@@ -60,6 +60,10 @@ export interface RemoveMenuItemAction {
   payload: string;
 }
 
+export interface ResetAction {
+  type: CreateTabActionType.Reset;
+}
+
 export type CreateTabAction =
   | SetTabNameAction
   | SetVenueAction
@@ -68,4 +72,5 @@ export type CreateTabAction =
   | AddMemberAction
   | RemoveMemberAction
   | AddMenuItemAction
-  | RemoveMenuItemAction;
+  | RemoveMenuItemAction
+  | ResetAction;
