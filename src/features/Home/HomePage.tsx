@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
 import { TabReceiptIcon } from './components';
-import { MainNav, MainNavTab } from '@/components';
+import { Button, MainNav, MainNavTab } from '@/components';
 import { ProfilePage } from '@/features/Profile';
 
 const HEADER_TITLES: Record<MainNavTab, string> = {
@@ -43,20 +43,17 @@ export function HomePage() {
           <Text style={styles.emptySubtitle}>
             Start one or scan a QR to join a friend's tab
           </Text>
-          <TouchableOpacity
-            style={styles.primaryButton}
+          <Button
+            label="+ Start a Tab"
             onPress={handleStartTab}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.primaryButtonText}>+ Start a Tab</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.secondaryButton}
+            style={styles.homeButton}
+          />
+          <Button
+            label="Scan QR to Join"
             onPress={handleScanQR}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.secondaryButtonText}>Scan QR to Join</Text>
-          </TouchableOpacity>
+            variant="secondary"
+            style={styles.homeButton}
+          />
         </View>
       )}
 
@@ -109,37 +106,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: 280,
   },
-  primaryButton: {
+  homeButton: {
     width: 327,
-    height: 54,
-    backgroundColor: Color.Gold,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 16,
-  },
-  primaryButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    lineHeight: 19,
-    letterSpacing: 0.3,
-    color: Color.White,
-  },
-  secondaryButton: {
-    width: 327,
-    height: 54,
-    backgroundColor: Color.Cream,
-    borderWidth: 1.5,
-    borderColor: Color.Gold,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  secondaryButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    lineHeight: 19,
-    letterSpacing: 0.3,
-    color: Color.Gold,
+    marginTop: 8,
   },
 });
