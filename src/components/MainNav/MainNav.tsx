@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     ...flex('row', 'space-around', 'center'),
     height: 62,
     paddingHorizontal: 16,
+    paddingBottom: 5,
   },
   tab: {
     flex: 1,
