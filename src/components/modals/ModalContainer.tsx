@@ -11,6 +11,7 @@ import { Color } from '@/styles';
 import { useAppSelector } from '@/state-management/providerHooks';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
+import { CurrencyModal } from './CurrencyModal';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
 const DURATION = 240;
@@ -94,17 +95,17 @@ export function ModalContainer() {
 
       {/* Sheet */}
       <Animated.View style={[styles.sheet, { transform: [{ translateY }] }]}>
-        {renderContent(renderedModal)}
+        <View style={styles.handle} />
+        {renderContent(renderedModal, hideModal)}
       </Animated.View>
     </View>
   );
 }
 
-function renderContent(modalId: ModalId): React.ReactNode {
+function renderContent(modalId: ModalId, onDone: () => void): React.ReactNode {
   switch (modalId) {
     case ModalId.CurrencyPicker:
-      // TODO: render CurrencyPickerSheet
-      return null;
+      return <CurrencyModal onDone={onDone} />;
   }
 }
 
@@ -122,5 +123,13 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Ivory,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  handle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: Color.Sand,
+    alignSelf: 'center',
+    marginTop: 10,
   },
 });

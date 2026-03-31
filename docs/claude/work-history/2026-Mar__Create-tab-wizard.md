@@ -87,18 +87,40 @@ Three reusable components extracted from `TabDetailsStep` into `src/components/`
 - `ModalId` enum — `CurrencyPicker` is the first entry
 - `useLayoutActions` hook exposes `showModal(modalId)` and `hideModal()`
 
-**`src/components/ModalContainer.tsx`** — global animated bottom sheet shell mounted in `AppLayout`:
+**`src/components/modals/ModalContainer.tsx`** — global animated bottom sheet shell mounted in `AppLayout`:
 - Reads `activeModal` from layout state
 - Slide-up + overlay animation (240ms, `Easing.inOut(Easing.ease)`)
 - Overlay: `Color.Black` at 60% opacity; sheet: `Color.Ivory`, rounded top corners
+- Drag handle (40×4px, `Color.Sand`) rendered by the container — modal content components do not repeat it
 - `renderedModal` ref pattern ensures close animation fully plays before content unmounts
-- `renderContent()` switch dispatches to per-modal content — currently stubs `CurrencyPicker`
+- `renderContent(modalId, onDone)` switch dispatches to per-modal content
 
 **`TabDetailsStep`** — tapping `CurrencySelector` dispatches `showModal(ModalId.CurrencyPicker)`
 
 ---
 
-### Step 8 — Home screen wiring ✅
+### Step 8 — CurrencyModal ✅
+
+**`src/components/modals/CurrencyModal.tsx`** — bottom sheet content for currency selection:
+- Props: `onDone: () => void` (wired to `hideModal` by `ModalContainer`)
+- Local state: `selectedCode` (default `'USD'`), `searchQuery`
+- Search filters by code, name, or country
+- Currency list (7 popular currencies): avatar circle with country abbreviation + per-currency colour, `CODE Symbol` label (Gold if selected, Espresso otherwise), `Name · Country` subtitle, `Color.Sand` separators, Gold checkmark on selected row
+- "Scroll to see all currencies ›" footer
+
+| Currency | Abbr | Avatar colour |
+|---|---|---|
+| USD $ | US | `#2E4F99` |
+| EUR € | EU | `#0D308F` |
+| GBP £ | GB | `#BF2133` |
+| CAD $ | CA | `#D92630` |
+| AUD $ | AU | `#1A408C` |
+| JPY ¥ | JP | `#D9141F` |
+| MXN $ | MX | `#087A24` |
+
+---
+
+### Step 9 — Home screen wiring ✅
 
 `src/features/Home/HomePage.tsx`:
 

@@ -10,4 +10,4 @@ export type { MainNavTab } from './MainNav';
 export { Wizard } from './Wizard';
 export { LocationSelector } from './LocationSelector';
 export { CurrencySelector } from './CurrencySelector';
-export { ModalContainer } from './ModalContainer';
+export { ModalContainer } from './modals/ModalContainer';
