@@ -7,3 +7,6 @@ export { Logo } from './Logo';
 export { PageHeader } from './PageHeader';
 export { MainNav } from './MainNav';
 export type { MainNavTab } from './MainNav';
+export { Wizard } from './Wizard';
+export { LocationSelector } from './LocationSelector';
+export { CurrencySelector } from './CurrencySelector';

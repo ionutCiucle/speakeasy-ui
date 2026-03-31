@@ -8,7 +8,7 @@ import {
 import { AppLayout } from '@/features/App';
 import { HomePage } from '@/features/Home/HomePage';
 import { ProfilePage } from '@/features/Profile/ProfilePage';
-import { CreateTabStep1Page } from '@/features/CreateTab';
+import { CreateTabPage } from '@/features/CreateTab';
 import { useAuthTokenRehydration } from '@/features/Auth/hooks/useAuthTokenRehydration';
 
 export function AppRoutes() {
@@ -30,7 +30,7 @@ export function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route path="/home" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/create-tab" element={<CreateTabStep1Page />} />
+        <Route path="/create-tab" element={<CreateTabPage />} />
       </Route>
     </Routes>
   );

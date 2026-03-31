@@ -1,1 +1,2 @@
-export { CreateTabStep1Page } from './CreateTabStep1Page';
+export { CreateTabPage } from './CreateTabPage';
+export { TabDetailsStep } from './TabDetailsStep';
