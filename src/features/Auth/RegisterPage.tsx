@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '@/styles';
 import { BracketContainer, Button, Input } from '@/components';
@@ -60,13 +60,7 @@ export function RegisterPage() {
   ]);
 
   return (
-    <BracketContainer>
-      <View style={styles.statusBarArea} />
-
-      <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-        <Text style={styles.backButtonText}>‹ Back</Text>
-      </TouchableOpacity>
-
+    <BracketContainer onBack={handleBack}>
       <View style={styles.content}>
         <Text style={styles.title}>Join the Club</Text>
 
@@ -142,19 +136,6 @@ export function RegisterPage() {
 }
 
 const styles = StyleSheet.create({
-  statusBarArea: {
-    height: 44,
-  },
-  backButton: {
-    paddingHorizontal: 31.5,
-    paddingVertical: 8,
-  },
-  backButtonText: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 15,
-    lineHeight: 18,
-    color: Color.Gold,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 31.5,

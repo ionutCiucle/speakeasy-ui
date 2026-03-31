@@ -17,13 +17,7 @@ export function ForgotPasswordPage() {
   }, []);
 
   return (
-    <BracketContainer>
-      <View style={styles.statusBarArea} />
-
-      <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-        <Text style={styles.backButtonText}>‹ Back</Text>
-      </TouchableOpacity>
-
+    <BracketContainer onBack={handleBack}>
       <View style={styles.content}>
         <Text style={styles.title}>Forgot Password?</Text>
         <View style={styles.titleUnderline} />
@@ -42,7 +36,11 @@ export function ForgotPasswordPage() {
             keyboardType="email-address"
           />
 
-          <Button label="Send Reset Link" onPress={handleSendResetLink} style={styles.button} />
+          <Button
+            label="Send Reset Link"
+            onPress={handleSendResetLink}
+            style={styles.button}
+          />
 
           <TouchableOpacity onPress={handleBack}>
             <Text style={styles.backToSignIn}>Back to Sign In</Text>
@@ -54,19 +52,6 @@ export function ForgotPasswordPage() {
 }
 
 const styles = StyleSheet.create({
-  statusBarArea: {
-    height: 44,
-  },
-  backButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-  },
-  backButtonText: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 15,
-    lineHeight: 18,
-    color: Color.Gold,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 31.5,
