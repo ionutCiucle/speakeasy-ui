@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   emptySubtitle: {
-    fontFamily: 'Inter_400Regular',
+    fontFamily: 'PlayfairDisplay_400Regular_Italic',
     fontSize: 14,
     lineHeight: 22,
     color: Color.WarmBrown,
