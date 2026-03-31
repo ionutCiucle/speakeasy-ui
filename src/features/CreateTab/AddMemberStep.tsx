@@ -55,6 +55,9 @@ export function AddMemberStep() {
           <TouchableOpacity style={styles.addAvatarCircle} activeOpacity={0.7}>
             <Text style={styles.addAvatarPlus}>+</Text>
           </TouchableOpacity>
+          {members.length === 0 && (
+            <Text style={styles.noMembersText}>No other members added</Text>
+          )}
         </View>
 
         {/* Search */}
@@ -148,6 +151,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_400Regular',
     fontSize: 18,
     lineHeight: 22,
+    color: Color.WarmBrown,
+  },
+  noMembersText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 11,
+    lineHeight: 13,
     color: Color.WarmBrown,
   },
   searchBar: {
