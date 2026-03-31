@@ -41,8 +41,7 @@ export function MainNav({ activeTab = 'home', onTabPress }: Props) {
           );
         })}
       </View>
-      <View style={styles.homeIndicator} />
-      <View style={{ height: bottom, backgroundColor: Color.Cream }} />
+      <View style={{ height: bottom }} />
     </View>
   );
 }
@@ -74,9 +73,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_400Regular',
     fontSize: 10,
     lineHeight: 12,
-  },
-  homeIndicator: {
-    height: 4,
-    backgroundColor: Color.Gold,
   },
 });
