@@ -6,4 +6,8 @@ export const AuthAPI = axios.create({
   baseURL: `${API_BASE_URL}/auth`,
 });
 
+export const TabAPI = axios.create({
+  baseURL: `${API_BASE_URL}/tabs`,
+});
+
 export { saveToken, getToken, removeToken } from './tokenService';

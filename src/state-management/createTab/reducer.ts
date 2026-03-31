@@ -8,6 +8,7 @@ export const createTabInitialState: CreateTabState = {
   notes: '',
   members: [],
   menuItems: [],
+  isSubmitting: false,
 };
 
 export function createTabReducer(
@@ -47,6 +48,15 @@ export function createTabReducer(
     }
     case CreateTabActionType.Reset: {
       return createTabInitialState;
+    }
+    case CreateTabActionType.SubmitPending: {
+      return { ...state, isSubmitting: true };
+    }
+    case CreateTabActionType.SubmitSuccess: {
+      return { ...state, isSubmitting: false };
+    }
+    case CreateTabActionType.SubmitFailure: {
+      return { ...state, isSubmitting: false };
     }
     default: {
       return state;

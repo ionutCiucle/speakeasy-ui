@@ -14,5 +14,8 @@ export type {
   AddMenuItemAction,
   RemoveMenuItemAction,
   ResetAction,
+  SubmitPendingAction,
+  SubmitSuccessAction,
+  SubmitFailureAction,
 } from './types';
-export { useCreateTabActions } from './hooks';
+export { useCreateTabActions, useCreateTabAsyncActions } from './hooks';

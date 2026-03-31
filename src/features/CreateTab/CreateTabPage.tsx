@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, Wizard } from '@/components';
+import { useCreateTabAsyncActions } from '@/state-management/createTab';
 
 const TOTAL_STEPS = 4;
 
@@ -52,9 +53,14 @@ export function CreateTabPage() {
     }
   }, [navigate, stepConfig]);
 
-  const handleStartTab = useCallback(() => {
-    navigate('/home');
-  }, [navigate]);
+  const { submitCreateTab } = useCreateTabAsyncActions();
+
+  const handleStartTab = useCallback(async () => {
+    const success = await submitCreateTab();
+    if (success) {
+      navigate('/home');
+    }
+  }, [submitCreateTab, navigate]);
 
   const isReviewStep = stepConfig?.nextRoute === '';
 

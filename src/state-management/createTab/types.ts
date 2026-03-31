@@ -18,6 +18,7 @@ export interface CreateTabState {
   notes: string;
   members: Member[];
   menuItems: MenuItem[];
+  isSubmitting: boolean;
 }
 
 export interface SetTabNameAction {
@@ -64,6 +65,18 @@ export interface ResetAction {
   type: CreateTabActionType.Reset;
 }
 
+export interface SubmitPendingAction {
+  type: CreateTabActionType.SubmitPending;
+}
+
+export interface SubmitSuccessAction {
+  type: CreateTabActionType.SubmitSuccess;
+}
+
+export interface SubmitFailureAction {
+  type: CreateTabActionType.SubmitFailure;
+}
+
 export type CreateTabAction =
   | SetTabNameAction
   | SetVenueAction
@@ -73,4 +86,7 @@ export type CreateTabAction =
   | RemoveMemberAction
   | AddMenuItemAction
   | RemoveMenuItemAction
-  | ResetAction;
+  | ResetAction
+  | SubmitPendingAction
+  | SubmitSuccessAction
+  | SubmitFailureAction;

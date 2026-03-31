@@ -8,4 +8,7 @@ export enum CreateTabActionType {
   AddMenuItem = 'CreateTab/AddMenuItem',
   RemoveMenuItem = 'CreateTab/RemoveMenuItem',
   Reset = 'CreateTab/Reset',
+  SubmitPending = 'CreateTab/SubmitPending',
+  SubmitSuccess = 'CreateTab/SubmitSuccess',
+  SubmitFailure = 'CreateTab/SubmitFailure',
 }
