@@ -21,6 +21,11 @@ const STEP_CONFIGS: Record<string, StepConfig> = {
   '/create-tab/add-members': {
     currentStep: 2,
     stepName: 'Add Members',
+    nextRoute: '/create-tab/build-menu',
+  },
+  '/create-tab/build-menu': {
+    currentStep: 3,
+    stepName: 'Build the Menu',
     nextRoute: '/create-tab/set-limit',
   },
 };

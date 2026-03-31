@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useAppDispatch } from '@/state-management/providerHooks';
 import { CreateTabActionType } from '@/state-management/createTab/enums';
-import { Member } from '@/state-management/createTab/types';
+import { Member, MenuItem } from '@/state-management/createTab/types';
 
 export function useCreateTabActions() {
   const dispatch = useAppDispatch();
@@ -51,6 +51,20 @@ export function useCreateTabActions() {
     [dispatch],
   );
 
+  const addMenuItem = useCallback(
+    (item: MenuItem) => {
+      dispatch({ type: CreateTabActionType.AddMenuItem, payload: item });
+    },
+    [dispatch],
+  );
+
+  const removeMenuItem = useCallback(
+    (id: string) => {
+      dispatch({ type: CreateTabActionType.RemoveMenuItem, payload: id });
+    },
+    [dispatch],
+  );
+
   return {
     setTabName,
     setVenue,
@@ -58,5 +72,7 @@ export function useCreateTabActions() {
     setNotes,
     addMember,
     removeMember,
+    addMenuItem,
+    removeMenuItem,
   };
 }

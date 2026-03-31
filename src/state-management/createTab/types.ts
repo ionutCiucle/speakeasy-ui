@@ -5,12 +5,19 @@ export interface Member {
   name: string;
 }
 
+export interface MenuItem {
+  id: string;
+  name: string;
+  price: number;
+}
+
 export interface CreateTabState {
   tabName: string;
   venue: string;
   currency: { code: string; name: string };
   notes: string;
   members: Member[];
+  menuItems: MenuItem[];
 }
 
 export interface SetTabNameAction {
@@ -43,10 +50,22 @@ export interface RemoveMemberAction {
   payload: string;
 }
 
+export interface AddMenuItemAction {
+  type: CreateTabActionType.AddMenuItem;
+  payload: MenuItem;
+}
+
+export interface RemoveMenuItemAction {
+  type: CreateTabActionType.RemoveMenuItem;
+  payload: string;
+}
+
 export type CreateTabAction =
   | SetTabNameAction
   | SetVenueAction
   | SetCurrencyAction
   | SetNotesAction
   | AddMemberAction
-  | RemoveMemberAction;
+  | RemoveMemberAction
+  | AddMenuItemAction
+  | RemoveMenuItemAction;

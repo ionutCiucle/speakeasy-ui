@@ -7,6 +7,7 @@ export const createTabInitialState: CreateTabState = {
   currency: { code: 'USD', name: 'US Dollar' },
   notes: '',
   members: [],
+  menuItems: [],
 };
 
 export function createTabReducer(
@@ -33,6 +34,15 @@ export function createTabReducer(
       return {
         ...state,
         members: state.members.filter((m) => m.id !== action.payload),
+      };
+    }
+    case CreateTabActionType.AddMenuItem: {
+      return { ...state, menuItems: [...state.menuItems, action.payload] };
+    }
+    case CreateTabActionType.RemoveMenuItem: {
+      return {
+        ...state,
+        menuItems: state.menuItems.filter((i) => i.id !== action.payload),
       };
     }
     default: {

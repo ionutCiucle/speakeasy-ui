@@ -12,6 +12,7 @@ import {
   CreateTabPage,
   TabDetailsStep,
   AddMemberStep,
+  BuildMenuStep,
 } from '@/features/CreateTab';
 import { useAuthTokenRehydration } from '@/features/Auth/hooks/useAuthTokenRehydration';
 
@@ -40,6 +41,7 @@ export function AppRoutes() {
           <Route index element={<Navigate to="tab-details" replace />} />
           <Route path="tab-details" element={<TabDetailsStep />} />
           <Route path="add-members" element={<AddMemberStep />} />
+          <Route path="build-menu" element={<BuildMenuStep />} />
         </Route>
       </Route>
     </Routes>
