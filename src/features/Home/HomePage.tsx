@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
-import { BottomNav, TabReceiptIcon } from './components';
-import { BottomNavTab } from './components/BottomNav';
+import { TabReceiptIcon } from './components';
+import { MainNav, MainNavTab } from '@/components';
 import { ProfilePage } from '@/features/Profile';
 
-const HEADER_TITLES: Record<BottomNavTab, string> = {
+const HEADER_TITLES: Record<MainNavTab, string> = {
   home: 'My Tabs',
   newTab: 'New Tab',
   friends: 'Friends',
@@ -13,7 +13,7 @@ const HEADER_TITLES: Record<BottomNavTab, string> = {
 };
 
 export function HomePage() {
-  const [activeTab, setActiveTab] = useState<BottomNavTab>('home');
+  const [activeTab, setActiveTab] = useState<MainNavTab>('home');
 
   const handleStartTab = useCallback(() => {
     // TODO: navigate to start tab flow
@@ -23,7 +23,7 @@ export function HomePage() {
     // TODO: navigate to QR scanner
   }, []);
 
-  const handleTabPress = useCallback((tab: BottomNavTab) => {
+  const handleTabPress = useCallback((tab: MainNavTab) => {
     setActiveTab(tab);
   }, []);
 
@@ -60,7 +60,7 @@ export function HomePage() {
         </View>
       )}
 
-      <BottomNav activeTab={activeTab} onTabPress={handleTabPress} />
+      <MainNav activeTab={activeTab} onTabPress={handleTabPress} />
     </View>
   );
 }

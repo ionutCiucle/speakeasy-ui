@@ -3,14 +3,14 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { Color } from '@/styles';
 
-export type BottomNavTab = 'home' | 'newTab' | 'friends' | 'profile';
+export type MainNavTab = 'home' | 'newTab' | 'friends' | 'profile';
 
 interface Props {
-  activeTab?: BottomNavTab;
-  onTabPress?: (tab: BottomNavTab) => void;
+  activeTab?: MainNavTab;
+  onTabPress?: (tab: MainNavTab) => void;
 }
 
-function NavIcon({ tab, color }: { tab: BottomNavTab; color: string }) {
+function NavIcon({ tab, color }: { tab: MainNavTab; color: string }) {
   switch (tab) {
     case 'home':
       return <Feather name="menu" size={20} color={color} />;
@@ -23,14 +23,14 @@ function NavIcon({ tab, color }: { tab: BottomNavTab; color: string }) {
   }
 }
 
-const NAV_ITEMS: { key: BottomNavTab; label: string }[] = [
+const NAV_ITEMS: { key: MainNavTab; label: string }[] = [
   { key: 'home', label: 'Home' },
   { key: 'newTab', label: 'New Tab' },
   { key: 'friends', label: 'Friends' },
   { key: 'profile', label: 'Profile' },
 ];
 
-export function BottomNav({ activeTab = 'home', onTabPress }: Props) {
+export function MainNav({ activeTab = 'home', onTabPress }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.separator} />
