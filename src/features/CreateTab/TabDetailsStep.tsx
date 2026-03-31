@@ -16,6 +16,7 @@ import {
   LocationSelector,
   Wizard,
 } from '@/components';
+import { useNavigate } from 'react-router-native';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
 import { useCreateTabActions } from '@/state-management/createTab';
@@ -25,11 +26,8 @@ import { useTabDetailsValidation } from './hooks/useTabDetailsValidation';
 const TOTAL_STEPS = 4;
 const CURRENT_STEP = 1;
 
-interface Props {
-  onContinue: () => void;
-}
-
-export function TabDetailsStep({ onContinue }: Props) {
+export function TabDetailsStep() {
+  const navigate = useNavigate();
   const { showModal } = useLayoutActions();
   const { setTabName, setVenue, setNotes } = useCreateTabActions();
   const tabName = useAppSelector((state) => state.createTab.tabName);
@@ -62,9 +60,9 @@ export function TabDetailsStep({ onContinue }: Props) {
 
   const handleContinue = useCallback(() => {
     if (validateAll()) {
-      onContinue();
+      navigate('/create-tab/add-members');
     }
-  }, [validateAll, onContinue]);
+  }, [validateAll, navigate]);
 
   return (
     <View style={styles.screen}>

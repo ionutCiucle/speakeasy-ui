@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-native';
+import { Navigate, Routes, Route } from 'react-router-native';
 import {
   SplashPage,
   LoginPage,
@@ -8,7 +8,11 @@ import {
 import { AppLayout } from './AppLayout';
 import { HomePage } from '@/features/Home/HomePage';
 import { ProfilePage } from '@/features/Profile/ProfilePage';
-import { CreateTabPage } from '@/features/CreateTab';
+import {
+  CreateTabPage,
+  TabDetailsStep,
+  AddMemberStep,
+} from '@/features/CreateTab';
 import { useAuthTokenRehydration } from '@/features/Auth/hooks/useAuthTokenRehydration';
 
 export function AppRoutes() {
@@ -30,7 +34,13 @@ export function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route path="/home" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/create-tab" element={<CreateTabPage />} />
+
+        {/* Create Tab wizard — each step is a subroute */}
+        <Route path="/create-tab" element={<CreateTabPage />}>
+          <Route index element={<Navigate to="tab-details" replace />} />
+          <Route path="tab-details" element={<TabDetailsStep />} />
+          <Route path="add-members" element={<AddMemberStep />} />
+        </Route>
       </Route>
     </Routes>
   );

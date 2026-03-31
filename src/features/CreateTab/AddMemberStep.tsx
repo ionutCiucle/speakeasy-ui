@@ -15,14 +15,14 @@ import { useAppSelector } from '@/state-management/providerHooks';
 const TOTAL_STEPS = 4;
 const CURRENT_STEP = 2;
 
-interface Props {
-  onContinue: () => void;
-}
-
-export function AddMemberStep({ onContinue }: Props) {
+export function AddMemberStep() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const members = useAppSelector((state) => state.createTab.members);
+
+  const handleContinue = useCallback(() => {
+    navigate('/create-tab/set-limit');
+  }, [navigate]);
 
   const handleFindFriends = useCallback(() => {
     navigate('/friends');
@@ -93,12 +93,7 @@ export function AddMemberStep({ onContinue }: Props) {
       </ScrollView>
 
       <View style={styles.footer}>
-        <Button
-          label="Continue"
-          variant="tertiary"
-          // disabled={members.length === 0}
-          onPress={onContinue}
-        />
+        <Button label="Continue" variant="tertiary" onPress={handleContinue} />
       </View>
     </View>
   );

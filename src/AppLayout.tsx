@@ -27,7 +27,12 @@ const TAB_ROUTES: Record<MainNavTab, string> = {
 export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const config = ROUTE_CONFIG[location.pathname] ?? ROUTE_CONFIG['/home'];
+  const config =
+    ROUTE_CONFIG[location.pathname] ??
+    (location.pathname.startsWith('/create-tab')
+      ? ROUTE_CONFIG['/create-tab']
+      : undefined) ??
+    ROUTE_CONFIG['/home'];
 
   const handleBack = useCallback(() => {
     navigate(-1);
