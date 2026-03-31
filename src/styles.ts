@@ -5,6 +5,7 @@ export const Color = {
   KellyGreen: '#76b041',
   Vetrdgris: '#17bebb',
   Flame: '#e4572e',
+  Black: '#000000',
   White: '#ffffff',
   // Speakeasy brand palette
   Cream: '#F5F0E8',

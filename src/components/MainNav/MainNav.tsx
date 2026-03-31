@@ -46,7 +46,7 @@ export function MainNav({ activeTab = 'home', onTabPress }: Props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Color.White,
-    shadowColor: '#000',
+    shadowColor: Color.Black,
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
