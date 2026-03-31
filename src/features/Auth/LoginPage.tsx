@@ -52,20 +52,22 @@ export function LoginPage() {
             label="EMAIL"
             placeholder="your@email.com"
             value={email}
-            onChangeText={onEmailChange}
+            invalid={!!emailError}
+            error={emailError ?? undefined}
             autoCapitalize="none"
             keyboardType="email-address"
+            onChangeText={onEmailChange}
           />
-          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
           <Input
             label="PASSWORD"
             placeholder="••••••••"
             value={password}
-            onChangeText={onPasswordChange}
+            invalid={!!passwordError}
+            error={passwordError ?? undefined}
             secureTextEntry
+            onChangeText={onPasswordChange}
           />
-          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
 
           <TouchableOpacity onPress={handleForgotPassword}>
             <Text style={styles.forgotPassword}>Forgot Password?</Text>
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   error: {
-    color: 'red',
+    color: Color.Flame,
     fontFamily: 'Inter_400Regular',
     fontSize: 14,
     marginBottom: 12,

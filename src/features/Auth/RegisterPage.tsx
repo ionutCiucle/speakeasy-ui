@@ -81,40 +81,42 @@ export function RegisterPage() {
             label="USERNAME"
             placeholder="@yourname"
             value={username}
-            onChangeText={onUsernameChange}
+            invalid={!!usernameError}
+            error={usernameError ?? undefined}
             autoCapitalize="none"
+            onChangeText={onUsernameChange}
           />
-          {usernameError && <Text style={styles.error}>{usernameError}</Text>}
 
           <Input
             label="EMAIL"
             placeholder="your@email.com"
             value={email}
-            onChangeText={onEmailChange}
+            invalid={!!emailError}
+            error={emailError ?? undefined}
             autoCapitalize="none"
             keyboardType="email-address"
+            onChangeText={onEmailChange}
           />
-          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
           <Input
             label="PASSWORD"
             placeholder="••••••••"
             value={password}
-            onChangeText={onPasswordChange}
+            invalid={!!passwordError}
+            error={passwordError ?? undefined}
             secureTextEntry
+            onChangeText={onPasswordChange}
           />
-          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
 
           <Input
             label="CONFIRM PASSWORD"
             placeholder="••••••••"
             value={confirmPassword}
-            onChangeText={onConfirmPasswordChange}
+            invalid={!!confirmPasswordError}
+            error={confirmPasswordError ?? undefined}
             secureTextEntry
+            onChangeText={onConfirmPasswordChange}
           />
-          {confirmPasswordError && (
-            <Text style={styles.error}>{confirmPasswordError}</Text>
-          )}
 
           {submitError && <Text style={styles.error}>{submitError}</Text>}
 
@@ -187,7 +189,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   error: {
-    color: 'red',
+    color: Color.Flame,
     fontFamily: 'Inter_400Regular',
     fontSize: 14,
     marginBottom: 12,
