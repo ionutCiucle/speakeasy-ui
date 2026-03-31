@@ -1,20 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Color } from '@/styles';
-import { Button, MainNav, MainNavTab, PageHeader } from '@/components';
-import { ProfilePage } from '@/features/Profile';
-
-const HEADER_TITLES: Record<MainNavTab, string> = {
-  home: 'My Tabs',
-  newTab: 'New Tab',
-  friends: 'Friends',
-  profile: 'Profile',
-};
+import { Button } from '@/components';
 
 export function HomePage() {
-  const [activeTab, setActiveTab] = useState<MainNavTab>('home');
   const navigate = useNavigate();
 
   const handleStartTab = useCallback(() => {
@@ -25,49 +16,26 @@ export function HomePage() {
     // TODO: navigate to QR scanner
   }, []);
 
-  const handleTabPress = useCallback(
-    (tab: MainNavTab) => {
-      if (tab === 'newTab') {
-        navigate('/create-tab');
-        return;
-      }
-      setActiveTab(tab);
-    },
-    [navigate],
-  );
-
   return (
     <View style={styles.screen}>
-      <PageHeader title={HEADER_TITLES[activeTab]} />
-
-      {activeTab === 'profile' ? (
-        <ProfilePage />
-      ) : (
-        <View style={styles.emptyState}>
-          <FontAwesome6
-            name="martini-glass-empty"
-            size={84}
-            color={Color.Gold}
-          />
-          <Text style={styles.emptyHeading}>No tabs added yet</Text>
-          <Text style={styles.emptySubtitle}>
-            Start one or scan a QR to join a friend's tab
-          </Text>
-          <Button
-            label="+ Start a Tab"
-            onPress={handleStartTab}
-            style={styles.homeButton}
-          />
-          <Button
-            label="Scan QR to Join"
-            onPress={handleScanQR}
-            variant="secondary"
-            style={styles.homeButton}
-          />
-        </View>
-      )}
-
-      <MainNav activeTab={activeTab} onTabPress={handleTabPress} />
+      <View style={styles.emptyState}>
+        <FontAwesome6 name="martini-glass-empty" size={84} color={Color.Gold} />
+        <Text style={styles.emptyHeading}>No tabs added yet</Text>
+        <Text style={styles.emptySubtitle}>
+          Start one or scan a QR to join a friend's tab
+        </Text>
+        <Button
+          label="+ Start a Tab"
+          onPress={handleStartTab}
+          style={styles.homeButton}
+        />
+        <Button
+          label="Scan QR to Join"
+          onPress={handleScanQR}
+          variant="secondary"
+          style={styles.homeButton}
+        />
+      </View>
     </View>
   );
 }
@@ -75,7 +43,6 @@ export function HomePage() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Color.Cream,
   },
   emptyState: {
     flex: 1,

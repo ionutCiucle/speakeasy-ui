@@ -9,30 +9,16 @@ import {
   Platform,
   StyleSheet,
 } from 'react-native';
-import { useNavigate } from 'react-router-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
-import { MainNav } from '@/components';
 
 const TOTAL_STEPS = 4;
 const CURRENT_STEP = 1;
 
 export function CreateTabStep1Page() {
-  const navigate = useNavigate();
-  const { top } = useSafeAreaInsets();
-
   const [tabName, setTabName] = useState('');
   const [venue, setVenue] = useState('');
   const [notes, setNotes] = useState('');
-
-  const handleBack = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
-
-  const handleClose = useCallback(() => {
-    navigate('/home');
-  }, [navigate]);
 
   const handleTabNameChange = useCallback((text: string) => {
     setTabName(text);
@@ -50,10 +36,6 @@ export function CreateTabStep1Page() {
     // TODO: navigate to step 2
   }, []);
 
-  const handleNavTabPress = useCallback(() => {
-    // already on new tab wizard — no-op
-  }, []);
-
   return (
     <View style={styles.screen}>
       <KeyboardAvoidingView
@@ -67,25 +49,6 @@ export function CreateTabStep1Page() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Header */}
-          <View style={[styles.header, { paddingTop: top + 12 }]}>
-            <TouchableOpacity
-              onPress={handleBack}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Feather name="chevron-left" size={24} color={Color.Espresso} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>New Tab</Text>
-
-            <TouchableOpacity
-              onPress={handleClose}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Feather name="x" size={20} color={Color.WarmBrown} />
-            </TouchableOpacity>
-          </View>
-
           {/* Progress bar */}
           <View style={styles.progressBar}>
             {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
@@ -208,8 +171,6 @@ export function CreateTabStep1Page() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-
-      <MainNav activeTab="newTab" onTabPress={handleNavTabPress} />
     </View>
   );
 }
@@ -217,7 +178,6 @@ export function CreateTabStep1Page() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Color.Cream,
   },
   flex: {
     flex: 1,
@@ -225,22 +185,10 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 32,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingBottom: 12,
-  },
-  headerTitle: {
-    fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 22,
-    lineHeight: 27,
-    color: Color.Espresso,
-  },
   progressBar: {
     flexDirection: 'row',
     paddingHorizontal: 20,
+    paddingTop: 12,
     gap: 10,
     marginBottom: 8,
   },

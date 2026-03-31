@@ -12,13 +12,12 @@ Move `PageHeader` and `MainNav` out of individual pages into a shared `AppLayout
 |---|---|
 | `src/features/App/AppLayout.tsx` | Layout route shell |
 | `src/features/App/index.ts` | Barrel |
-| `src/components/WizardPageHeader.tsx` | Header variant with back chevron + title + X close |
 
 ## Modified files
 
 | File | Change |
 |---|---|
-| `src/components/index.ts` | Export `WizardPageHeader` |
+| `src/components/PageHeader.tsx` | Added optional `onBack` / `onClose` props for wizard variant |
 | `src/AppRoutes.tsx` | Nest authenticated routes under `AppLayout` |
 | `src/features/Home/HomePage.tsx` | Strip `PageHeader`, `MainNav`, inline `ProfilePage`, `activeTab` state |
 | `src/features/CreateTab/CreateTabStep1Page.tsx` | Strip custom header block + `MainNav` |
@@ -28,40 +27,33 @@ Move `PageHeader` and `MainNav` out of individual pages into a shared `AppLayout
 
 ## Steps
 
-### Step 1 — `WizardPageHeader` component ⬜
+### Step 1 — Extend `PageHeader` with optional back / close buttons ✅
 
-**File:** `src/components/WizardPageHeader.tsx`
+Added two optional props to `PageHeader`:
 
 ```ts
 interface Props {
   title: string;
-  onBack: () => void;
-  onClose: () => void;
+  onBack?: () => void;
+  onClose?: () => void;
 }
 ```
 
-- `useSafeAreaInsets` for `top`
-- Header row: height `60 + top`, `paddingTop: top`, `paddingHorizontal: 20`, row layout
-- Left: `Feather chevron-left` size 24 `Color.Espresso` → `onBack`
-- Centre: title text, absolute-positioned so side buttons don't shift it
-- Right: `Feather x` size 20 `Color.WarmBrown` → `onClose`
-- Gold 1px divider below (matching `PageHeader`)
-
-Also export from `src/components/index.ts`.
+Layout uses the three-column pattern (`[flex:1 left] [auto centre] [flex:1 right]`) so the title is always optically centred regardless of which buttons are present. Left side shows `Feather chevron-left` when `onBack` is provided; right side shows `Feather x` when `onClose` is provided. Empty `View` slots hold their space when the props are absent, preserving the centred title.
 
 ---
 
-### Step 2 — `AppLayout` layout route ⬜
+### Step 2 — `AppLayout` layout route ✅
 
 **File:** `src/features/App/AppLayout.tsx`
 
-Route config map:
+Route config map drives both the header variant and the active nav tab:
 
 ```ts
 const ROUTE_CONFIG = {
-  '/home':       { header: 'standard', title: 'My Tabs', tab: 'home' },
-  '/profile':    { header: 'standard', title: 'Profile', tab: 'profile' },
-  '/create-tab': { header: 'wizard',   title: 'New Tab', tab: 'newTab' },
+  '/home':       { title: 'My Tabs', tab: 'home' },
+  '/profile':    { title: 'Profile', tab: 'profile' },
+  '/create-tab': { title: 'New Tab', tab: 'newTab', wizard: true },
 };
 ```
 
@@ -69,19 +61,19 @@ Layout structure:
 
 ```
 View (flex: 1, bg: Cream)
-├── PageHeader | WizardPageHeader   ← chosen by config.header
-├── View (flex: 1) → <Outlet />     ← page content
-└── MainNav                         ← route-aware active tab + navigate handlers
+├── PageHeader (onBack + onClose passed when config.wizard === true)
+├── View (flex: 1) → <Outlet />
+└── MainNav (route-aware active tab + navigate handlers)
 ```
 
-- `WizardPageHeader` gets `onBack → navigate(-1)`, `onClose → navigate('/home')`
-- `MainNav` tab press → navigate to route (`home→/home`, `newTab→/create-tab`, `profile→/profile`, `friends→/friends`); pressing the active tab is a no-op
+- Wizard routes get `onBack → navigate(-1)` and `onClose → navigate('/home')`
+- `MainNav` tab press navigates to the route for that tab; pressing the active tab is a no-op
 
-Also create `src/features/App/index.ts` barrel exporting `AppLayout`.
+Also created `src/features/App/index.ts` barrel.
 
 ---
 
-### Step 3 — Wire routes in `AppRoutes.tsx` ⬜
+### Step 3 — Wire routes in `AppRoutes.tsx` ✅
 
 ```tsx
 <Routes>
@@ -100,52 +92,23 @@ Also create `src/features/App/index.ts` barrel exporting `AppLayout`.
 </Routes>
 ```
 
-Also import `ProfilePage` here (it's not currently imported in `AppRoutes`).
+`ProfilePage` promoted to its own route (previously rendered inline inside `HomePage`).
 
 ---
 
-### Step 4 — Strip `HomePage` ⬜
+### Step 4 — Strip `HomePage` ✅
 
-**Remove:**
-- `PageHeader` (import + JSX)
-- `MainNav` (import + JSX)
-- `ProfilePage` inline render + import
-- `activeTab` / `setActiveTab` state
-- `handleTabPress` callback
-- `HEADER_TITLES` record
-- `MainNavTab` import
+Removed: `PageHeader`, `MainNav`, `ProfilePage` inline render, `activeTab` state,
+`handleTabPress`, `HEADER_TITLES`, `MainNavTab` import.
 
-**Keep:**
-- `handleStartTab` → `navigate('/create-tab')`
-- `handleScanQR` (stub)
-- Empty-state content (icon, headings, buttons)
+Kept: `handleStartTab` → `navigate('/create-tab')`, `handleScanQR` stub, empty-state content.
 
 ---
 
-### Step 5 — Strip `CreateTabStep1Page` ⬜
+### Step 5 — Strip `CreateTabStep1Page` ✅
 
-**Remove:**
-- Entire `{/* Header */}` block (back button row, title, X button)
-- `handleBack` callback
-- `handleClose` callback
-- `handleNavTabPress` callback
-- `<MainNav>` at bottom of JSX + import
-- `useSafeAreaInsets` import and `const { top }` (only used by the removed header)
-- `header` and `headerTitle` styles from `StyleSheet.create`
+Removed: entire header block (back button, title, X), `handleBack`, `handleClose`,
+`handleNavTabPress`, `<MainNav>`, `useSafeAreaInsets` import.
 
-**Keep:**
-- Progress bar + step label (page content, not header)
-- `KeyboardAvoidingView` wrapping `ScrollView`
-- All form fields and styles
-
----
-
-## Implementation order
-
-Steps 4 and 5 must land in the **same commit** as step 3 so the app is never
-in a state with headers and nav missing from pages before the layout provides them.
-
-Recommended sequence:
-1. Step 1 (WizardPageHeader) — isolated, no impact on running app
-2. Step 2 (AppLayout) — new file, no impact until wired
-3. Steps 3 + 4 + 5 together — route wiring + page stripping in one commit
+Kept: progress bar + step label + form (page content). Added `paddingTop: 12` to
+`progressBar` style to replace the spacing previously provided by the removed header.
