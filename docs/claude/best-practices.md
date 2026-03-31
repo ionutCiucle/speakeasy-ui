@@ -1,5 +1,27 @@
 # Best Practices
 
+## Prop types: functional props go last
+
+In component `interface Props`, list data/config props first and functional props (callbacks) last.
+
+```ts
+// ✅ correct
+interface Props {
+  label: string;
+  variant?: 'primary' | 'secondary';
+  style?: StyleProp<ViewStyle>;
+  onPress: () => void;
+}
+
+// ❌ wrong
+interface Props {
+  onPress: () => void;
+  label: string;
+  variant?: 'primary' | 'secondary';
+  style?: StyleProp<ViewStyle>;
+}
+```
+
 ## Handlers in components must use `useCallback`
 
 All event handlers defined inside a component must be wrapped in `useCallback`.
