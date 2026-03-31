@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
@@ -30,10 +30,19 @@ export function AppLayout() {
   const navigate = useNavigate();
   const { reset } = useCreateTabActions();
   const lastCreateTabRoute = useRef('/create-tab');
+  const [createTabInProgress, setCreateTabInProgress] = useState(false);
 
   if (location.pathname.startsWith('/create-tab')) {
     lastCreateTabRoute.current = location.pathname;
   }
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/create-tab')) {
+      setCreateTabInProgress(false);
+    } else {
+      setCreateTabInProgress(lastCreateTabRoute.current !== '/create-tab');
+    }
+  }, [location.pathname]);
 
   const config =
     ROUTE_CONFIG[location.pathname] ??
@@ -76,7 +85,11 @@ export function AppLayout() {
         <Outlet />
       </View>
 
-      <MainNav activeTab={config.tab} onTabPress={handleTabPress} />
+      <MainNav
+        activeTab={config.tab}
+        badgeTabs={createTabInProgress ? ['newTab'] : []}
+        onTabPress={handleTabPress}
+      />
 
       <ModalRoot />
     </View>
