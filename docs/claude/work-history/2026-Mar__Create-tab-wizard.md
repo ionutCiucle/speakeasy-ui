@@ -59,7 +59,46 @@ Added two new tokens to `src/styles.ts`:
 
 ---
 
-### Step 5 — Home screen wiring ✅
+### Step 5 — Refactor: CreateTabPage container + TabDetailsStep ✅
+
+- `CreateTabStep1Page` renamed → `TabDetailsStep` (accepts `onContinue: () => void` prop)
+- New `CreateTabPage` container manages `currentStep` state and renders the active step
+- Route `/create-tab` now points to `<CreateTabPage />`
+
+---
+
+### Step 6 — Extract shared components ✅
+
+Three reusable components extracted from `TabDetailsStep` into `src/components/`:
+
+| Component | Description |
+|---|---|
+| `Wizard` | Progress bar segments + "Step N of M · Name" label; props: `totalSteps`, `currentStep`, `stepName` |
+| `LocationSelector` | "Venue / Location" label + map-pin icon text input; props: `value`, `onChangeText` |
+| `CurrencySelector` | "Currency" label + selector row + hint text; props: `currencyCode`, `currencyName`, `onPress` |
+
+---
+
+### Step 7 — Layout slice + ModalContainer ✅
+
+**`src/state-management/layout/`** — new slice following the standard slice structure:
+- `LayoutState { activeModal: ModalId | null }`
+- Actions: `ShowModal` / `HideModal`
+- `ModalId` enum — `CurrencyPicker` is the first entry
+- `useLayoutActions` hook exposes `showModal(modalId)` and `hideModal()`
+
+**`src/components/ModalContainer.tsx`** — global animated bottom sheet shell mounted in `AppLayout`:
+- Reads `activeModal` from layout state
+- Slide-up + overlay animation (240ms, `Easing.inOut(Easing.ease)`)
+- Overlay: `Color.Black` at 60% opacity; sheet: `Color.Ivory`, rounded top corners
+- `renderedModal` ref pattern ensures close animation fully plays before content unmounts
+- `renderContent()` switch dispatches to per-modal content — currently stubs `CurrencyPicker`
+
+**`TabDetailsStep`** — tapping `CurrencySelector` dispatches `showModal(ModalId.CurrencyPicker)`
+
+---
+
+### Step 8 — Home screen wiring ✅
 
 `src/features/Home/HomePage.tsx`:
 

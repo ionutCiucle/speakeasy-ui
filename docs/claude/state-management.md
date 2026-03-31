@@ -123,6 +123,53 @@ Rules:
 
 Internal hook — not for direct use in components. Use a slice's `use<Slice>Actions` or `use<Slice>AsyncActions` hook instead.
 
+## Slices
+
+### `auth`
+
+Handles authentication state: username, email, userId, token, isLoading. See `src/state-management/auth/`.
+
+### `layout`
+
+Controls global UI state that lives above any single feature — currently: which modal is visible.
+
+```
+src/state-management/layout/
+  enums.ts    - LayoutActionType, ModalId
+  types.ts    - LayoutState, ShowModalAction, HideModalAction, LayoutAction
+  reducer.ts  - layoutReducer + layoutInitialState
+  hooks/
+    useLayoutActions.ts  - showModal(modalId), hideModal()
+  index.ts    - re-exports everything above
+```
+
+**State shape:**
+
+```ts
+interface LayoutState {
+  activeModal: ModalId | null;
+}
+```
+
+**`ModalId` enum** — add a new entry here whenever a new modal sheet is introduced:
+
+```ts
+export enum ModalId {
+  CurrencyPicker = 'CurrencyPicker',
+}
+```
+
+**Usage:**
+
+```ts
+const { showModal, hideModal } = useLayoutActions();
+
+showModal(ModalId.CurrencyPicker); // opens the sheet
+hideModal();                        // closes it
+```
+
+`ModalContainer` (mounted in `AppLayout`) reads `activeModal` and renders the corresponding sheet with a slide-up + overlay animation.
+
 ## Known limitations / planned improvements
 
 - `useAppSelector` equality check: replace `JSON.stringify` with `shallowEqual`.

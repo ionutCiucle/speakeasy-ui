@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
-import { MainNav, MainNavTab, PageHeader } from '@/components';
+import { MainNav, MainNavTab, ModalContainer, PageHeader } from '@/components';
 
 interface RouteConfig {
   title: string;
@@ -59,6 +59,8 @@ export function AppLayout() {
       </View>
 
       <MainNav activeTab={config.tab} onTabPress={handleTabPress} />
+
+      <ModalContainer />
     </View>
   );
 }

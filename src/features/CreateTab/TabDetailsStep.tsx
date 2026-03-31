@@ -16,6 +16,8 @@ import {
   LocationSelector,
   Wizard,
 } from '@/components';
+import { useLayoutActions } from '@/state-management/layout';
+import { ModalId } from '@/state-management/layout/enums';
 
 const TOTAL_STEPS = 4;
 const CURRENT_STEP = 1;
@@ -25,6 +27,7 @@ interface Props {
 }
 
 export function TabDetailsStep({ onContinue }: Props) {
+  const { showModal } = useLayoutActions();
   const [tabName, setTabName] = useState('');
   const [venue, setVenue] = useState('');
   const [notes, setNotes] = useState('');
@@ -81,7 +84,7 @@ export function TabDetailsStep({ onContinue }: Props) {
             <CurrencySelector
               currencyCode="USD"
               currencyName="US Dollar"
-              onPress={() => {}}
+              onPress={() => showModal(ModalId.CurrencyPicker)}
             />
 
             {/* Notes */}
