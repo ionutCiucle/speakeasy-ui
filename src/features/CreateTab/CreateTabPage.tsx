@@ -10,6 +10,7 @@ interface StepConfig {
   currentStep: number;
   stepName: string;
   nextRoute: string;
+  hideFooter?: boolean;
 }
 
 const STEP_CONFIGS: Record<string, StepConfig> = {
@@ -26,7 +27,13 @@ const STEP_CONFIGS: Record<string, StepConfig> = {
   '/create-tab/build-menu': {
     currentStep: 3,
     stepName: 'Build the Menu',
-    nextRoute: '/create-tab/set-limit',
+    nextRoute: '/create-tab/review',
+  },
+  '/create-tab/review': {
+    currentStep: 4,
+    stepName: 'Review & Start',
+    nextRoute: '',
+    hideFooter: true,
   },
 };
 
@@ -59,14 +66,16 @@ export function CreateTabPage() {
         <Outlet context={{ onValidate: setValidator }} />
       </View>
 
-      <View style={styles.footer}>
-        <Button
-          label="Continue"
-          variant="tertiary"
-          rightIcon="chevron-right"
-          onPress={handleContinue}
-        />
-      </View>
+      {!stepConfig?.hideFooter && (
+        <View style={styles.footer}>
+          <Button
+            label="Continue"
+            variant="tertiary"
+            rightIcon="chevron-right"
+            onPress={handleContinue}
+          />
+        </View>
+      )}
     </View>
   );
 }
