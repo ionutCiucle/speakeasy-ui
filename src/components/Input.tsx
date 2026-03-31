@@ -12,10 +12,10 @@ interface Props {
   label: string;
   placeholder: string;
   value: string;
-  onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  onChangeText: (text: string) => void;
 }
 
 export function Input({

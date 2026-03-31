@@ -10,9 +10,9 @@ import { Color } from '@/styles';
 
 interface Props {
   label: string;
-  onPress: () => void;
   variant?: 'primary' | 'secondary';
   style?: StyleProp<ViewStyle>;
+  onPress: () => void;
 }
 
 export function Button({ label, onPress, variant = 'primary', style }: Props) {
