@@ -1,26 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Feather, Ionicons } from '@expo/vector-icons';
 import { Color, flex } from '@/styles';
+import { NavIcon } from './NavIcon';
 
 export type MainNavTab = 'home' | 'newTab' | 'friends' | 'profile';
 
 interface Props {
   activeTab?: MainNavTab;
   onTabPress?: (tab: MainNavTab) => void;
-}
-
-function NavIcon({ tab, color }: { tab: MainNavTab; color: string }) {
-  switch (tab) {
-    case 'home':
-      return <Feather name="menu" size={20} color={color} />;
-    case 'newTab':
-      return <Feather name="plus" size={22} color={color} />;
-    case 'friends':
-      return <Ionicons name="people-outline" size={22} color={color} />;
-    case 'profile':
-      return <Feather name="user" size={20} color={color} />;
-  }
 }
 
 const NAV_ITEMS: { key: MainNavTab; label: string }[] = [
