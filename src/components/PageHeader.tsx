@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
+import { IconButton } from './IconButton';
 
 interface Props {
   title: string;
@@ -17,27 +17,13 @@ export function PageHeader({ title, onBack, onClose }: Props) {
     <>
       <View style={[styles.header, { height: 60 + top, paddingTop: top }]}>
         <View style={styles.side}>
-          {onBack && (
-            <TouchableOpacity
-              onPress={onBack}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Feather name="chevron-left" size={24} color={Color.Espresso} />
-            </TouchableOpacity>
-          )}
+          {onBack && <IconButton name="chevron-left" onPress={onBack} />}
         </View>
 
         <Text style={styles.title}>{title}</Text>
 
         <View style={[styles.side, styles.sideRight]}>
-          {onClose && (
-            <TouchableOpacity
-              onPress={onClose}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Feather name="x" size={20} color={Color.WarmBrown} />
-            </TouchableOpacity>
-          )}
+          {onClose && <IconButton name="x" onPress={onClose} />}
         </View>
       </View>
       <View style={styles.divider} />

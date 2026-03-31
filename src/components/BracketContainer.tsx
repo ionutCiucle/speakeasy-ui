@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Color } from '@/styles';
-import { BackButton } from './BackButton';
+import { IconButton } from './IconButton';
 
 interface Props {
   children: React.ReactNode;
@@ -24,7 +24,11 @@ export function BracketContainer({
   return (
     <View style={styles.container}>
       {onBack ? (
-        <BackButton onPress={onBack} top={topOffset - 2} />
+        <IconButton
+          name="chevron-left"
+          style={[styles.backButton, { top: topOffset - 2 }]}
+          onPress={onBack}
+        />
       ) : (
         <>
           <View
@@ -140,5 +144,10 @@ const styles = StyleSheet.create({
   bracketV: {
     position: 'absolute',
     backgroundColor: Color.Gold,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 16,
+    zIndex: 1,
   },
 });

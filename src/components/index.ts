@@ -1,5 +1,6 @@
 export { BackButton } from './BackButton';
 export { BracketContainer } from './BracketContainer';
+export { IconButton } from './IconButton';
 export { Button } from './Button';
 export { Input, useValidatedEmailField, useValidatedTextField } from './Input';
 export { Logo } from './Logo';
