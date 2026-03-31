@@ -1,1 +1,0 @@
-export { TabReceiptIcon } from './TabReceiptIcon';

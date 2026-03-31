@@ -4,8 +4,7 @@ import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '@/styles';
 import { BracketContainer, Button, Input, Logo } from '@/components';
 import { useAuthAsyncActions } from '@/state-management/auth';
-import { useValidatedEmailField } from './hooks/useValidatedEmailField';
-import { useValidatedTextField } from './hooks/useValidatedTextField';
+import { useValidatedEmailField, useValidatedTextField } from '@/components';
 
 export function LoginPage() {
   const [email, onEmailChange, emailError, validateEmail] =

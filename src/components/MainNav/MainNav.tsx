@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Color, flex } from '@/styles';
 import { NavIcon } from './NavIcon';
 
@@ -18,6 +19,8 @@ const NAV_ITEMS: { key: MainNavTab; label: string }[] = [
 ];
 
 export function MainNav({ activeTab = 'home', onTabPress }: Props) {
+  const { bottom } = useSafeAreaInsets();
+
   return (
     <View style={styles.container}>
       <View style={styles.separator} />
@@ -39,6 +42,7 @@ export function MainNav({ activeTab = 'home', onTabPress }: Props) {
         })}
       </View>
       <View style={styles.homeIndicator} />
+      <View style={{ height: bottom, backgroundColor: Color.Cream }} />
     </View>
   );
 }
@@ -60,7 +64,6 @@ const styles = StyleSheet.create({
     ...flex('row', 'space-around', 'center'),
     height: 62,
     paddingHorizontal: 16,
-    paddingBottom: 5,
   },
   tab: {
     flex: 1,

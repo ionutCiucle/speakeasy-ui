@@ -4,8 +4,7 @@ import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '@/styles';
 import { BracketContainer, Button, Input } from '@/components';
 import { useAuthWorkflows } from '@/state-management/auth';
-import { useValidatedEmailField } from './hooks/useValidatedEmailField';
-import { useValidatedTextField } from './hooks/useValidatedTextField';
+import { useValidatedEmailField, useValidatedTextField } from '@/components';
 
 export function RegisterPage() {
   const [username, onUsernameChange, usernameError, validateUsername] =

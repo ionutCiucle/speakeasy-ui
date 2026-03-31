@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { FontAwesome6 } from '@expo/vector-icons';
 import { Color } from '@/styles';
-import { TabReceiptIcon } from './components';
 import { Button, MainNav, MainNavTab, PageHeader } from '@/components';
 import { ProfilePage } from '@/features/Profile';
 
@@ -35,7 +35,11 @@ export function HomePage() {
         <ProfilePage />
       ) : (
         <View style={styles.emptyState}>
-          <TabReceiptIcon />
+          <FontAwesome6
+            name="martini-glass-empty"
+            size={84}
+            color={Color.Gold}
+          />
           <Text style={styles.emptyHeading}>No tabs added yet</Text>
           <Text style={styles.emptySubtitle}>
             Start one or scan a QR to join a friend's tab
