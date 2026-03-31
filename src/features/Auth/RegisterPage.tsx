@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useNavigate, Link } from 'react-router-native';
 import { Color, flex } from '@/styles';
 import { BracketContainer, Button, Input } from '@/components';
 import { useAuthWorkflows } from '@/state-management/auth';
-import { useValidatedEmailField } from './hooks/useValidatedEmailField';
-import { useValidatedTextField } from './hooks/useValidatedTextField';
+import { useValidatedEmailField, useValidatedTextField } from '@/components';
 
 export function RegisterPage() {
   const [username, onUsernameChange, usernameError, validateUsername] =
@@ -61,13 +60,7 @@ export function RegisterPage() {
   ]);
 
   return (
-    <BracketContainer>
-      <View style={styles.statusBarArea} />
-
-      <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-        <Text style={styles.backButtonText}>‹ Back</Text>
-      </TouchableOpacity>
-
+    <BracketContainer onBack={handleBack}>
       <View style={styles.content}>
         <Text style={styles.title}>Join the Club</Text>
 
@@ -81,40 +74,42 @@ export function RegisterPage() {
             label="USERNAME"
             placeholder="@yourname"
             value={username}
-            onChangeText={onUsernameChange}
+            invalid={!!usernameError}
+            error={usernameError ?? undefined}
             autoCapitalize="none"
+            onChangeText={onUsernameChange}
           />
-          {usernameError && <Text style={styles.error}>{usernameError}</Text>}
 
           <Input
             label="EMAIL"
             placeholder="your@email.com"
             value={email}
-            onChangeText={onEmailChange}
+            invalid={!!emailError}
+            error={emailError ?? undefined}
             autoCapitalize="none"
             keyboardType="email-address"
+            onChangeText={onEmailChange}
           />
-          {emailError && <Text style={styles.error}>{emailError}</Text>}
 
           <Input
             label="PASSWORD"
             placeholder="••••••••"
             value={password}
-            onChangeText={onPasswordChange}
+            invalid={!!passwordError}
+            error={passwordError ?? undefined}
             secureTextEntry
+            onChangeText={onPasswordChange}
           />
-          {passwordError && <Text style={styles.error}>{passwordError}</Text>}
 
           <Input
             label="CONFIRM PASSWORD"
             placeholder="••••••••"
             value={confirmPassword}
-            onChangeText={onConfirmPasswordChange}
+            invalid={!!confirmPasswordError}
+            error={confirmPasswordError ?? undefined}
             secureTextEntry
+            onChangeText={onConfirmPasswordChange}
           />
-          {confirmPasswordError && (
-            <Text style={styles.error}>{confirmPasswordError}</Text>
-          )}
 
           {submitError && <Text style={styles.error}>{submitError}</Text>}
 
@@ -141,19 +136,6 @@ export function RegisterPage() {
 }
 
 const styles = StyleSheet.create({
-  statusBarArea: {
-    height: 44,
-  },
-  backButton: {
-    paddingHorizontal: 31.5,
-    paddingVertical: 8,
-  },
-  backButtonText: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 15,
-    lineHeight: 18,
-    color: Color.Gold,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 31.5,
@@ -187,7 +169,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   error: {
-    color: 'red',
+    color: Color.Flame,
     fontFamily: 'Inter_400Regular',
     fontSize: 14,
     marginBottom: 12,

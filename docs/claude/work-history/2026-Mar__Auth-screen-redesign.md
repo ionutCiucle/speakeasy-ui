@@ -181,6 +181,33 @@ import { LoginPage } from './features/Auth/LoginPage';
 
 ---
 
+## BracketContainer polish (March 2026)
+
+### Safe area insets ✅
+
+`BracketContainer` now uses `useSafeAreaInsets()` so bracket corners and content clear the iPhone notch and home indicator on all devices:
+
+- Top brackets positioned at `safeArea.top + 20`; bottom brackets at `safeArea.bottom + 20`
+- Children wrapped in a `View` with `paddingTop: topOffset` and `paddingBottom: bottomOffset` — every page inside `BracketContainer` gets safe area clearance automatically without managing insets itself
+
+### Consistent bracket size ✅
+
+Default `bracketSize` changed from `25` → `35`. `SplashPage` was previously overriding with `bracketSize={35}`; that prop was removed so all pages now share the same bracket dimensions.
+
+### Gold top/bottom bars removed ✅
+
+The 4px `Color.Gold` top and bottom bars that flanked the container were removed, leaving only the four corner brackets.
+
+### Back button replaces top-left bracket ✅
+
+`BracketContainer` accepts an optional `onBack?: () => void` prop. When provided, the top-left corner bracket is replaced with a `Feather chevron-left` icon button (`size={28}`, `Color.Gold`) positioned at the same coordinates.
+
+Applied to:
+- `RegisterPage` — `handleBack` (navigates to `/`) passed as `onBack`; manual `TouchableOpacity` back button and `statusBarArea` spacer removed
+- `ForgotPasswordPage` — `handleBack` (navigates to `/login`) passed as `onBack`; manual `TouchableOpacity` back button and `statusBarArea` spacer removed
+
+---
+
 ## Packages installed
 
 - `@expo-google-fonts/inter`

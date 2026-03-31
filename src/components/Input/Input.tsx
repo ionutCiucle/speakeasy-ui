@@ -12,26 +12,30 @@ interface Props {
   label: string;
   placeholder: string;
   value: string;
-  onChangeText: (text: string) => void;
+  invalid?: boolean;
+  error?: string;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  onChangeText: (text: string) => void;
 }
 
 export function Input({
   label,
   placeholder,
   value,
-  onChangeText,
+  invalid,
+  error,
   secureTextEntry,
   keyboardType,
   autoCapitalize,
+  onChangeText,
 }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, invalid && styles.inputInvalid]}
         placeholder={placeholder}
         placeholderTextColor={Color.Sand}
         value={value}
@@ -40,6 +44,7 @@ export function Input({
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
       />
+      {error && <Text style={styles.error}>{error}</Text>}
     </View>
   );
 }
@@ -67,5 +72,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 18,
     color: Color.Espresso,
+  },
+  inputInvalid: {
+    borderColor: Color.Flame,
+  },
+  error: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 14,
+    lineHeight: 18,
+    color: Color.Flame,
+    marginTop: 4,
   },
 });

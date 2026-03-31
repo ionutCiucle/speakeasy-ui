@@ -35,7 +35,11 @@ export function useAuthWorkflows() {
         await saveToken(data.token);
         dispatch({
           type: AuthActionType.LoginSuccess,
-          payload: { userId: data.user.id, token: data.token },
+          payload: {
+            userId: data.user.id,
+            token: data.token,
+            email: data.user.email,
+          },
         });
         return true;
       } catch {

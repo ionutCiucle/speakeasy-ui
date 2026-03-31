@@ -23,7 +23,7 @@ export function useAuthTokenRehydration() {
       const token = await getToken();
       if (token && !isTokenExpired(token)) {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        loginSuccess(payload.sub ?? payload.userId, token);
+        loginSuccess(payload.sub ?? payload.userId, token, payload.email ?? '');
         navigate('/home');
       } else {
         await removeToken();

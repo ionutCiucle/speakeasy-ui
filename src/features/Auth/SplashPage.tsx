@@ -12,7 +12,7 @@ export function SplashPage() {
   }, [navigate]);
 
   return (
-    <BracketContainer bracketSize={35}>
+    <BracketContainer>
       <View style={styles.content}>
         <Logo marginBottom={16} />
 
@@ -27,7 +27,11 @@ export function SplashPage() {
           <View style={styles.ornamentLine} />
         </View>
 
-        <Button label="Get Started" onPress={handleGetStarted} style={styles.button} />
+        <Button
+          label="Get Started"
+          onPress={handleGetStarted}
+          style={styles.button}
+        />
 
         <Link to="/login">
           <Text style={styles.signInText}>Already a member? Sign In</Text>

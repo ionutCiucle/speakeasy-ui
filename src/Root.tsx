@@ -11,6 +11,7 @@ import {
 } from '@expo-google-fonts/inter';
 import { PlayfairDisplay_400Regular_Italic } from '@expo-google-fonts/playfair-display';
 import { useFonts } from 'expo-font';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider } from '@/state-management/Provider';
 import { AppRoutes } from '@/AppRoutes';
 
@@ -29,12 +30,14 @@ export const Root = () => {
   }
 
   return (
-    <AppProvider>
-      <NavigationContainer>
-        <NativeRouter>
-          <AppRoutes />
-        </NativeRouter>
-      </NavigationContainer>
-    </AppProvider>
+    <SafeAreaProvider>
+      <AppProvider>
+        <NavigationContainer>
+          <NativeRouter>
+            <AppRoutes />
+          </NativeRouter>
+        </NavigationContainer>
+      </AppProvider>
+    </SafeAreaProvider>
   );
 };
