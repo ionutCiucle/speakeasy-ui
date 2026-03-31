@@ -11,9 +11,11 @@ export const Color = {
   Cream: '#F5F0E8',
   Gold: '#C9A84C',
   Espresso: '#2D2416',
+  EspressoDark: '#1A140D',
   WarmBrown: '#8B7355',
   Ivory: '#FDFAF5',
   Sand: '#D4C9B0',
+  Linen: '#EDE8DC',
 };
 
 export const flex = (

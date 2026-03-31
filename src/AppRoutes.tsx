@@ -1,6 +1,12 @@
 import { Routes, Route } from 'react-router-native';
-import { SplashPage, LoginPage, RegisterPage, ForgotPasswordPage } from '@/features/Auth';
+import {
+  SplashPage,
+  LoginPage,
+  RegisterPage,
+  ForgotPasswordPage,
+} from '@/features/Auth';
 import { HomePage } from '@/features/Home/HomePage';
+import { CreateTabStep1Page } from '@/features/CreateTab';
 import { useAuthTokenRehydration } from '@/features/Auth/hooks/useAuthTokenRehydration';
 
 export function AppRoutes() {
@@ -17,6 +23,7 @@ export function AppRoutes() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/home" element={<HomePage />} />
+      <Route path="/create-tab" element={<CreateTabStep1Page />} />
     </Routes>
   );
 }

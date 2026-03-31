@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useNavigate } from 'react-router-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Color } from '@/styles';
 import { Button, MainNav, MainNavTab, PageHeader } from '@/components';
@@ -14,18 +15,26 @@ const HEADER_TITLES: Record<MainNavTab, string> = {
 
 export function HomePage() {
   const [activeTab, setActiveTab] = useState<MainNavTab>('home');
+  const navigate = useNavigate();
 
   const handleStartTab = useCallback(() => {
-    // TODO: navigate to start tab flow
-  }, []);
+    navigate('/create-tab');
+  }, [navigate]);
 
   const handleScanQR = useCallback(() => {
     // TODO: navigate to QR scanner
   }, []);
 
-  const handleTabPress = useCallback((tab: MainNavTab) => {
-    setActiveTab(tab);
-  }, []);
+  const handleTabPress = useCallback(
+    (tab: MainNavTab) => {
+      if (tab === 'newTab') {
+        navigate('/create-tab');
+        return;
+      }
+      setActiveTab(tab);
+    },
+    [navigate],
+  );
 
   return (
     <View style={styles.screen}>
