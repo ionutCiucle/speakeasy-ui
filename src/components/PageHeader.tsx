@@ -12,7 +12,7 @@ export function PageHeader({ title }: Props) {
 
   return (
     <>
-      <View style={[styles.header, { paddingTop: top }]}>
+      <View style={[styles.header, { height: 60 + top, paddingTop: top }]}>
         <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.divider} />
@@ -22,7 +22,6 @@ export function PageHeader({ title }: Props) {
 
 const styles = StyleSheet.create({
   header: {
-    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
   },
