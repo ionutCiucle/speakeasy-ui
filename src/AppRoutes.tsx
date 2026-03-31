@@ -5,7 +5,7 @@ import {
   RegisterPage,
   ForgotPasswordPage,
 } from '@/features/Auth';
-import { AppLayout } from '@/features/App';
+import { AppLayout } from './AppLayout';
 import { HomePage } from '@/features/Home/HomePage';
 import { ProfilePage } from '@/features/Profile/ProfilePage';
 import { CreateTabPage } from '@/features/CreateTab';

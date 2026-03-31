@@ -11,12 +11,12 @@ import { Color } from '@/styles';
 import { useAppSelector } from '@/state-management/providerHooks';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
-import { CurrencyModal } from './CurrencyModal';
+import { CurrencyModal } from '@/components/modals/CurrencyModal';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
 const DURATION = 240;
 
-export function ModalContainer() {
+export function ModalRoot() {
   const activeModal = useAppSelector((state) => state.layout.activeModal);
   const { hideModal } = useLayoutActions();
 
