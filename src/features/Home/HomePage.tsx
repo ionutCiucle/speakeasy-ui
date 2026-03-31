@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
 import { TabReceiptIcon } from './components';
-import { Button, MainNav, MainNavTab } from '@/components';
+import { Button, MainNav, MainNavTab, PageHeader } from '@/components';
 import { ProfilePage } from '@/features/Profile';
 
 const HEADER_TITLES: Record<MainNavTab, string> = {
@@ -29,10 +29,7 @@ export function HomePage() {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>{HEADER_TITLES[activeTab]}</Text>
-      </View>
-      <View style={styles.headerDivider} />
+      <PageHeader title={HEADER_TITLES[activeTab]} />
 
       {activeTab === 'profile' ? (
         <ProfilePage />
@@ -66,21 +63,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Color.Cream,
-  },
-  header: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 22,
-    lineHeight: 27,
-    color: Color.Espresso,
-  },
-  headerDivider: {
-    height: 1,
-    backgroundColor: Color.Gold,
   },
   emptyState: {
     flex: 1,
