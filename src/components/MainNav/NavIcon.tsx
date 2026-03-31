@@ -16,6 +16,6 @@ export function NavIcon({ tab, color }: Props) {
     case 'friends':
       return <Ionicons name="people-outline" size={22} color={color} />;
     case 'profile':
-      return <Feather name="user" size={20} color={color} />;
+      return <Feather name="user" size={18} color={color} />;
   }
 }
