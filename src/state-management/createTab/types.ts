@@ -1,10 +1,16 @@
 import { CreateTabActionType } from './enums';
 
+export interface Member {
+  id: string;
+  name: string;
+}
+
 export interface CreateTabState {
   tabName: string;
   venue: string;
   currency: { code: string; name: string };
   notes: string;
+  members: Member[];
 }
 
 export interface SetTabNameAction {
@@ -27,8 +33,20 @@ export interface SetNotesAction {
   payload: string;
 }
 
+export interface AddMemberAction {
+  type: CreateTabActionType.AddMember;
+  payload: Member;
+}
+
+export interface RemoveMemberAction {
+  type: CreateTabActionType.RemoveMember;
+  payload: string;
+}
+
 export type CreateTabAction =
   | SetTabNameAction
   | SetVenueAction
   | SetCurrencyAction
-  | SetNotesAction;
+  | SetNotesAction
+  | AddMemberAction
+  | RemoveMemberAction;

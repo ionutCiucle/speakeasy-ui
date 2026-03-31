@@ -6,6 +6,7 @@ export const createTabInitialState: CreateTabState = {
   venue: '',
   currency: { code: 'USD', name: 'US Dollar' },
   notes: '',
+  members: [],
 };
 
 export function createTabReducer(
@@ -24,6 +25,15 @@ export function createTabReducer(
     }
     case CreateTabActionType.SetNotes: {
       return { ...state, notes: action.payload };
+    }
+    case CreateTabActionType.AddMember: {
+      return { ...state, members: [...state.members, action.payload] };
+    }
+    case CreateTabActionType.RemoveMember: {
+      return {
+        ...state,
+        members: state.members.filter((m) => m.id !== action.payload),
+      };
     }
     default: {
       return state;

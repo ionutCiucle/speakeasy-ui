@@ -14,6 +14,7 @@ interface Props {
   variant?: 'primary' | 'secondary' | 'tertiary';
   rightIcon?: React.ComponentProps<typeof Feather>['name'];
   style?: StyleProp<ViewStyle>;
+  disabled?: boolean;
   onPress: () => void;
 }
 
@@ -28,12 +29,19 @@ export function Button({
   variant = 'primary',
   rightIcon,
   style,
+  disabled,
   onPress,
 }: Props) {
   return (
     <TouchableOpacity
-      style={[styles.button, styles[variant], style]}
+      style={[
+        styles.button,
+        styles[variant],
+        style,
+        disabled && styles.disabled,
+      ]}
       onPress={onPress}
+      disabled={disabled}
       activeOpacity={0.8}
     >
       <Text style={[styles.label, styles[`${variant}Label`]]}>{label}</Text>
@@ -86,5 +94,8 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     marginLeft: 8,
+  },
+  disabled: {
+    opacity: 0.35,
   },
 });

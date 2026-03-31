@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { AddMemberStep } from './AddMemberStep';
 import { TabDetailsStep } from './TabDetailsStep';
 
 export function CreateTabPage() {
@@ -10,6 +11,10 @@ export function CreateTabPage() {
 
   if (currentStep === 1) {
     return <TabDetailsStep onContinue={handleContinue} />;
+  }
+
+  if (currentStep === 2) {
+    return <AddMemberStep onContinue={handleContinue} />;
   }
 
   return null;

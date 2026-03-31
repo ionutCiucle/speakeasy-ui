@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useAppDispatch } from '@/state-management/providerHooks';
 import { CreateTabActionType } from '@/state-management/createTab/enums';
+import { Member } from '@/state-management/createTab/types';
 
 export function useCreateTabActions() {
   const dispatch = useAppDispatch();
@@ -36,5 +37,26 @@ export function useCreateTabActions() {
     [dispatch],
   );
 
-  return { setTabName, setVenue, setCurrency, setNotes };
+  const addMember = useCallback(
+    (member: Member) => {
+      dispatch({ type: CreateTabActionType.AddMember, payload: member });
+    },
+    [dispatch],
+  );
+
+  const removeMember = useCallback(
+    (id: string) => {
+      dispatch({ type: CreateTabActionType.RemoveMember, payload: id });
+    },
+    [dispatch],
+  );
+
+  return {
+    setTabName,
+    setVenue,
+    setCurrency,
+    setNotes,
+    addMember,
+    removeMember,
+  };
 }
