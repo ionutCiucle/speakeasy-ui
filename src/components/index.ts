@@ -1,3 +1,4 @@
+export { BackButton } from './BackButton';
 export { BracketContainer } from './BracketContainer';
 export { Button } from './Button';
 export { Input, useValidatedEmailField, useValidatedTextField } from './Input';

@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Color } from '@/styles';
+import { BackButton } from './BackButton';
 
 interface Props {
   children: React.ReactNode;
@@ -24,13 +24,7 @@ export function BracketContainer({
   return (
     <View style={styles.container}>
       {onBack ? (
-        <TouchableOpacity
-          style={[styles.backButton, { top: topOffset - 2, left: margin - 4 }]}
-          onPress={onBack}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <Feather name="chevron-left" size={28} color={Color.Gold} />
-        </TouchableOpacity>
+        <BackButton onPress={onBack} top={topOffset - 2} />
       ) : (
         <>
           <View
@@ -138,10 +132,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.Cream,
-  },
-  backButton: {
-    position: 'absolute',
-    zIndex: 1,
   },
   bracketH: {
     position: 'absolute',

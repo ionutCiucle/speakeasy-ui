@@ -14,6 +14,10 @@ jest.mock('@/state-management/auth', () => ({
   useAuthWorkflows: () => ({ registerAndLogin: mockRegisterAndLogin }),
 }));
 
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+}));
+
 function fillValidForm({
   getByPlaceholderText,
   getAllByPlaceholderText,
@@ -35,12 +39,14 @@ describe('RegisterPage', () => {
   });
 
   it('renders the registration form', () => {
-    const { getByPlaceholderText, getByText } = render(<RegisterPage />);
+    const { getByPlaceholderText, getByText, getByTestId } = render(
+      <RegisterPage />,
+    );
 
     expect(getByPlaceholderText('@yourname')).toBeTruthy();
     expect(getByPlaceholderText('your@email.com')).toBeTruthy();
     expect(getByText('Create Account')).toBeTruthy();
-    expect(getByText('‹ Back')).toBeTruthy();
+    expect(getByTestId('back-button')).toBeTruthy();
   });
 
   it('shows validation errors for all empty fields on submit', async () => {
@@ -123,9 +129,9 @@ describe('RegisterPage', () => {
   });
 
   it('navigates to / on "Back" press', () => {
-    const { getByText } = render(<RegisterPage />);
+    const { getByTestId } = render(<RegisterPage />);
 
-    fireEvent.press(getByText('‹ Back'));
+    fireEvent.press(getByTestId('back-button'));
 
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
