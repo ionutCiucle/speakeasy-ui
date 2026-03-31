@@ -7,14 +7,21 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
+import { Avatar } from '@/components';
 import { useAppSelector } from '@/state-management/providerHooks';
+
+// Placeholder until a real friends list exists in state
+const FRIENDS: unknown[] = [];
 
 export function AddMemberStep() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const members = useAppSelector((state) => state.createTab.members);
+
+  const hasFriends = FRIENDS.length > 0;
 
   const handleFindFriends = useCallback(() => {
     navigate('/friends');
@@ -31,22 +38,44 @@ export function AddMemberStep() {
         {/* WHO'S JOINING? */}
         <Text style={styles.sectionHeader}>WHO'S JOINING?</Text>
         <View style={styles.membersPanel}>
+          <Avatar label="Me" variant="self" size={44} />
+          {members.map((member) => (
+            <Avatar
+              key={member.id}
+              label={member.name
+                .split(' ')
+                .map((w) => w[0] ?? '')
+                .join('')
+                .toUpperCase()
+                .slice(0, 2)}
+              variant="member"
+              size={44}
+            />
+          ))}
           <TouchableOpacity style={styles.addAvatarCircle} activeOpacity={0.7}>
             <Text style={styles.addAvatarPlus}>+</Text>
           </TouchableOpacity>
-          {members.length === 0 && (
-            <Text style={styles.noMembersText}>No members added</Text>
-          )}
         </View>
 
         {/* Search */}
-        <TextInput
-          style={styles.searchBar}
-          placeholder="Search your friends…"
-          placeholderTextColor={Color.WarmBrown}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
+        <View
+          style={[styles.searchBar, !hasFriends && styles.searchBarDisabled]}
+        >
+          <Feather
+            name="search"
+            size={16}
+            color={Color.WarmBrown}
+            style={styles.searchIcon}
+          />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search your friends..."
+            placeholderTextColor={Color.WarmBrown}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            editable={hasFriends}
+          />
+        </View>
 
         {/* YOUR FRIENDS */}
         <Text style={[styles.sectionHeader, styles.sectionHeaderSpaced]}>
@@ -105,6 +134,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
     marginBottom: 12,
+    gap: 8,
   },
   addAvatarCircle: {
     width: 44,
@@ -120,20 +150,24 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: Color.WarmBrown,
   },
-  noMembersText: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 11,
-    lineHeight: 13,
-    color: Color.WarmBrown,
-    marginLeft: 12,
-  },
   searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Color.Ivory,
     borderWidth: 1,
     borderColor: Color.Sand,
     borderRadius: 20,
     height: 40,
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
+  },
+  searchBarDisabled: {
+    opacity: 0.45,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
     fontFamily: 'Inter_400Regular',
     fontSize: 13,
     lineHeight: 16,

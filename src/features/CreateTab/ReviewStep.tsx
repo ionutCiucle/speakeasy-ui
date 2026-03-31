@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigate } from 'react-router-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
+import { Avatar } from '@/components';
 import { useAppSelector } from '@/state-management/providerHooks';
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
@@ -36,16 +30,11 @@ function getInitials(name: string): string {
 }
 
 export function ReviewStep() {
-  const navigate = useNavigate();
   const tabName = useAppSelector((state) => state.createTab.tabName);
   const venue = useAppSelector((state) => state.createTab.venue);
   const currency = useAppSelector((state) => state.createTab.currency);
   const members = useAppSelector((state) => state.createTab.members);
   const menuItems = useAppSelector((state) => state.createTab.menuItems);
-
-  const handleStartTab = () => {
-    navigate('/home');
-  };
 
   return (
     <ScrollView
@@ -92,22 +81,15 @@ export function ReviewStep() {
           </View>
           <Text style={styles.rowLabel}>Members</Text>
           <View style={styles.avatarGroup}>
-            <View style={[styles.avatar, styles.avatarMe]}>
-              <Text style={[styles.avatarText, styles.avatarTextMe]}>Me</Text>
-            </View>
+            <Avatar label="Me" variant="self" size={26} />
             {members.slice(0, 3).map((member) => (
-              <View
+              <Avatar
                 key={member.id}
-                style={[
-                  styles.avatar,
-                  styles.avatarOther,
-                  styles.avatarOverlap,
-                ]}
-              >
-                <Text style={styles.avatarText}>
-                  {getInitials(member.name)}
-                </Text>
-              </View>
+                label={getInitials(member.name)}
+                variant="member"
+                size={26}
+                style={styles.avatarOverlap}
+              />
             ))}
           </View>
         </View>
@@ -148,20 +130,6 @@ export function ReviewStep() {
           </View>
         </>
       )}
-
-      {/* Start Tab */}
-      <TouchableOpacity
-        style={styles.startButton}
-        onPress={handleStartTab}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.startButtonLabel}>Start Tab</Text>
-        <MaterialCommunityIcons
-          name="glass-cocktail"
-          size={20}
-          color={Color.Gold}
-        />
-      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -231,30 +199,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  avatar: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   avatarOverlap: {
     marginLeft: -6,
-  },
-  avatarMe: {
-    backgroundColor: Color.Gold,
-  },
-  avatarOther: {
-    backgroundColor: Color.Linen,
-  },
-  avatarText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 9,
-    lineHeight: 11,
-    color: Color.Espresso,
-  },
-  avatarTextMe: {
-    color: Color.EspressoDark,
   },
   menuItemName: {
     flex: 1,
@@ -281,21 +227,5 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 13,
     color: Color.Espresso,
-  },
-  startButton: {
-    flexDirection: 'row',
-    backgroundColor: Color.EspressoDark,
-    borderRadius: 12,
-    height: 56,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
-    marginTop: 32,
-  },
-  startButtonLabel: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 17,
-    lineHeight: 21,
-    color: Color.White,
   },
 });

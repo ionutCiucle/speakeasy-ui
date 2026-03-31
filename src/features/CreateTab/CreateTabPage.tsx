@@ -10,7 +10,6 @@ interface StepConfig {
   currentStep: number;
   stepName: string;
   nextRoute: string;
-  hideFooter?: boolean;
 }
 
 const STEP_CONFIGS: Record<string, StepConfig> = {
@@ -33,7 +32,6 @@ const STEP_CONFIGS: Record<string, StepConfig> = {
     currentStep: 4,
     stepName: 'Review & Start',
     nextRoute: '',
-    hideFooter: true,
   },
 };
 
@@ -54,6 +52,12 @@ export function CreateTabPage() {
     }
   }, [navigate, stepConfig]);
 
+  const handleStartTab = useCallback(() => {
+    navigate('/home');
+  }, [navigate]);
+
+  const isReviewStep = stepConfig?.nextRoute === '';
+
   return (
     <View style={styles.screen}>
       <Wizard
@@ -66,16 +70,22 @@ export function CreateTabPage() {
         <Outlet context={{ onValidate: setValidator }} />
       </View>
 
-      {!stepConfig?.hideFooter && (
-        <View style={styles.footer}>
+      <View style={styles.footer}>
+        {isReviewStep ? (
+          <Button
+            label="Start Tab"
+            variant="tertiary"
+            onPress={handleStartTab}
+          />
+        ) : (
           <Button
             label="Continue"
             variant="tertiary"
             rightIcon="chevron-right"
             onPress={handleContinue}
           />
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 }

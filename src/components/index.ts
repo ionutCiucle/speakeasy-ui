@@ -1,3 +1,4 @@
+export { Avatar } from './Avatar';
 export { BackButton } from './BackButton';
 export { BracketContainer } from './BracketContainer';
 export { IconButton } from './IconButton';
