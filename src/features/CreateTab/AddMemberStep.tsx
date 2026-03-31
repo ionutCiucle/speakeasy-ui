@@ -9,100 +9,74 @@ import {
 } from 'react-native';
 import { useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
-import { Button, Wizard } from '@/components';
 import { useAppSelector } from '@/state-management/providerHooks';
-
-const TOTAL_STEPS = 4;
-const CURRENT_STEP = 2;
 
 export function AddMemberStep() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const members = useAppSelector((state) => state.createTab.members);
 
-  const handleContinue = useCallback(() => {
-    navigate('/create-tab/set-limit');
-  }, [navigate]);
-
   const handleFindFriends = useCallback(() => {
     navigate('/friends');
   }, [navigate]);
 
   return (
-    <View style={styles.screen}>
-      <ScrollView
-        style={styles.flex}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Wizard
-          totalSteps={TOTAL_STEPS}
-          currentStep={CURRENT_STEP}
-          stepName="Add Members"
+    <ScrollView
+      style={styles.flex}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.content}>
+        {/* WHO'S JOINING? */}
+        <Text style={styles.sectionHeader}>WHO'S JOINING?</Text>
+        <View style={styles.membersPanel}>
+          <TouchableOpacity style={styles.addAvatarCircle} activeOpacity={0.7}>
+            <Text style={styles.addAvatarPlus}>+</Text>
+          </TouchableOpacity>
+          {members.length === 0 && (
+            <Text style={styles.noMembersText}>No members added</Text>
+          )}
+        </View>
+
+        {/* Search */}
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search your friends…"
+          placeholderTextColor={Color.WarmBrown}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
         />
 
-        <View style={styles.content}>
-          {/* WHO'S JOINING? */}
-          <Text style={styles.sectionHeader}>WHO'S JOINING?</Text>
-          <View style={styles.membersPanel}>
-            <TouchableOpacity
-              style={styles.addAvatarCircle}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.addAvatarPlus}>+</Text>
-            </TouchableOpacity>
-            {members.length === 0 && (
-              <Text style={styles.noMembersText}>No members added</Text>
-            )}
+        {/* YOUR FRIENDS */}
+        <Text style={[styles.sectionHeader, styles.sectionHeaderSpaced]}>
+          YOUR FRIENDS
+        </Text>
+
+        {/* Empty state */}
+        <View style={styles.emptyState}>
+          <View style={styles.emptyAvatarOuter}>
+            <View style={styles.emptyAvatarHead} />
+            <View style={styles.emptyAvatarBody} />
           </View>
-
-          {/* Search */}
-          <TextInput
-            style={styles.searchBar}
-            placeholder="Search your friends…"
-            placeholderTextColor={Color.WarmBrown}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-
-          {/* YOUR FRIENDS */}
-          <Text style={[styles.sectionHeader, styles.sectionHeaderSpaced]}>
-            YOUR FRIENDS
+          <Text style={styles.emptyTitle}>No friends yet</Text>
+          <Text style={styles.emptySubtitle}>
+            Add friends to easily invite them to tabs
           </Text>
-
-          {/* Empty state */}
-          <View style={styles.emptyState}>
-            <View style={styles.emptyAvatarOuter}>
-              <View style={styles.emptyAvatarHead} />
-              <View style={styles.emptyAvatarBody} />
-            </View>
-            <Text style={styles.emptyTitle}>No friends yet</Text>
-            <Text style={styles.emptySubtitle}>
-              Add friends to easily invite them to tabs
-            </Text>
-            <TouchableOpacity
-              style={styles.findFriendsButton}
-              onPress={handleFindFriends}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.findFriendsLabel}>Find Friends</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.findFriendsButton}
+            onPress={handleFindFriends}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.findFriendsLabel}>Find Friends</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-
-      <View style={styles.footer}>
-        <Button label="Continue" variant="tertiary" onPress={handleContinue} />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-  },
   flex: {
     flex: 1,
   },
@@ -224,10 +198,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 17,
     color: Color.White,
-  },
-  footer: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 24,
   },
 });
