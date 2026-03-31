@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
@@ -29,6 +29,12 @@ export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { reset } = useCreateTabActions();
+  const lastCreateTabRoute = useRef('/create-tab');
+
+  if (location.pathname.startsWith('/create-tab')) {
+    lastCreateTabRoute.current = location.pathname;
+  }
+
   const config =
     ROUTE_CONFIG[location.pathname] ??
     (location.pathname.startsWith('/create-tab')
@@ -41,16 +47,19 @@ export function AppLayout() {
   }, [navigate]);
 
   const handleClose = useCallback(() => {
+    lastCreateTabRoute.current = '/create-tab';
     reset();
     navigate('/home');
   }, [reset, navigate]);
 
   const handleTabPress = useCallback(
     (tab: MainNavTab) => {
-      if (TAB_ROUTES[tab] === location.pathname) {
+      const target =
+        tab === 'newTab' ? lastCreateTabRoute.current : TAB_ROUTES[tab];
+      if (target === location.pathname) {
         return;
       }
-      navigate(TAB_ROUTES[tab]);
+      navigate(target);
     },
     [navigate, location.pathname],
   );
