@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
+import { Button } from '@/components';
 
 const TOTAL_STEPS = 4;
 const CURRENT_STEP = 1;
@@ -155,19 +156,13 @@ export function CreateTabStep1Page() {
             </View>
 
             {/* Continue button */}
-            <TouchableOpacity
-              style={styles.continueButton}
+            <Button
+              label="Continue"
+              variant="tertiary"
+              rightIcon="chevron-right"
+              style={styles.continueWrapper}
               onPress={handleContinue}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.continueLabel}>Continue</Text>
-              <Feather
-                name="chevron-right"
-                size={16}
-                color={Color.Gold}
-                style={styles.continueChevron}
-              />
-            </TouchableOpacity>
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -331,22 +326,7 @@ const styles = StyleSheet.create({
     color: Color.WarmBrown,
     flex: 1,
   },
-  continueButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Color.EspressoDark,
-    borderRadius: 10,
-    height: 52,
+  continueWrapper: {
     marginTop: 32,
-  },
-  continueLabel: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    lineHeight: 19,
-    color: Color.White,
-  },
-  continueChevron: {
-    marginLeft: 8,
   },
 });

@@ -19,10 +19,11 @@ Lift `PageHeader` and `MainNav` out of individual pages into a shared layout she
 | `src/components/PageHeader.tsx` | Optional `onBack`/`onClose` props; uses `IconButton` |
 | `src/components/BackButton.tsx` | Thin wrapper around `IconButton` |
 | `src/components/BracketContainer.tsx` | Migrated from `BackButton` to `IconButton` |
+| `src/components/Button.tsx` | Added `tertiary` variant and `rightIcon` prop |
 | `src/components/index.ts` | Export `IconButton` |
 | `src/AppRoutes.tsx` | Authenticated routes nested under `AppLayout` |
 | `src/features/Home/HomePage.tsx` | Stripped to content only |
-| `src/features/CreateTab/CreateTabStep1Page.tsx` | Stripped to content only |
+| `src/features/CreateTab/CreateTabStep1Page.tsx` | Stripped to content only; Continue uses `Button` |
 | `src/features/Auth/hooks/useAuthTokenRehydration.ts` | Navigate ref fix |
 
 ---
@@ -140,3 +141,41 @@ Exported from `src/components/index.ts`.
 **`src/features/Profile/ProfilePage.tsx`** — promoted to its own `/profile` route; no structural changes needed (already pure content).
 
 **`src/features/CreateTab/CreateTabStep1Page.tsx`** — removed custom header block (`handleBack`, `handleClose`, back/close buttons, title), `MainNav`, `useSafeAreaInsets`. Added `paddingTop: 12` to `progressBar` style to replace the spacing the removed header provided.
+
+---
+
+### Step 8 — `Button` tertiary variant + `rightIcon` prop ✅
+
+**`src/components/Button.tsx`**
+
+Added `tertiary` variant (`Color.EspressoDark` background, `Color.White` label) and a `rightIcon` prop (Feather icon name rendered to the right of the label).
+
+```ts
+interface Props {
+  label: string;
+  variant?: 'primary' | 'secondary' | 'tertiary';
+  rightIcon?: React.ComponentProps<typeof Feather>['name'];
+  style?: StyleProp<ViewStyle>;
+  onPress: () => void;
+}
+
+const ICON_COLOR = { primary: Color.White, secondary: Color.Gold, tertiary: Color.Gold };
+```
+
+Base button style gains `flexDirection: 'row'` and `justifyContent: 'center'` to accommodate the icon. Icon rendered with `marginLeft: 8`.
+
+**`src/features/CreateTab/CreateTabStep1Page.tsx`**
+
+Replaced the bespoke `TouchableOpacity` continue button with:
+
+```tsx
+<Button
+  label="Continue"
+  variant="tertiary"
+  rightIcon="chevron-right"
+  style={styles.continueWrapper}
+  onPress={handleContinue}
+/>
+```
+
+Removed `continueButton`, `continueLabel`, `continueChevron` from `StyleSheet`; added `continueWrapper: { marginTop: 32 }`.

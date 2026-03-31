@@ -6,34 +6,45 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
 
 interface Props {
   label: string;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'tertiary';
+  rightIcon?: React.ComponentProps<typeof Feather>['name'];
   style?: StyleProp<ViewStyle>;
   onPress: () => void;
 }
 
-export function Button({ label, onPress, variant = 'primary', style }: Props) {
+const ICON_COLOR: Record<'primary' | 'secondary' | 'tertiary', string> = {
+  primary: Color.White,
+  secondary: Color.Gold,
+  tertiary: Color.Gold,
+};
+
+export function Button({
+  label,
+  variant = 'primary',
+  rightIcon,
+  style,
+  onPress,
+}: Props) {
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        variant === 'secondary' ? styles.secondary : styles.primary,
-        style,
-      ]}
+      style={[styles.button, styles[variant], style]}
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Text
-        style={[
-          styles.label,
-          variant === 'secondary' ? styles.secondaryLabel : styles.primaryLabel,
-        ]}
-      >
-        {label}
-      </Text>
+      <Text style={[styles.label, styles[`${variant}Label`]]}>{label}</Text>
+      {rightIcon && (
+        <Feather
+          name={rightIcon}
+          size={16}
+          color={ICON_COLOR[variant]}
+          style={styles.rightIcon}
+        />
+      )}
     </TouchableOpacity>
   );
 }
@@ -43,7 +54,9 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 10,
     paddingVertical: 17,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   primary: {
     backgroundColor: Color.Gold,
@@ -52,6 +65,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 1.5,
     borderColor: Color.Gold,
+  },
+  tertiary: {
+    backgroundColor: Color.EspressoDark,
   },
   label: {
     fontFamily: 'Inter_600SemiBold',
@@ -64,5 +80,11 @@ const styles = StyleSheet.create({
   },
   secondaryLabel: {
     color: Color.Gold,
+  },
+  tertiaryLabel: {
+    color: Color.White,
+  },
+  rightIcon: {
+    marginLeft: 8,
   },
 });
