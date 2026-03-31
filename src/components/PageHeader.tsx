@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Color } from '@/styles';
 
 interface Props {
@@ -7,9 +8,11 @@ interface Props {
 }
 
 export function PageHeader({ title }: Props) {
+  const { top } = useSafeAreaInsets();
+
   return (
     <>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: top }]}>
         <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.divider} />
