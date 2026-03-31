@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-native';
 import { getToken, removeToken } from '@/services';
 import { useAuthActions } from '@/state-management/auth';
@@ -17,6 +17,8 @@ export function useAuthTokenRehydration() {
   const { loginSuccess } = useAuthActions();
 
   const navigate = useNavigate();
+  const navigateRef = useRef(navigate);
+  navigateRef.current = navigate;
 
   const rehydrate = useCallback(async () => {
     try {
@@ -24,14 +26,14 @@ export function useAuthTokenRehydration() {
       if (token && !isTokenExpired(token)) {
         const payload = JSON.parse(atob(token.split('.')[1]));
         loginSuccess(payload.sub ?? payload.userId, token, payload.email ?? '');
-        navigate('/home');
+        navigateRef.current('/home');
       } else {
         await removeToken();
       }
     } finally {
       setIsReady(true);
     }
-  }, [loginSuccess, navigate]);
+  }, [loginSuccess]);
 
   useEffect(() => {
     rehydrate();
