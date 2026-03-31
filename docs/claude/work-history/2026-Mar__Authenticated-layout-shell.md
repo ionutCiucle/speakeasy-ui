@@ -4,6 +4,27 @@
 
 Lift `PageHeader` and `MainNav` out of individual pages into a shared layout shell (`AppLayout`) so they persist across route changes. Auth screens remain full-screen. `ProfilePage` promoted to its own route. Introduce `IconButton` as a reusable icon-press primitive used by `BackButton`, `PageHeader`, and `BracketContainer`.
 
+**New files**
+
+| File | Purpose |
+|---|---|
+| `src/features/App/AppLayout.tsx` | Pathless layout route shell |
+| `src/features/App/index.ts` | Barrel |
+| `src/components/IconButton.tsx` | Generic icon press primitive |
+
+**Modified files**
+
+| File | Change |
+|---|---|
+| `src/components/PageHeader.tsx` | Optional `onBack`/`onClose` props; uses `IconButton` |
+| `src/components/BackButton.tsx` | Thin wrapper around `IconButton` |
+| `src/components/BracketContainer.tsx` | Migrated from `BackButton` to `IconButton` |
+| `src/components/index.ts` | Export `IconButton` |
+| `src/AppRoutes.tsx` | Authenticated routes nested under `AppLayout` |
+| `src/features/Home/HomePage.tsx` | Stripped to content only |
+| `src/features/CreateTab/CreateTabStep1Page.tsx` | Stripped to content only |
+| `src/features/Auth/hooks/useAuthTokenRehydration.ts` | Navigate ref fix |
+
 ---
 
 ### Step 1 — Navigation bug fix: rehydration re-fires on every route change ✅
