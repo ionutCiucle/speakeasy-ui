@@ -17,19 +17,6 @@ jest.mock('@expo/vector-icons', () => ({
   Feather: () => null,
 }));
 
-jest.mock('@/components', () => ({
-  BracketContainer: ({ children }: any) => children,
-  Button: ({ label, onPress }: any) => {
-    const { TouchableOpacity, Text } = require('react-native');
-    return (
-      <TouchableOpacity onPress={onPress}>
-        <Text>{label}</Text>
-      </TouchableOpacity>
-    );
-  },
-  Logo: () => null,
-}));
-
 beforeEach(() => {
   mockNavigate.mockClear();
 });
