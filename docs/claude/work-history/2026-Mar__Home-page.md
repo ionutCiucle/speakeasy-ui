@@ -155,3 +155,49 @@ Added two new props to `Input`:
 | No red border by default | `invalid` absent |
 | Red border when `invalid=true` | `invalid` prop applied |
 | Both invalid border and error together | Combined state |
+
+---
+
+### Step 12 — Component directory restructuring + MainNav unit tests ✅
+
+- `Input` moved to `src/components/Input/` directory; `useValidatedEmailField` and `useValidatedTextField` hooks moved into `src/components/Input/hooks/` and re-exported from `src/components/index.ts`
+- `MainNav` moved to `src/components/MainNav/` directory; `NavIcon` extracted to its own file `src/components/MainNav/NavIcon.tsx`
+- `Color.Black` (`#000000`) added to the `Color` enum and used for the MainNav shadow
+- `src/components/MainNav/__tests__/MainNav.test.tsx` — 7 tests covering labels, active/inactive colours, and `onTabPress` callbacks; `react-native-safe-area-context` mocked to return zero insets
+
+---
+
+### Step 13 — Button unit tests ✅
+
+`src/components/__tests__/Button.test.tsx` — 5 tests:
+
+| Test | What it checks |
+|---|---|
+| Renders label | Basic render |
+| Calls onPress | Interaction |
+| Defaults to primary variant | Default prop |
+| Primary: white text | Colour check |
+| Secondary: gold text | Colour check |
+
+---
+
+### Step 14 — PageHeader component ✅
+
+`src/components/PageHeader.tsx` — shared header component used by `HomePage`.
+
+- Uses `useSafeAreaInsets().top` to push content below the iPhone notch
+- Height is `60 + top` set inline so the container grows rather than squashing content
+- `paddingTop: top` ensures the title is vertically centred in the visible 60px region
+- Gold 1px divider below the header
+- `HomePage` updated to import and render `<PageHeader title={HEADER_TITLES[activeTab]} />`
+
+---
+
+### Step 15 — MainNav safe area + UI polish ✅
+
+- MainNav uses `useSafeAreaInsets().bottom` via a dedicated spacer `<View style={{ height: bottom }} />` below the tab row — avoids squashing the fixed-height (62px) tabs container
+- Removed hardcoded `paddingBottom: 5` from the tabs style
+- Bottom spacer background set to `Color.White` to match the nav background
+- Removed the gold 4px `homeIndicator` bottom border from MainNav
+- `TabReceiptIcon` wrapper component removed; `FontAwesome6 martini-glass-empty` used inline in `HomePage` for an empty martini glass silhouette
+- `react-native-safe-area-context` mocked in MainNav tests to fix the "No safe area value available" failure

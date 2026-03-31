@@ -7,6 +7,10 @@ jest.mock('@expo/vector-icons', () => ({
   Ionicons: () => null,
 }));
 
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+}));
+
 describe('MainNav', () => {
   it('renders all four tab labels', () => {
     const { getByText } = render(<MainNav />);
