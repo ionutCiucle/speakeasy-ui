@@ -1,1 +1,0 @@
-export { TabDashboard } from './TabDashboard';

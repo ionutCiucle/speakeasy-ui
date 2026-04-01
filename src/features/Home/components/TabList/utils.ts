@@ -1,5 +1,5 @@
 import type { TabDTO } from '@/state-management/tabs';
-import type { TabCardData } from '../components/TabCard';
+import type { TabCardData } from '../TabCard';
 import { CURRENCY_SYMBOLS } from './constants';
 
 export function formatDuration(createdAt: string): string {

@@ -3,8 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
 import { useAppSelector } from '@/state-management/providerHooks';
 import { useTabsAsyncActions } from '@/state-management/tabs';
-import { TabDashboard } from './TabDashboard';
-import { NoTabs } from './NoTabs';
+import { TabList, NoTabs } from './components';
 
 export function HomePage() {
   const { getTabs } = useTabsAsyncActions();
@@ -21,7 +20,7 @@ export function HomePage() {
 
   return (
     <View style={styles.screen}>
-      {tabs.length > 0 ? <TabDashboard tabs={tabs} /> : <NoTabs />}
+      {tabs.length > 0 ? <TabList tabs={tabs} /> : <NoTabs />}
     </View>
   );
 }

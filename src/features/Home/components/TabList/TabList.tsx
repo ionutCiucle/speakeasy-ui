@@ -9,7 +9,7 @@ import {
 import { Color } from '@/styles';
 import { useAppSelector } from '@/state-management/providerHooks';
 import type { TabDTO } from '@/state-management/tabs';
-import { TabCard } from '../components';
+import { TabCard } from '../TabCard';
 import { toCardData } from './utils';
 import { FILTERS } from './constants';
 import { TabFilter } from './enums';
@@ -18,7 +18,7 @@ interface Props {
   tabs: TabDTO[];
 }
 
-export function TabDashboard({ tabs }: Props) {
+export function TabList({ tabs }: Props) {
   const [filter, setFilter] = useState<TabFilter>(TabFilter.All);
   const userId = useAppSelector((state) => state.auth.userId);
 
