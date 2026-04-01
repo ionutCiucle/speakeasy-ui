@@ -16,6 +16,7 @@ const ROUTE_CONFIG: Record<string, RouteConfig> = {
   '/home': { title: 'My Tabs', tab: 'home' },
   '/profile': { title: 'Profile', tab: 'profile' },
   '/create-tab': { title: 'New Tab', tab: 'newTab', wizard: true },
+  '/tab': { title: '', tab: 'home' },
 };
 
 const TAB_ROUTES: Record<MainNavTab, string> = {
@@ -49,7 +50,13 @@ export function AppLayout() {
     (location.pathname.startsWith('/create-tab')
       ? ROUTE_CONFIG['/create-tab']
       : undefined) ??
+    (location.pathname.startsWith('/tab/')
+      ? ROUTE_CONFIG['/tab']
+      : undefined) ??
     ROUTE_CONFIG['/home'];
+
+  const title =
+    (location.state as { title?: string } | null)?.title ?? config.title;
 
   const handleBack = useCallback(() => {
     navigate(-1);
@@ -76,8 +83,12 @@ export function AppLayout() {
   return (
     <View style={styles.screen}>
       <PageHeader
-        title={config.title}
-        onBack={config.wizard ? handleBack : undefined}
+        title={title}
+        onBack={
+          config.wizard || location.pathname.startsWith('/tab/')
+            ? handleBack
+            : undefined
+        }
         onClose={config.wizard ? handleClose : undefined}
       />
 

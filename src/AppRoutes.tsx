@@ -7,6 +7,7 @@ import {
 } from '@/features/Auth';
 import { AppLayout } from './AppLayout';
 import { HomePage } from '@/features/Home/HomePage';
+import { TabDetailPage } from '@/features/TabDetail/TabDetailPage';
 import { ProfilePage } from '@/features/Profile/ProfilePage';
 import {
   CreateTabPage,
@@ -35,6 +36,7 @@ export function AppRoutes() {
       {/* Authenticated shell — pathless layout route */}
       <Route element={<AppLayout />}>
         <Route path="/home" element={<HomePage />} />
+        <Route path="/tab/:id" element={<TabDetailPage />} />
         <Route path="/profile" element={<ProfilePage />} />
 
         {/* Create Tab wizard — each step is a subroute */}
