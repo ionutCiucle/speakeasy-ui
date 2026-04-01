@@ -8,7 +8,7 @@ const mockRemoveMenuItem = jest.fn();
 let mockMenuItems: { id: string; name: string; price: number }[] = [];
 let mockCurrency = { code: 'USD', name: 'US Dollar' };
 
-jest.mock('@/state-management/createTab', () => ({
+jest.mock('@/state-management/create-tab', () => ({
   useCreateTabActions: () => ({
     addMenuItem: mockAddMenuItem,
     removeMenuItem: mockRemoveMenuItem,

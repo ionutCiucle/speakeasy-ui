@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
 import { MainNav, MainNavTab, PageHeader } from '@/components';
-import { useCreateTabActions } from '@/state-management/createTab';
+import { useCreateTabActions } from '@/state-management/create-tab';
 import { ModalRoot } from './ModalRoot';
 
 interface RouteConfig {

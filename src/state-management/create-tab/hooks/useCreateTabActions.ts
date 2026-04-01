@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useAppDispatch } from '@/state-management/providerHooks';
-import { CreateTabActionType } from '@/state-management/createTab/enums';
-import { Member, MenuItem } from '@/state-management/createTab/types';
+import { CreateTabActionType } from '@/state-management/create-tab/enums';
+import { Member, MenuItem } from '@/state-management/create-tab/types';
 
 export function useCreateTabActions() {
   const dispatch = useAppDispatch();

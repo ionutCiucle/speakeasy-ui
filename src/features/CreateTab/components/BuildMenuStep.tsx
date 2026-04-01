@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
-import { useCreateTabActions } from '@/state-management/createTab';
+import { useCreateTabActions } from '@/state-management/create-tab';
 import { useAppSelector } from '@/state-management/providerHooks';
 
 const CURRENCY_SYMBOLS: Record<string, string> = {

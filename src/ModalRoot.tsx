@@ -11,7 +11,7 @@ import { Color } from '@/styles';
 import { useAppSelector } from '@/state-management/providerHooks';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
-import { useCreateTabActions } from '@/state-management/createTab';
+import { useCreateTabActions } from '@/state-management/create-tab';
 import { CurrencyModal } from '@/components/modals/CurrencyModal';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;

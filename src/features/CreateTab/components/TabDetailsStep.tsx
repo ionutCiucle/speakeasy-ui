@@ -13,7 +13,7 @@ import { CurrencySelector, Input, LocationSelector } from '@/components';
 import { useOutletContext } from 'react-router-native';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
-import { useCreateTabActions } from '@/state-management/createTab';
+import { useCreateTabActions } from '@/state-management/create-tab';
 import { useAppSelector } from '@/state-management/providerHooks';
 import { useTabDetailsValidation } from '../hooks/useTabDetailsValidation';
 

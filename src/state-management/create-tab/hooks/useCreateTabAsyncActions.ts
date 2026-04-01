@@ -3,7 +3,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@/state-management/providerHooks';
-import { createTabAsyncAction } from '@/state-management/createTab/asyncActions';
+import { createTabAsyncAction } from '@/state-management/create-tab/asyncActions';
 
 export function useCreateTabAsyncActions() {
   const dispatch = useAppDispatch();

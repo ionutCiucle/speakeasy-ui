@@ -13,7 +13,7 @@ jest.mock('react-router-native', () => ({
   Outlet: () => null,
 }));
 
-jest.mock('@/state-management/createTab', () => ({
+jest.mock('@/state-management/create-tab', () => ({
   useCreateTabAsyncActions: () => ({ submitCreateTab: mockSubmitCreateTab }),
 }));
 

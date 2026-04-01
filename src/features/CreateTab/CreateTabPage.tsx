@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, Wizard } from '@/components';
-import { useCreateTabAsyncActions } from '@/state-management/createTab';
+import { useCreateTabAsyncActions } from '@/state-management/create-tab';
 import { useAppSelector } from '@/state-management/providerHooks';
 
 const TOTAL_STEPS = 4;

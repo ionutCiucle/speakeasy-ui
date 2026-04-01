@@ -1,18 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
-import { useAppSelector } from '@/state-management/providerHooks';
-import { useTabsAsyncActions } from '@/state-management/tabs';
+import { useTabs } from '@/state-management/tabs';
 import { TabList, NoTabs } from './components';
 
 export function HomePage() {
-  const { getTabs } = useTabsAsyncActions();
-  const tabs = useAppSelector((state) => state.tabs.tabs);
-  const isLoading = useAppSelector((state) => state.tabs.isLoading);
-
-  useEffect(() => {
-    getTabs();
-  }, [getTabs]);
+  const { tabs, isLoading } = useTabs();
 
   if (isLoading) {
     return <View style={styles.screen} />;

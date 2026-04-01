@@ -16,7 +16,7 @@ jest.mock('react-router-native', () => ({
   useOutletContext: () => ({ onValidate: mockOnValidate }),
 }));
 
-jest.mock('@/state-management/createTab', () => ({
+jest.mock('@/state-management/create-tab', () => ({
   useCreateTabActions: () => ({
     setTabName: mockSetTabName,
     setVenue: mockSetVenue,
