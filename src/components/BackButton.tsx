@@ -1,23 +1,20 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { Color } from '@/styles';
+import { StyleSheet } from 'react-native';
+import { IconButton } from './IconButton';
 
 interface Props {
-  onPress: () => void;
   top: number;
+  onPress: () => void;
 }
 
-export function BackButton({ onPress, top }: Props) {
+export function BackButton({ top, onPress }: Props) {
   return (
-    <TouchableOpacity
+    <IconButton
       testID="back-button"
+      name="chevron-left"
       style={[styles.button, { top }]}
       onPress={onPress}
-      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-    >
-      <Feather name="chevron-left" size={28} color={Color.Gold} />
-    </TouchableOpacity>
+    />
   );
 }
 

@@ -2,18 +2,37 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Color } from '@/styles';
+import { IconButton } from './IconButton';
 
 interface Props {
   title: string;
+  onBack?: () => void;
+  onClose?: () => void;
 }
 
-export function PageHeader({ title }: Props) {
+export function PageHeader({ title, onBack, onClose }: Props) {
   const { top } = useSafeAreaInsets();
 
   return (
     <>
       <View style={[styles.header, { height: 60 + top, paddingTop: top }]}>
+        <View style={styles.side}>
+          {onBack && (
+            <IconButton
+              name="chevron-left"
+              testID="back-button"
+              onPress={onBack}
+            />
+          )}
+        </View>
+
         <Text style={styles.title}>{title}</Text>
+
+        <View style={[styles.side, styles.sideRight]}>
+          {onClose && (
+            <IconButton name="x" testID="close-button" onPress={onClose} />
+          )}
+        </View>
       </View>
       <View style={styles.divider} />
     </>
@@ -22,8 +41,16 @@ export function PageHeader({ title }: Props) {
 
 const styles = StyleSheet.create({
   header: {
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  side: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  sideRight: {
+    alignItems: 'flex-end',
   },
   title: {
     fontFamily: 'CormorantGaramond_700Bold',

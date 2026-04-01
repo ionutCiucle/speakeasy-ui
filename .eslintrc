@@ -1,7 +1,7 @@
 {
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "unicorn"],
   "root": true,
   "env": {
     "browser": true,
@@ -10,6 +10,7 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": [1],
     "@typescript-eslint/ban-ts-comment": [1],
-    "curly": ["error", "all"]
+    "curly": ["error", "all"],
+    "unicorn/switch-case-braces": ["error", "always"]
   }
 }

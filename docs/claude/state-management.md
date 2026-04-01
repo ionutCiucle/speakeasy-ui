@@ -119,9 +119,119 @@ Rules:
 - Every async action type needs a Pending variant in the slice's enum, and the reducer must handle it (typically sets `isLoading: true`).
 - Export from the slice's `index.ts`.
 
+### `use<Resource>` (apiHooks)
+
+For read-only list fetching where the data only needs to live for the lifetime of the component. These hooks store their result in **local state** — no reducer, no store, no dispatch.
+
+They live in `<slice>/hooks/use<Resource>.ts` and are the preferred approach when you just need to display a list and optionally re-fetch when parameters change.
+
+```ts
+// src/state-management/tabs/hooks/useTabs.ts
+export function useTabs() {
+  const [tabs, setTabs] = useState<TabDTO[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTabs = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const { data } = await TabAPI.get<TabDTO[]>('/');
+      setTabs(data);
+    } catch {
+      setError('Failed to load tabs');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTabs();
+  }, [fetchTabs]);
+
+  return { tabs, isLoading, error };
+}
+```
+
+When the hook needs to re-fetch based on changing inputs (e.g. a `tabId`), pass them into `useCallback`'s dependency array:
+
+```ts
+export function useTabItems(tabId: string) {
+  // ...
+  const fetchItems = useCallback(async () => {
+    const { data } = await TabAPI.get<TabItemDTO[]>(`/${tabId}/items`);
+    setItems(data);
+  }, [tabId]);
+  // ...
+}
+```
+
+**Rules:**
+- Local state only — no `dispatch`, no store
+- Always use the service API client from `@/services` (e.g. `TabAPI`); never import axios directly
+- Return `{ <items>, isLoading, error }` — no mutations, no callbacks exposed
+- Named `use<Resource>` to match the field name in the return value (e.g. `useTabs` returns `tabs`)
+- Export from the slice's `index.ts`
+
+**When to use which hook:**
+
+| Situation | Hook |
+|---|---|
+| Fetch a list to display; optionally re-fetch on param change | `use<Resource>` (apiHook) |
+| Fetch then navigate or show a toast on result | `use<Slice>AsyncActions` |
+| Any mutation (POST / PATCH / DELETE) | `use<Slice>AsyncActions` |
+| Data must persist across unmounts or be shared across screens | `use<Slice>AsyncActions` + store |
+
 ### `useAppDispatch`
 
 Internal hook — not for direct use in components. Use a slice's `use<Slice>Actions` or `use<Slice>AsyncActions` hook instead.
+
+## Slices
+
+### `auth`
+
+Handles authentication state: username, email, userId, token, isLoading. See `src/state-management/auth/`.
+
+### `layout`
+
+Controls global UI state that lives above any single feature — currently: which modal is visible.
+
+```
+src/state-management/layout/
+  enums.ts    - LayoutActionType, ModalId
+  types.ts    - LayoutState, ShowModalAction, HideModalAction, LayoutAction
+  reducer.ts  - layoutReducer + layoutInitialState
+  hooks/
+    useLayoutActions.ts  - showModal(modalId), hideModal()
+  index.ts    - re-exports everything above
+```
+
+**State shape:**
+
+```ts
+interface LayoutState {
+  activeModal: ModalId | null;
+}
+```
+
+**`ModalId` enum** — add a new entry here whenever a new modal sheet is introduced:
+
+```ts
+export enum ModalId {
+  CurrencyPicker = 'CurrencyPicker',
+}
+```
+
+**Usage:**
+
+```ts
+const { showModal, hideModal } = useLayoutActions();
+
+showModal(ModalId.CurrencyPicker); // opens the sheet
+hideModal();                        // closes it
+```
+
+`ModalContainer` (mounted in `AppLayout`) reads `activeModal` and renders the corresponding sheet with a slide-up + overlay animation.
 
 ## Known limitations / planned improvements
 

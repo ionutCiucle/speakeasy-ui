@@ -55,6 +55,26 @@ import { useAuthAsyncActions } from './hooks/useAuthAsyncActions';
 
 This applies everywhere: `hooks/`, `services/`, slice directories, etc.
 
+## DTO suffix is reserved for BE response types
+
+The `DTO` suffix marks interfaces that directly mirror a backend response shape. Never apply it to local or display-only types.
+
+```ts
+// ✅ correct — mirrors the BE response field-for-field
+export interface TabDTO {
+  id: string;
+  title: string;
+  currencyCode: string;
+  // ...
+}
+
+// ❌ wrong — local display type, not a BE contract
+type TabCardDataDTO = { ... };
+type TabFilterDTO = 'all' | 'owned' | 'joined';
+```
+
+DTO files live in `src/state-management/<slice>/dto.ts`. All DTO types are re-exported from the slice `index.ts` using `export type`.
+
 ## Always use `Color.*` tokens for colours
 
 Import colours from `src/styles.ts` — never hardcode hex values or named CSS colours in stylesheets.

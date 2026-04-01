@@ -9,13 +9,17 @@ interface Props {
 
 export function NavIcon({ tab, color }: Props) {
   switch (tab) {
-    case 'home':
+    case 'home': {
       return <Feather name="menu" size={20} color={color} />;
-    case 'newTab':
+    }
+    case 'newTab': {
       return <Feather name="plus" size={22} color={color} />;
-    case 'friends':
+    }
+    case 'friends': {
       return <Ionicons name="people-outline" size={22} color={color} />;
-    case 'profile':
+    }
+    case 'profile': {
       return <Feather name="user" size={18} color={color} />;
+    }
   }
 }

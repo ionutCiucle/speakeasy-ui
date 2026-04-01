@@ -1,0 +1,32 @@
+import { Dispatch } from 'react';
+import { AppAction } from '@/state-management/store';
+import { TabAPI } from '@/services';
+import { CreateTabActionType } from './enums';
+import { Member } from './types';
+
+interface CreateTabBody {
+  title: string;
+  venue: string;
+  currency: { code: string; name: string };
+  notes: string;
+  members: Member[];
+  menuItems: { name: string; price: number }[];
+}
+
+interface TabResponse {
+  id: string;
+  title: string;
+}
+
+export const createTabAsyncAction =
+  (dispatch: Dispatch<AppAction>) => async (body: CreateTabBody) => {
+    dispatch({ type: CreateTabActionType.SubmitPending });
+    try {
+      await TabAPI.post<TabResponse>('/', body);
+      dispatch({ type: CreateTabActionType.SubmitSuccess });
+      return true;
+    } catch {
+      dispatch({ type: CreateTabActionType.SubmitFailure });
+      return false;
+    }
+  };

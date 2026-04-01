@@ -8,6 +8,7 @@ export type MainNavTab = 'home' | 'newTab' | 'friends' | 'profile';
 
 interface Props {
   activeTab?: MainNavTab;
+  badgeTabs?: MainNavTab[];
   onTabPress?: (tab: MainNavTab) => void;
 }
 
@@ -18,7 +19,7 @@ const NAV_ITEMS: { key: MainNavTab; label: string }[] = [
   { key: 'profile', label: 'Profile' },
 ];
 
-export function MainNav({ activeTab = 'home', onTabPress }: Props) {
+export function MainNav({ activeTab = 'home', badgeTabs, onTabPress }: Props) {
   const { bottom } = useSafeAreaInsets();
 
   return (
@@ -35,7 +36,10 @@ export function MainNav({ activeTab = 'home', onTabPress }: Props) {
               onPress={() => onTabPress?.(key)}
               activeOpacity={0.7}
             >
-              <NavIcon tab={key} color={color} />
+              <View style={styles.iconWrapper}>
+                <NavIcon tab={key} color={color} />
+                {badgeTabs?.includes(key) && <View style={styles.badge} />}
+              </View>
               <Text style={[styles.label, { color }]}>{label}</Text>
             </TouchableOpacity>
           );
@@ -47,6 +51,18 @@ export function MainNav({ activeTab = 'home', onTabPress }: Props) {
 }
 
 const styles = StyleSheet.create({
+  iconWrapper: {
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -3,
+    right: -5,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Color.Flame,
+  },
   container: {
     backgroundColor: Color.White,
     shadowColor: Color.Black,

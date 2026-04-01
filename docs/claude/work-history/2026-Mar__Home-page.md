@@ -201,3 +201,57 @@ Added two new props to `Input`:
 - Removed the gold 4px `homeIndicator` bottom border from MainNav
 - `TabReceiptIcon` wrapper component removed; `FontAwesome6 martini-glass-empty` used inline in `HomePage` for an empty martini glass silhouette
 - `react-native-safe-area-context` mocked in MainNav tests to fix the "No safe area value available" failure
+
+---
+
+### Step 16 — tabs slice + TabDashboard + NoTabs ✅
+
+**`src/state-management/tabs/`** — new slice:
+
+| Field | Type | Default |
+|---|---|---|
+| `tabs` | `Tab[]` | `[]` |
+| `isLoading` | `boolean` | `false` |
+
+Actions: `GetTabsPending`, `GetTabsSuccess` (payload: `Tab[]`), `GetTabsFailure`.
+
+`Tab` interface matches the BE response shape: `id`, `title`, `venue`, `currencyCode`, `currencyName`, `notes`, `createdById`, `closedAt`, `createdAt`, `updatedAt`, plus relations `items`, `participants`, `settlements`, `members`, `menuItems`.
+
+`getTabsAsyncAction(dispatch)()` — `GET /api/tabs` (auth header injected by `TabAPI` interceptor).
+
+`useTabsAsyncActions` hook exposes zero-arg `getTabs()`.
+
+**`src/features/Home/TabDashboard.tsx`** — replaces the old placeholder:
+- Accepts `tabs: Tab[]` prop
+- `toCardData(tab, userId)` derives display shape: status (from `closedAt`), role (`createdById === userId`), duration, formatted date, member count, total amount with currency symbol
+- Filter pills (All / Owned / Joined), ACTIVE / CLOSED sections
+- `TabCard` with coloured left accent bar (green = active, gold = closed), role badge, chevron, total amount
+
+**`src/features/Home/TabDashboard/`** — refactored into a directory:
+
+```
+TabDashboard/
+  TabDashboard.tsx   — component
+  enums.ts           — TabFilter enum (All / Owned / Joined)
+  constants.ts       — FILTERS array, CURRENCY_SYMBOLS map
+  utils.ts           — formatDuration, formatClosedDate, formatTotal, toCardData
+  index.ts           — re-exports TabDashboard
+```
+
+**`src/features/Home/components/TabCard.tsx`** — extracted from `TabDashboard`; uses `AccentCard` as its container shell.
+
+**`src/components/AccentCard.tsx`** — generic container component:
+- Props: `accentColor: string`, `style?`, `children`
+- Renders white card with shadow + 4px left accent bar in the given color
+- No knowledge of tab status — callers pass the color directly
+
+**`Color.ActiveGreen`** (`#42904C`) added to `src/styles.ts`.
+
+**`src/features/Home/NoTabs.tsx`** — extracted from old `HomePage` empty state:
+- Martini glass icon, heading, subtitle
+- "Start a Tab" → `/create-tab`, "Scan QR to Join" → TODO
+
+**`src/features/Home/HomePage.tsx`** — rewritten:
+- Calls `getTabs()` on mount
+- Shows blank screen while `isLoading`
+- Renders `TabDashboard` when `tabs.length > 0`, `NoTabs` otherwise
