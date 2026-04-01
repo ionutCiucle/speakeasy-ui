@@ -26,6 +26,7 @@ export function BracketContainer({
       {onBack ? (
         <IconButton
           name="chevron-left"
+          testID="back-button"
           style={[styles.backButton, { top: topOffset - 2 }]}
           onPress={onBack}
         />

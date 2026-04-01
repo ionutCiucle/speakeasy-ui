@@ -2,6 +2,7 @@ import React from 'react';
 import {
   TouchableOpacity,
   Text,
+  ActivityIndicator,
   StyleSheet,
   StyleProp,
   ViewStyle,
@@ -15,13 +16,14 @@ interface Props {
   rightIcon?: React.ComponentProps<typeof Feather>['name'];
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
+  showSpinner?: boolean;
   onPress: () => void;
 }
 
-const ICON_COLOR: Record<'primary' | 'secondary' | 'tertiary', string> = {
+const VARIANT_COLOR: Record<'primary' | 'secondary' | 'tertiary', string> = {
   primary: Color.White,
   secondary: Color.Gold,
-  tertiary: Color.Gold,
+  tertiary: Color.White,
 };
 
 export function Button({
@@ -30,6 +32,7 @@ export function Button({
   rightIcon,
   style,
   disabled,
+  showSpinner,
   onPress,
 }: Props) {
   return (
@@ -41,17 +44,23 @@ export function Button({
         disabled && styles.disabled,
       ]}
       onPress={onPress}
-      disabled={disabled}
+      disabled={disabled || showSpinner}
       activeOpacity={0.8}
     >
-      <Text style={[styles.label, styles[`${variant}Label`]]}>{label}</Text>
-      {rightIcon && (
-        <Feather
-          name={rightIcon}
-          size={16}
-          color={ICON_COLOR[variant]}
-          style={styles.rightIcon}
-        />
+      {showSpinner ? (
+        <ActivityIndicator size="small" color={VARIANT_COLOR[variant]} />
+      ) : (
+        <>
+          <Text style={[styles.label, styles[`${variant}Label`]]}>{label}</Text>
+          {rightIcon && (
+            <Feather
+              name={rightIcon}
+              size={16}
+              color={VARIANT_COLOR[variant]}
+              style={styles.rightIcon}
+            />
+          )}
+        </>
       )}
     </TouchableOpacity>
   );

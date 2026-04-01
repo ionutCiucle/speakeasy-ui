@@ -17,13 +17,21 @@ export function PageHeader({ title, onBack, onClose }: Props) {
     <>
       <View style={[styles.header, { height: 60 + top, paddingTop: top }]}>
         <View style={styles.side}>
-          {onBack && <IconButton name="chevron-left" onPress={onBack} />}
+          {onBack && (
+            <IconButton
+              name="chevron-left"
+              testID="back-button"
+              onPress={onBack}
+            />
+          )}
         </View>
 
         <Text style={styles.title}>{title}</Text>
 
         <View style={[styles.side, styles.sideRight]}>
-          {onClose && <IconButton name="x" onPress={onClose} />}
+          {onClose && (
+            <IconButton name="x" testID="close-button" onPress={onClose} />
+          )}
         </View>
       </View>
       <View style={styles.divider} />

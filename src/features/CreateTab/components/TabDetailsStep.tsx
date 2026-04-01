@@ -15,7 +15,7 @@ import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
 import { useCreateTabActions } from '@/state-management/createTab';
 import { useAppSelector } from '@/state-management/providerHooks';
-import { useTabDetailsValidation } from './hooks/useTabDetailsValidation';
+import { useTabDetailsValidation } from '../hooks/useTabDetailsValidation';
 
 interface WizardOutletContext {
   onValidate: (fn: (() => boolean) | null) => void;

@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, Wizard } from '@/components';
 import { useCreateTabAsyncActions } from '@/state-management/createTab';
+import { useAppSelector } from '@/state-management/providerHooks';
 
 const TOTAL_STEPS = 4;
 
@@ -54,6 +55,7 @@ export function CreateTabPage() {
   }, [navigate, stepConfig]);
 
   const { submitCreateTab } = useCreateTabAsyncActions();
+  const isSubmitting = useAppSelector((state) => state.createTab.isSubmitting);
 
   const handleStartTab = useCallback(async () => {
     const success = await submitCreateTab();
@@ -81,6 +83,7 @@ export function CreateTabPage() {
           <Button
             label="Start Tab"
             variant="tertiary"
+            showSpinner={isSubmitting}
             onPress={handleStartTab}
           />
         ) : (
