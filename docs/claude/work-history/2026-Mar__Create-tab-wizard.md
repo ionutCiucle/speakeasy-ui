@@ -298,3 +298,75 @@ No Start Tab button — owned by `CreateTabPage` footer.
 **`src/state-management/createTab/` slice additions:**
 - `isSubmitting: boolean` added to `CreateTabState`
 - `Reset`, `SubmitPending`, `SubmitSuccess`, `SubmitFailure` action types
+
+---
+
+### Step 21 — Button `showSpinner` prop ✅
+
+**`src/components/Button.tsx`**:
+- Added `showSpinner?: boolean` prop
+- When `true`, replaces the label (and any icon) with `<ActivityIndicator>` using the variant's label colour
+- `disabled` is coerced to `true` while spinning — prevents double-submit
+- `VARIANT_COLOR` map drives both the label colour and the spinner colour
+
+---
+
+### Step 22 — FilterPills component + TabList scroll fix ✅
+
+**`src/features/Home/components/FilterPills.tsx`** — new component containing only the pill buttons row (All / Owned / Joined). No tab count, no wrapper row.
+
+**`src/features/Home/components/TabList/TabList.tsx`** — restructured so only the cards scroll:
+- `filterRow` (tab count + `FilterPills`) and `filterSeparator` live **outside** the `ScrollView`
+- `ScrollView` contains only the tab cards
+
+---
+
+### Step 23 — Step components moved to `CreateTab/components/` ✅
+
+Moved `TabDetailsStep`, `AddMemberStep`, `BuildMenuStep`, `ReviewStep` into `src/features/CreateTab/components/` with a barrel `index.ts`. Tests moved to `src/features/CreateTab/components/__tests__/`.
+
+---
+
+### Step 24 — `apiHooks` pattern + `useTabs` ✅
+
+New read-only data-fetching pattern — an alternative to GET async actions. Stores fetched data in local component state rather than the global store.
+
+**`src/state-management/tabs/api-hooks/useTabs.ts`**:
+- `useState` for `tabs`, `isLoading`, `error`
+- `fetchTabs` in a `useCallback`; called once on mount via `useEffect`
+- On failure: sets `error: 'Failed to load tabs'` and logs `console.error('[useTabs] Failed to load tabs:', err)`
+- Returns `{ tabs, isLoading, error }`
+
+**`src/features/Home/HomePage.tsx`** — replaced `getTabs` async action with `useTabs()`. Tabs data no longer lives in the global store.
+
+**`src/state-management/tabs/` slice** — `getTabs` async action and all associated reducer fields (`isLoading`, `GetTabsPending`, `GetTabsSuccess`, `GetTabsFailure`) removed. Slice now only holds DTOs and exports `useTabs`.
+
+**Docs** — `docs/claude/state-management.md` updated with the `use<Resource>` apiHooks pattern, rules, and when-to-use guidance.
+
+---
+
+### Step 25 — Directory renames ✅
+
+- `src/state-management/tabs/hooks/` → `src/state-management/tabs/api-hooks/`
+- `src/state-management/createTab/` → `src/state-management/create-tab/`
+
+All internal and external imports updated accordingly.
+
+---
+
+### Step 26 — Axios removed; `createApi` factory introduced ✅
+
+Replaced axios with a zero-dependency `fetch`-based API client. Call-site contract (`{ data }` destructure) is unchanged.
+
+**`src/services/createApi.ts`** (was `apiClient.ts`):
+- `createApi(baseURL, getHeaders?)` factory — `getHeaders` is an optional async function passed at construction time, replacing the old `setHeadersInterceptor` method
+- Methods: `get`, `post`, `put`, `patch`, `delete` — all return `Promise<{ data: T }>`
+- `_request` internal helper — not exported
+- Non-2xx responses throw `Error('HTTP <status>: <statusText>')`
+
+**`src/services/index.ts`**:
+- `getAuthHeaders()` — shared helper that reads the JWT from SecureStore and returns `{ Authorization: Bearer <token> }` or `{}` when absent
+- `AuthAPI` — no auth headers (login/register endpoints)
+- `TabAPI` — constructed with `getAuthHeaders`
+
+**Tests** — `src/services/__tests__/createApi.test.ts` (renamed from `apiClient.test.ts`): covers all five HTTP methods plus the `getHeaders` constructor argument.

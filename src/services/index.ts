@@ -1,26 +1,18 @@
-import axios from 'axios';
+import { createApi } from './createApi';
 import { getToken, saveToken, removeToken } from './tokenService';
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 
-export const AuthAPI = axios.create({
-  baseURL: `${API_BASE_URL}/auth`,
-});
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  const token = await getToken();
+  if (!token) {
+    return {};
+  }
+  return { Authorization: `Bearer ${token}` };
+}
 
-export const TabAPI = axios.create({
-  baseURL: `${API_BASE_URL}/tabs`,
-});
+export const AuthAPI = createApi(`${API_BASE_URL}/auth`);
 
-const addAuthInterceptor = (instance: ReturnType<typeof axios.create>) => {
-  instance.interceptors.request.use(async (config) => {
-    const token = await getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  });
-};
-
-addAuthInterceptor(TabAPI);
+export const TabAPI = createApi(`${API_BASE_URL}/tabs`, getAuthHeaders);
 
 export { saveToken, getToken, removeToken };
