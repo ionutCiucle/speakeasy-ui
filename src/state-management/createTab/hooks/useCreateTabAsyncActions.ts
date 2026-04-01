@@ -18,7 +18,7 @@ export function useCreateTabAsyncActions() {
         currency,
         notes,
         members,
-        menuItems,
+        menuItems: menuItems.map(({ name, price }) => ({ name, price })),
       }),
     [dispatch, tabName, venue, currency, notes, members, menuItems],
   );

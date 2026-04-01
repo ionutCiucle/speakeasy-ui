@@ -9,7 +9,7 @@ import {
 import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
 import { useAppSelector } from '@/state-management/providerHooks';
-import { Tab } from '@/state-management/tabs';
+import type { TabDTO } from '@/state-management/tabs';
 
 const ActiveGreen = '#42904C';
 
@@ -58,13 +58,13 @@ function formatClosedDate(closedAt: string): string {
   });
 }
 
-function formatTotal(items: Tab['items'], currencyCode: string): string {
+function formatTotal(items: TabDTO['items'], currencyCode: string): string {
   const total = items.reduce((sum, item) => sum + parseFloat(item.amount), 0);
   const symbol = CURRENCY_SYMBOLS[currencyCode] ?? currencyCode;
   return `${symbol}${total.toFixed(2)}`;
 }
 
-function toCardData(tab: Tab, userId: string | null): TabCardData {
+function toCardData(tab: TabDTO, userId: string | null): TabCardData {
   const isActive = tab.closedAt === null;
   return {
     id: tab.id,
@@ -157,7 +157,7 @@ function TabCard({ tab }: TabCardProps) {
 }
 
 interface Props {
-  tabs: Tab[];
+  tabs: TabDTO[];
 }
 
 export function TabDashboard({ tabs }: Props) {
