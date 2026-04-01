@@ -197,3 +197,104 @@ Hook: `useCreateTabActions` exposes `setTabName`, `setVenue`, `setCurrency`, `se
 - `handleContinue` calls `validateAll()` and only invokes `onContinue` if the form is valid
 - Tab Name `<Input>` wired with `invalid` + `error` from hook
 - `<LocationSelector>` wired with `invalid` + `error` from hook
+
+---
+
+### Step 14 — AddMemberStep ✅
+
+`src/features/CreateTab/AddMemberStep.tsx`
+
+**WHO'S JOINING panel:**
+- `Avatar` (size 44, variant `'self'`, label `"Me"`) always shown first
+- Member avatars (size 44, variant `'member'`) for each added member
+- "+" add button (dashed `Color.Sand` border) for future member-add flow
+- `"No other members added"` text shown when `members.length === 0`
+
+**Search bar:**
+- `Feather: 'search'` icon on the left
+- Disabled (`editable={false}`, `searchBarDisabled` style) when no friends exist (`FRIENDS.length === 0`)
+
+**Friends list:**
+- Placeholder `FRIENDS: unknown[] = []` — to be wired when friends slice exists
+
+---
+
+### Step 15 — BuildMenuStep ✅
+
+`src/features/CreateTab/BuildMenuStep.tsx`
+
+Menu item entry form:
+- Name + price inputs with inline validation
+- "Add Item" button appends to `menuItems` in the `createTab` store
+- Renders each added item in a list with remove button
+- Wired to `useCreateTabActions` (`addMenuItem`, `removeMenuItem`)
+
+---
+
+### Step 16 — ReviewStep ✅
+
+`src/features/CreateTab/ReviewStep.tsx`
+
+Pure display step — reads all `createTab` state from Redux:
+- **TAB DETAILS card:** name, venue, currency
+- **WHO'S JOINING card:** overlapping `Avatar` components (size 26, `marginLeft: -6`) for each member
+- **ITEMS card:** list of menu items with price; Sand `infoBar` footer showing total
+
+No Start Tab button — owned by `CreateTabPage` footer.
+
+---
+
+### Step 17 — CreateTabPage footer + Start Tab wiring ✅
+
+**`src/features/CreateTab/CreateTabPage.tsx`**:
+- Footer renders `Button variant="tertiary" label="Start Tab"` on the review step (step 4), `Button variant="tertiary" label="Continue" rightIcon="chevron-right"` otherwise
+- `isReviewStep` derived from `stepConfig?.nextRoute === ''`
+- `handleStartTab` calls `submitCreateTab()` (async action) and navigates to `/home` on success
+
+---
+
+### Step 18 — Avatar shared component ✅
+
+`src/components/Avatar.tsx`
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `string` | — |
+| `variant` | `'self' \| 'member'` | `'member'` |
+| `size` | `number` | `44` |
+| `style` | `StyleProp<ViewStyle>` | — |
+
+- `'self'` → Gold background, EspressoDark text
+- `'member'` → Linen background, Espresso text
+- Font size: 9 when `size <= 30`, 11 otherwise
+- Used in `AddMemberStep` and `ReviewStep`
+
+---
+
+### Step 19 — Route persistence + badge indicator ✅
+
+**`src/AppLayout.tsx`**:
+- `lastCreateTabRoute` ref tracks the last active sub-route within `/create-tab` (updated on every render while on that route)
+- `createTabInProgress` state: `true` when user navigates away mid-wizard (i.e. `lastCreateTabRoute.current !== '/create-tab'`)
+- `<MainNav badgeTabs={createTabInProgress ? ['newTab'] : []} />` shows red dot on New Tab icon
+- Pressing New Tab while `createTabInProgress` resumes at `lastCreateTabRoute.current`
+- `handleClose` (X button): resets ref, dispatches `reset()`, navigates to `/home` — clears badge
+
+**`src/components/MainNav/MainNav.tsx`**:
+- Added `badgeTabs?: MainNavTab[]` prop
+- Red 8×8 dot (`Color.Flame`) positioned `top: -3, right: -5` on the nav icon wrapper when tab key is in `badgeTabs`
+
+---
+
+### Step 20 — createTab async action + submit ✅
+
+**`src/state-management/createTab/asyncActions.ts`**:
+- `createTabAsyncAction(dispatch)(body)` — `POST /api/tabs` with `{ title, venue, currency, notes, members, menuItems }`
+- Dispatches `SubmitPending` / `SubmitSuccess` / `SubmitFailure`
+
+**`src/state-management/createTab/hooks/useCreateTabAsyncActions.ts`**:
+- `submitCreateTab()` — zero-arg; reads all state internally, maps `tabName → title`
+
+**`src/state-management/createTab/` slice additions:**
+- `isSubmitting: boolean` added to `CreateTabState`
+- `Reset`, `SubmitPending`, `SubmitSuccess`, `SubmitFailure` action types

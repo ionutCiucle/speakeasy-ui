@@ -18,11 +18,14 @@ Wraps `expo-secure-store` for JWT persistence. All token I/O goes through this m
 
 Axios instances, one per micro-service, defined and exported from `src/services/index.ts`. Always import from `services` — never from sub-modules directly, and never create axios instances elsewhere.
 
-| Export | Base URL |
-|---|---|
-| `AuthAPI` | `http://localhost:3000/api/auth` |
+| Export | Base URL | Auth interceptor |
+|---|---|---|
+| `AuthAPI` | `{API_BASE_URL}/api/auth` | No |
+| `TabAPI` | `{API_BASE_URL}/api/tabs` | Yes — injects `Authorization: Bearer <token>` |
 
 Usage follows the standard axios API (`AuthAPI.post('/register', body)`, etc.). Base URL is read from `EXPO_PUBLIC_API_BASE_URL` in `.env` — never hardcode it.
+
+**Auth interceptor:** `TabAPI` (and any future authenticated client) uses a request interceptor that calls `getToken()` from `tokenService` before each request and sets `Authorization: Bearer <token>`. Token is read fresh from SecureStore on every request, so re-auth token updates are picked up automatically. Async action creators do **not** pass tokens manually — the interceptor handles it.
 
 ## Hooks
 

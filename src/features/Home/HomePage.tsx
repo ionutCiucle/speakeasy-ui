@@ -1,41 +1,27 @@
-import React, { useCallback } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useNavigate } from 'react-router-native';
-import { FontAwesome6 } from '@expo/vector-icons';
+import React, { useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
-import { Button } from '@/components';
+import { useAppSelector } from '@/state-management/providerHooks';
+import { useTabsAsyncActions } from '@/state-management/tabs';
+import { TabDashboard } from './TabDashboard';
+import { NoTabs } from './NoTabs';
 
 export function HomePage() {
-  const navigate = useNavigate();
+  const { getTabs } = useTabsAsyncActions();
+  const tabs = useAppSelector((state) => state.tabs.tabs);
+  const isLoading = useAppSelector((state) => state.tabs.isLoading);
 
-  const handleStartTab = useCallback(() => {
-    navigate('/create-tab');
-  }, [navigate]);
+  useEffect(() => {
+    getTabs();
+  }, [getTabs]);
 
-  const handleScanQR = useCallback(() => {
-    // TODO: navigate to QR scanner
-  }, []);
+  if (isLoading) {
+    return <View style={styles.screen} />;
+  }
 
   return (
     <View style={styles.screen}>
-      <View style={styles.emptyState}>
-        <FontAwesome6 name="martini-glass-empty" size={84} color={Color.Gold} />
-        <Text style={styles.emptyHeading}>No tabs added yet</Text>
-        <Text style={styles.emptySubtitle}>
-          Start one or scan a QR to join a friend's tab
-        </Text>
-        <Button
-          label="+ Start a Tab"
-          onPress={handleStartTab}
-          style={styles.homeButton}
-        />
-        <Button
-          label="Scan QR to Join"
-          onPress={handleScanQR}
-          variant="secondary"
-          style={styles.homeButton}
-        />
-      </View>
+      {tabs.length > 0 ? <TabDashboard tabs={tabs} /> : <NoTabs />}
     </View>
   );
 }
@@ -43,33 +29,6 @@ export function HomePage() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-  },
-  emptyState: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 79,
-    paddingHorizontal: 24,
-    gap: 16,
-  },
-  emptyHeading: {
-    fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 26,
-    lineHeight: 31,
-    color: Color.Espresso,
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  emptySubtitle: {
-    fontFamily: 'PlayfairDisplay_400Regular_Italic',
-    fontSize: 14,
-    lineHeight: 22,
-    color: Color.WarmBrown,
-    textAlign: 'center',
-    maxWidth: 280,
-  },
-  homeButton: {
-    width: 327,
-    marginTop: 8,
+    backgroundColor: Color.Cream,
   },
 });

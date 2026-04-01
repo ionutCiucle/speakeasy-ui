@@ -7,7 +7,6 @@ import { createTabAsyncAction } from '@/state-management/createTab/asyncActions'
 
 export function useCreateTabAsyncActions() {
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.auth.token);
   const { tabName, venue, currency, notes, members, menuItems } =
     useAppSelector((state) => state.createTab);
 
@@ -20,9 +19,8 @@ export function useCreateTabAsyncActions() {
         notes,
         members,
         menuItems,
-        token: token ?? '',
       }),
-    [dispatch, token, tabName, venue, currency, notes, members, menuItems],
+    [dispatch, tabName, venue, currency, notes, members, menuItems],
   );
 
   return { submitCreateTab };

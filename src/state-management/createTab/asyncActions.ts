@@ -19,13 +19,10 @@ interface TabResponse {
 }
 
 export const createTabAsyncAction =
-  (dispatch: Dispatch<AppAction>) =>
-  async ({ token, ...body }: CreateTabBody & { token: string }) => {
+  (dispatch: Dispatch<AppAction>) => async (body: CreateTabBody) => {
     dispatch({ type: CreateTabActionType.SubmitPending });
     try {
-      await TabAPI.post<TabResponse>('/', body, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await TabAPI.post<TabResponse>('/', body);
       dispatch({ type: CreateTabActionType.SubmitSuccess });
       return true;
     } catch {
