@@ -40,39 +40,34 @@ jest.mock('@/state-management/layout', () => ({
   useLayoutActions: () => ({ showModal: mockShowModal }),
 }));
 
-jest.mock('@/components', () => ({
-  Input: ({
-    label,
-    onChangeText,
-  }: {
-    label: string;
-    onChangeText: (t: string) => void;
-  }) => {
-    const { TextInput, Text } = require('react-native');
-    return (
+jest.mock('@/components', () => {
+  const { TextInput, Text, TouchableOpacity } =
+    jest.requireActual('react-native');
+  return {
+    Input: ({
+      label,
+      onChangeText,
+    }: {
+      label: string;
+      onChangeText: (t: string) => void;
+    }) => (
       <>
         <Text>{label}</Text>
         <TextInput testID={label} onChangeText={onChangeText} />
       </>
-    );
-  },
-  LocationSelector: ({
-    onChangeText,
-  }: {
-    onChangeText: (t: string) => void;
-  }) => {
-    const { TextInput } = require('react-native');
-    return <TextInput testID="location-selector" onChangeText={onChangeText} />;
-  },
-  CurrencySelector: ({ onPress }: { onPress: () => void }) => {
-    const { TouchableOpacity, Text } = require('react-native');
-    return (
+    ),
+    LocationSelector: ({
+      onChangeText,
+    }: {
+      onChangeText: (t: string) => void;
+    }) => <TextInput testID="location-selector" onChangeText={onChangeText} />,
+    CurrencySelector: ({ onPress }: { onPress: () => void }) => (
       <TouchableOpacity testID="currency-selector" onPress={onPress}>
         <Text>Currency</Text>
       </TouchableOpacity>
-    );
-  },
-}));
+    ),
+  };
+});
 
 jest.mock('@expo/vector-icons', () => ({
   Feather: () => null,

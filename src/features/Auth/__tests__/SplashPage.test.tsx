@@ -6,7 +6,7 @@ const mockNavigate = jest.fn();
 
 jest.mock('react-router-native', () => ({
   useNavigate: () => mockNavigate,
-  Link: ({ children }: any) => children,
+  Link: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 jest.mock('react-native-safe-area-context', () => ({

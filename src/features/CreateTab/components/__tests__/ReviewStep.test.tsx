@@ -15,12 +15,12 @@ jest.mock('@/state-management/providerHooks', () => ({
     selector({ createTab: mockState }),
 }));
 
-jest.mock('@/components', () => ({
-  Avatar: ({ label }: { label: string }) => {
-    const { Text } = require('react-native');
-    return <Text>{label}</Text>;
-  },
-}));
+jest.mock('@/components', () => {
+  const { Text } = jest.requireActual('react-native');
+  return {
+    Avatar: ({ label }: { label: string }) => <Text>{label}</Text>,
+  };
+});
 
 jest.mock('@expo/vector-icons', () => ({
   Feather: () => null,
