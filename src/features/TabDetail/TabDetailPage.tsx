@@ -116,7 +116,7 @@ export function TabDetailPage() {
       {/* Info bar */}
       <View style={styles.infoBar}>
         <View style={styles.infoLeft}>
-          <Feather name="clock" size={12} color={Color.WarmBrown} />
+          <Feather name="map-pin" size={12} color={Color.WarmBrown} />
           <Text style={styles.infoVenue}>{tab.venue ?? ''}</Text>
         </View>
         {isActive && (
