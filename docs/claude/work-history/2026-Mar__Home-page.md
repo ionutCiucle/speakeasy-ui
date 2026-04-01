@@ -227,6 +227,26 @@ Actions: `GetTabsPending`, `GetTabsSuccess` (payload: `Tab[]`), `GetTabsFailure`
 - Filter pills (All / Owned / Joined), ACTIVE / CLOSED sections
 - `TabCard` with coloured left accent bar (green = active, gold = closed), role badge, chevron, total amount
 
+**`src/features/Home/TabDashboard/`** — refactored into a directory:
+
+```
+TabDashboard/
+  TabDashboard.tsx   — component
+  enums.ts           — TabFilter enum (All / Owned / Joined)
+  constants.ts       — FILTERS array, CURRENCY_SYMBOLS map
+  utils.ts           — formatDuration, formatClosedDate, formatTotal, toCardData
+  index.ts           — re-exports TabDashboard
+```
+
+**`src/features/Home/components/TabCard.tsx`** — extracted from `TabDashboard`; uses `AccentCard` as its container shell.
+
+**`src/components/AccentCard.tsx`** — generic container component:
+- Props: `accentColor: string`, `style?`, `children`
+- Renders white card with shadow + 4px left accent bar in the given color
+- No knowledge of tab status — callers pass the color directly
+
+**`Color.ActiveGreen`** (`#42904C`) added to `src/styles.ts`.
+
 **`src/features/Home/NoTabs.tsx`** — extracted from old `HomePage` empty state:
 - Martini glass icon, heading, subtitle
 - "Start a Tab" → `/create-tab`, "Scan QR to Join" → TODO

@@ -16,6 +16,7 @@ export const Color = {
   Ivory: '#FDFAF5',
   Sand: '#D4C9B0',
   Linen: '#EDE8DC',
+  ActiveGreen: '#42904C',
 };
 
 export const flex = (
