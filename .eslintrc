@@ -10,6 +10,7 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": [1],
     "@typescript-eslint/ban-ts-comment": [1],
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "curly": ["error", "all"],
     "unicorn/switch-case-braces": ["error", "always"]
   }
