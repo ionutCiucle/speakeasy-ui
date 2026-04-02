@@ -55,12 +55,11 @@ export function TabMenuItem({
 
   return (
     <View style={styles.outer}>
-      {/* Split background always visible behind the card */}
+      {/* Split background sits behind the card; card's borderRadius reveals it */}
       <View style={styles.background} pointerEvents="none">
         <View style={styles.leftBg} />
         <View style={styles.rightBg} />
       </View>
-
       <Swipeable
         ref={swipeableRef}
         renderLeftActions={renderLeftActions}
@@ -92,14 +91,16 @@ const styles = StyleSheet.create({
   outer: {
     marginHorizontal: 32,
     marginTop: 12,
-    height: 54,
-    borderRadius: 8,
-    overflow: 'hidden',
   },
   background: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     borderRadius: 8,
+    overflow: 'hidden',
   },
   leftBg: {
     flex: 1,
@@ -110,9 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Danger,
   },
   swipeableContainer: {
-    flex: 1,
     borderRadius: 8,
-    overflow: 'visible',
   },
   card: {
     flexDirection: 'row',
@@ -165,9 +164,13 @@ const styles = StyleSheet.create({
     color: Color.EspressoDark,
     textAlign: 'center',
   },
+  // Left action: green, left corners rounded (spec: border-radius 8px 0 0 8px)
   leftAction: {
-    width: 157,
+    width: 79,
     height: 54,
+    backgroundColor: Color.ActiveGreen,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -185,9 +188,13 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     backgroundColor: Color.White,
   },
+  // Right action: red, right corners rounded (spec: border-radius 0 8px 8px 0)
   rightAction: {
-    width: 169,
+    width: 85,
     height: 54,
+    backgroundColor: Color.Danger,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
