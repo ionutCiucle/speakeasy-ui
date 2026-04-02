@@ -10,6 +10,9 @@ interface Props {
   currencySymbol: string;
   onIncrement: (id: string) => void;
   onDecrement: (id: string) => void;
+  onTapPlus?: (id: string) => void;
+  onTapMinus?: (id: string) => void;
+  onTapRemove?: (id: string) => void;
 }
 
 export function TabMenuItem({
@@ -17,6 +20,9 @@ export function TabMenuItem({
   currencySymbol,
   onIncrement,
   onDecrement,
+  onTapPlus,
+  onTapMinus,
+  onTapRemove,
 }: Props) {
   const swipeableRef = useRef<Swipeable>(null);
 
@@ -28,6 +34,7 @@ export function TabMenuItem({
       activeOpacity={0.8}
       onPress={() => {
         onIncrement(item.id);
+        onTapPlus?.(item.id);
         close();
       }}
     >
@@ -42,6 +49,11 @@ export function TabMenuItem({
       activeOpacity={0.8}
       onPress={() => {
         onDecrement(item.id);
+        if (item.quantity === 1) {
+          onTapRemove?.(item.id);
+        } else {
+          onTapMinus?.(item.id);
+        }
         close();
       }}
     >
@@ -112,6 +124,7 @@ const styles = StyleSheet.create({
   },
   swipeableContainer: {
     borderRadius: 8,
+    overflow: 'visible',
   },
   card: {
     flexDirection: 'row',

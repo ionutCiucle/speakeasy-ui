@@ -36,6 +36,37 @@ Previously the page used `useTabs()` + `Array.find` — replaced because it fetc
 - `MemberAvatars` component — displays member avatars with a label; used in TabDetailPage's members section
 - Gold chevron on the "Start Tab" button in the create-tab review step
 
+### TabMenuItem — swipeable interactions
+
+`TabMenuItem` was rewritten to support swipe gestures using `Swipeable` from `react-native-gesture-handler`:
+
+- Swipe right → green `+` panel (increment)
+- Swipe left → red `−` / trash panel (decrement / remove)
+- `quantity === 1` shows trash icon instead of `−`
+- Card slides off-screen on swipe; tapping card or action snaps back
+
+New optional props on `TabMenuItem` (and threaded through `TabMenuItems`):
+
+| Prop | Fires when |
+|---|---|
+| `onTapPlus(id)` | Left action tapped |
+| `onTapMinus(id)` | Right action tapped, `quantity > 1` |
+| `onTapRemove(id)` | Right action tapped, `quantity === 1` |
+
+`Color.Danger: '#C0392B'` added to `src/styles.ts`.  
+`GestureHandlerRootView` added to `src/Root.tsx`.
+
+### Tests
+
+Unit tests added for `TabMenuItem` and `TabMenuItems`:
+
+- Rendering: name, quantity badge, total price, trash vs minus icon
+- `onIncrement` / `onDecrement` callbacks
+- `onTapPlus`, `onTapMinus`, `onTapRemove` — correct firing conditions
+- Edge cases: missing optional callbacks don't throw
+
+ESLint override added in `.eslintrc` to allow `no-var-requires` in test files (required by Jest's `jest.mock` hoisting behaviour).
+
 ## Files changed
 
 ```
@@ -44,7 +75,12 @@ src/features/TabDetail/
   components/
     TabInfoBar.tsx
     TabViewToggle.tsx
-    TabMenuItems.tsx
+    TabMenuItems/
+      TabMenuItems.tsx            - threads onTapPlus/Minus/Remove
+      TabMenuItem.tsx             - swipeable rewrite + new tap props
+      __tests__/
+        TabMenuItem.test.tsx
+        TabMenuItems.test.tsx
     TabSubtotal.tsx
     index.ts
   utils.ts                        - toItems() helper
@@ -60,4 +96,7 @@ src/state-management/tabs/
   index.ts
 
 src/components/MemberAvatars.tsx
+src/styles.ts                     - Color.Danger added
+src/Root.tsx                      - GestureHandlerRootView added
+.eslintrc                         - no-var-requires off in test files
 ```

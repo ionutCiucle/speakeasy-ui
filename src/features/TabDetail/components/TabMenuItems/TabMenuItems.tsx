@@ -10,6 +10,9 @@ interface Props {
   onIncrement: (id: string) => void;
   onDecrement: (id: string) => void;
   onAdd: () => void;
+  onTapPlus?: (id: string) => void;
+  onTapMinus?: (id: string) => void;
+  onTapRemove?: (id: string) => void;
 }
 
 export function TabMenuItems({
@@ -18,6 +21,9 @@ export function TabMenuItems({
   onIncrement,
   onDecrement,
   onAdd,
+  onTapPlus,
+  onTapMinus,
+  onTapRemove,
 }: Props) {
   return (
     <>
@@ -28,6 +34,9 @@ export function TabMenuItems({
           currencySymbol={currencySymbol}
           onIncrement={onIncrement}
           onDecrement={onDecrement}
+          onTapPlus={onTapPlus}
+          onTapMinus={onTapMinus}
+          onTapRemove={onTapRemove}
         />
       ))}
       <TouchableOpacity
