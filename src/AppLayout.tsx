@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Outlet, useLocation, useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
 import { MainNav, MainNavTab, PageHeader } from '@/components';
 import { useCreateTabActions } from '@/state-management/create-tab';
+import { useAppSelector } from '@/state-management/providerHooks';
 import { ModalRoot } from './ModalRoot';
 
 interface RouteConfig {
@@ -26,24 +27,24 @@ const TAB_ROUTES: Record<MainNavTab, string> = {
   profile: '/profile',
 };
 
+const WIZARD_PREV_ROUTE: Record<string, string> = {
+  '/create-tab/add-members': '/create-tab/tab-details',
+  '/create-tab/build-menu': '/create-tab/add-members',
+  '/create-tab/review': '/create-tab/build-menu',
+};
+
 export function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { reset } = useCreateTabActions();
   const lastCreateTabRoute = useRef('/create-tab');
-  const [createTabInProgress, setCreateTabInProgress] = useState(false);
+  const createTabInProgress = useAppSelector(
+    (state) => state.createTab.tabName !== '',
+  );
 
   if (location.pathname.startsWith('/create-tab')) {
     lastCreateTabRoute.current = location.pathname;
   }
-
-  useEffect(() => {
-    if (location.pathname.startsWith('/create-tab')) {
-      setCreateTabInProgress(false);
-    } else {
-      setCreateTabInProgress(lastCreateTabRoute.current !== '/create-tab');
-    }
-  }, [location.pathname]);
 
   const config =
     ROUTE_CONFIG[location.pathname] ??
@@ -59,8 +60,13 @@ export function AppLayout() {
     (location.state as { title?: string } | null)?.title ?? config.title;
 
   const handleBack = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
+    const prevWizardRoute = WIZARD_PREV_ROUTE[location.pathname];
+    if (prevWizardRoute) {
+      navigate(prevWizardRoute, { replace: true });
+    } else {
+      navigate(-1);
+    }
+  }, [navigate, location.pathname]);
 
   const handleClose = useCallback(() => {
     lastCreateTabRoute.current = '/create-tab';
@@ -71,13 +77,17 @@ export function AppLayout() {
   const handleTabPress = useCallback(
     (tab: MainNavTab) => {
       const target =
-        tab === 'newTab' ? lastCreateTabRoute.current : TAB_ROUTES[tab];
+        tab === 'newTab'
+          ? createTabInProgress
+            ? lastCreateTabRoute.current
+            : '/create-tab'
+          : TAB_ROUTES[tab];
       if (target === location.pathname) {
         return;
       }
       navigate(target);
     },
-    [navigate, location.pathname],
+    [navigate, location.pathname, createTabInProgress],
   );
 
   return (
