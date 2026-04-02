@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { useParams } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, MemberAvatars } from '@/components';
-import { useTabs } from '@/state-management/tabs';
+import { useTabDetails } from '@/state-management/tabs';
 import { CurrencySymbol } from '@/enums';
 import { toItems } from './utils';
 import {
@@ -16,10 +16,8 @@ import type { ActiveView } from './types';
 
 export function TabDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { tabs } = useTabs();
+  const { tab } = useTabDetails(id ?? '');
   const [activeView, setActiveView] = useState<ActiveView>('mine');
-
-  const tab = tabs.find((t) => t.id === id);
 
   const handleAddItem = useCallback(() => {
     // TODO: navigate to add item flow

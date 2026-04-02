@@ -6,4 +6,4 @@ export type {
   TabParticipantDTO,
   TabSettlementDTO,
 } from './dto';
-export { useTabs } from './api-hooks';
+export { useTabs, useTabDetails } from './api-hooks';
