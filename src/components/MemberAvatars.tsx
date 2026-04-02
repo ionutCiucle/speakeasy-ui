@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
+import { toInitials } from '@/utils';
 import { Avatar } from './Avatar';
 
 interface Member {
@@ -13,15 +14,6 @@ interface Props {
   label?: string;
   showSelf?: boolean;
   onAdd?: () => void;
-}
-
-function toInitials(name: string): string {
-  return name
-    .split(' ')
-    .map((w) => w[0] ?? '')
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
 }
 
 export function MemberAvatars({

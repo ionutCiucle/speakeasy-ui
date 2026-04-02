@@ -9,21 +9,13 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
+import { CurrencySymbol } from '@/enums';
 import { useCreateTabActions } from '@/state-management/create-tab';
 import { useAppSelector } from '@/state-management/providerHooks';
 
-const CURRENCY_SYMBOLS: Record<string, string> = {
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  CAD: 'CA$',
-  AUD: 'A$',
-  JPY: '¥',
-  MXN: 'MX$',
-};
-
 function formatPrice(price: number, currencyCode: string): string {
-  const symbol = CURRENCY_SYMBOLS[currencyCode] ?? currencyCode;
+  const symbol =
+    CurrencySymbol[currencyCode as keyof typeof CurrencySymbol] ?? currencyCode;
   return `${symbol}${price.toFixed(2)}`;
 }
 
