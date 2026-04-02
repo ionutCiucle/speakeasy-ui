@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
   ScrollView,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
@@ -12,6 +11,7 @@ import { Color } from '@/styles';
 import { CurrencySymbol } from '@/enums';
 import { useCreateTabActions } from '@/state-management/create-tab';
 import { useAppSelector } from '@/state-management/providerHooks';
+import { AddItemForm } from '@/components';
 
 function formatPrice(price: number, currencyCode: string): string {
   const symbol =
@@ -20,25 +20,20 @@ function formatPrice(price: number, currencyCode: string): string {
 }
 
 export function BuildMenuStep() {
-  const [itemName, setItemName] = useState('');
-  const [itemPrice, setItemPrice] = useState('');
-
   const { addMenuItem, removeMenuItem } = useCreateTabActions();
   const menuItems = useAppSelector((state) => state.createTab.menuItems);
   const currency = useAppSelector((state) => state.createTab.currency);
 
-  const handleAddItem = useCallback(() => {
-    if (itemName.trim().length === 0) {
-      return;
-    }
-    addMenuItem({
-      id: Date.now().toString(),
-      name: itemName.trim(),
-      price: parseFloat(itemPrice) || 0,
-    });
-    setItemName('');
-    setItemPrice('');
-  }, [itemName, itemPrice, addMenuItem]);
+  const handleAddItem = useCallback(
+    (name: string, price: number) => {
+      addMenuItem({
+        id: Date.now().toString(),
+        name,
+        price,
+      });
+    },
+    [addMenuItem],
+  );
 
   const handleRemoveItem = useCallback(
     (id: string) => {
@@ -55,41 +50,7 @@ export function BuildMenuStep() {
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.content}>
-        {/* ADD AN ITEM */}
-        <Text style={styles.sectionHeader}>ADD AN ITEM</Text>
-
-        <Text style={styles.fieldLabel}>Item Name</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeholder="e.g. Gin & Tonic"
-          placeholderTextColor={Color.WarmBrown}
-          value={itemName}
-          onChangeText={setItemName}
-        />
-
-        <Text style={styles.fieldLabel}>Price</Text>
-        <View style={styles.priceInput}>
-          <View style={styles.currencyBadge}>
-            <Text style={styles.currencyCode}>{currency.code}</Text>
-          </View>
-          <View style={styles.priceSeparator} />
-          <TextInput
-            style={styles.priceValue}
-            placeholder="0.00"
-            placeholderTextColor={Color.WarmBrown}
-            value={itemPrice}
-            onChangeText={setItemPrice}
-            keyboardType="decimal-pad"
-          />
-        </View>
-
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={handleAddItem}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.addButtonLabel}>Add to Menu</Text>
-        </TouchableOpacity>
+        <AddItemForm currencyCode={currency.code} onAdd={handleAddItem} />
 
         {/* Divider */}
         <View style={styles.divider} />
@@ -168,81 +129,10 @@ const styles = StyleSheet.create({
     color: Color.WarmBrown,
     marginBottom: 12,
   },
-  fieldLabel: {
-    fontFamily: 'Inter_500Medium',
-    fontSize: 11,
-    lineHeight: 13,
-    color: Color.WarmBrown,
-    marginBottom: 6,
-  },
-  nameInput: {
-    backgroundColor: Color.Ivory,
-    borderWidth: 1,
-    borderColor: Color.Sand,
-    borderRadius: 8,
-    height: 44,
-    paddingHorizontal: 14,
-    fontFamily: 'Inter_400Regular',
-    fontSize: 13,
-    lineHeight: 16,
-    color: Color.Espresso,
-    marginBottom: 16,
-  },
-  priceInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Color.Ivory,
-    borderWidth: 1,
-    borderColor: Color.Sand,
-    borderRadius: 8,
-    height: 44,
-    marginBottom: 16,
-    paddingHorizontal: 10,
-  },
-  currencyBadge: {
-    width: 42,
-    height: 24,
-    backgroundColor: Color.Linen,
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  currencyCode: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 10,
-    lineHeight: 12,
-    color: Color.WarmBrown,
-  },
-  priceSeparator: {
-    width: 1,
-    height: 28,
-    backgroundColor: Color.Sand,
-    marginHorizontal: 10,
-  },
-  priceValue: {
-    flex: 1,
-    fontFamily: 'Inter_400Regular',
-    fontSize: 14,
-    lineHeight: 17,
-    color: Color.Espresso,
-  },
-  addButton: {
-    backgroundColor: Color.Gold,
-    borderRadius: 8,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  addButtonLabel: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 14,
-    lineHeight: 17,
-    color: Color.EspressoDark,
-  },
   divider: {
     height: 1,
     backgroundColor: Color.Sand,
+    marginTop: 16,
     marginBottom: 16,
   },
   menuItemRow: {

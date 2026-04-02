@@ -12,7 +12,9 @@ import { useAppSelector } from '@/state-management/providerHooks';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
 import { useCreateTabActions } from '@/state-management/create-tab';
+import { CurrencySymbol } from '@/enums';
 import { CurrencyModal } from '@/components/modals/CurrencyModal';
+import { AddItemsModal } from '@/components/modals/AddItemsModal';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
 const DURATION = 240;
@@ -117,6 +119,18 @@ function renderContent(
         <CurrencyModal
           selectedCode={currency.code}
           onSelect={onSelectCurrency}
+          onDone={onDone}
+        />
+      );
+    }
+    case ModalId.AddItems: {
+      const currencySymbol =
+        CurrencySymbol[currency.code as keyof typeof CurrencySymbol] ??
+        currency.code;
+      return (
+        <AddItemsModal
+          currencyCode={currency.code}
+          currencySymbol={currencySymbol}
           onDone={onDone}
         />
       );

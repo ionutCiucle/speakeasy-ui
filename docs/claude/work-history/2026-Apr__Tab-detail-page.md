@@ -67,6 +67,26 @@ Unit tests added for `TabMenuItem` and `TabMenuItems`:
 
 ESLint override added in `.eslintrc` to allow `no-var-requires` in test files (required by Jest's `jest.mock` hoisting behaviour).
 
+### Add Items modal
+
+A bottom-sheet modal for adding items to a tab from `TabDetailPage`.
+
+- `ModalId.AddItems` added to `src/state-management/layout/enums.ts`
+- `AddItemsModal` — header ("Add Items" + "Done"), item list with drag handles / price pills / trash, info banner
+- `ModalRoot.tsx` — new `case ModalId.AddItems` in `renderContent`
+- `TabDetailPage` — `handleAddItem` now calls `showModal(ModalId.AddItems)`
+
+### Shared form components
+
+The "add an item" form was extracted from `BuildMenuStep` into reusable shared components:
+
+- **`AddItemForm`** (`src/components/AddItemForm.tsx`) — section label, item name field (`Input` small), price field (`PriceInput`), submit button (`Button` primary). Props: `currencyCode`, `onAdd`, `sectionLabel?`, `buttonLabel?`
+  - Uses `useValidatedTextField` for both name and price; both fields validate on submit
+- **`PriceInput`** (`src/components/PriceInput.tsx`) — currency badge + divider + numeric-only `TextInput`. Props: `currencyCode`, `value`, `invalid?`, `error?`, `onChangeValue`. Filters non-numeric characters internally.
+- Both exported from `src/components/index.ts`
+
+`BuildMenuStep` and `AddItemsModal` now both consume `AddItemForm`.
+
 ## Files changed
 
 ```
@@ -96,7 +116,15 @@ src/state-management/tabs/
   index.ts
 
 src/components/MemberAvatars.tsx
+src/components/AddItemForm.tsx    - new shared form component
+src/components/PriceInput.tsx     - new numeric price input component
+src/components/modals/
+  AddItemsModal.tsx               - new modal: add items to a tab
+src/components/index.ts           - exports AddItemForm, PriceInput
 src/styles.ts                     - Color.Danger added
 src/Root.tsx                      - GestureHandlerRootView added
+src/state-management/layout/
+  enums.ts                        - ModalId.AddItems added
+src/ModalRoot.tsx                 - case ModalId.AddItems wired
 .eslintrc                         - no-var-requires off in test files
 ```

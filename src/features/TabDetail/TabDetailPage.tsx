@@ -4,6 +4,8 @@ import { useParams } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, MemberAvatars } from '@/components';
 import { useTabDetails } from '@/state-management/tabs';
+import { useLayoutActions } from '@/state-management/layout';
+import { ModalId } from '@/state-management/layout/enums';
 import { CurrencySymbol } from '@/enums';
 import { toItems } from './utils';
 import {
@@ -18,10 +20,11 @@ export function TabDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { tab } = useTabDetails(id ?? '');
   const [activeView, setActiveView] = useState<ActiveView>('mine');
+  const { showModal } = useLayoutActions();
 
   const handleAddItem = useCallback(() => {
-    // TODO: navigate to add item flow
-  }, []);
+    showModal(ModalId.AddItems);
+  }, [showModal]);
 
   const handleIncrement = useCallback((_itemId: string) => {
     // TODO: wire to add item action
