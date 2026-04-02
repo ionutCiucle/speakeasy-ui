@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { Ionicons } from '@expo/vector-icons';
 import { Color } from '@/styles';
 import type { OrderItem } from '../../types';
 
@@ -16,104 +18,183 @@ export function TabMenuItem({
   onIncrement,
   onDecrement,
 }: Props) {
+  const swipeableRef = useRef<Swipeable>(null);
+
+  const close = () => swipeableRef.current?.close();
+
+  const renderLeftActions = () => (
+    <TouchableOpacity
+      style={styles.leftAction}
+      activeOpacity={0.8}
+      onPress={() => {
+        onIncrement(item.id);
+        close();
+      }}
+    >
+      <View style={styles.plusHorizontal} />
+      <View style={styles.plusVertical} />
+    </TouchableOpacity>
+  );
+
+  const renderRightActions = () => (
+    <TouchableOpacity
+      style={styles.rightAction}
+      activeOpacity={0.8}
+      onPress={() => {
+        onDecrement(item.id);
+        close();
+      }}
+    >
+      {item.quantity === 1 ? (
+        <Ionicons name="trash-outline" size={18} color={Color.White} />
+      ) : (
+        <View style={styles.minusBar} />
+      )}
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={styles.itemRow}>
-      <Text style={styles.itemName}>{item.name}</Text>
-      <View style={styles.stepper}>
-        <TouchableOpacity
-          style={styles.stepperMinus}
-          onPress={() => onDecrement(item.id)}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.stepperMinusLabel}>−</Text>
-        </TouchableOpacity>
-        <Text style={styles.stepperQty}>{item.quantity}</Text>
-        <TouchableOpacity
-          style={styles.stepperPlus}
-          onPress={() => onIncrement(item.id)}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.stepperPlusLabel}>+</Text>
-        </TouchableOpacity>
+    <View style={styles.outer}>
+      {/* Split background always visible behind the card */}
+      <View style={styles.background} pointerEvents="none">
+        <View style={styles.leftBg} />
+        <View style={styles.rightBg} />
       </View>
-      <Text style={styles.itemPrice}>
-        {currencySymbol}
-        {(item.quantity * item.price).toFixed(2)}
-      </Text>
+
+      <Swipeable
+        ref={swipeableRef}
+        renderLeftActions={renderLeftActions}
+        renderRightActions={renderRightActions}
+        leftThreshold={40}
+        rightThreshold={40}
+        overshootLeft={false}
+        overshootRight={false}
+        containerStyle={styles.swipeableContainer}
+      >
+        <TouchableOpacity style={styles.card} activeOpacity={1} onPress={close}>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{item.quantity}</Text>
+          </View>
+          <Text style={styles.itemName}>{item.name}</Text>
+          <View style={styles.priceBadge}>
+            <Text style={styles.priceText}>
+              {currencySymbol}
+              {(item.quantity * item.price).toFixed(2)}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </Swipeable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  itemRow: {
+  outer: {
+    marginHorizontal: 32,
+    marginTop: 12,
+    height: 54,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  background: {
+    ...StyleSheet.absoluteFillObject,
+    flexDirection: 'row',
+    borderRadius: 8,
+  },
+  leftBg: {
+    flex: 1,
+    backgroundColor: Color.ActiveGreen,
+  },
+  rightBg: {
+    flex: 1,
+    backgroundColor: Color.Danger,
+  },
+  swipeableContainer: {
+    flex: 1,
+    borderRadius: 8,
+    overflow: 'visible',
+  },
+  card: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Color.White,
-    borderRadius: 6,
-    marginHorizontal: 32,
-    marginTop: 12,
-    height: 60,
-    paddingHorizontal: 14,
+    borderRadius: 8,
+    height: 54,
+    paddingHorizontal: 8,
     shadowColor: Color.Black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
   },
-  itemName: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 14,
-    lineHeight: 17,
-    color: Color.EspressoDark,
-    flex: 1,
-  },
-  stepper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  stepperMinus: {
-    width: 28,
-    height: 28,
-    borderRadius: 4,
-    backgroundColor: Color.Linen,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  stepperMinusLabel: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 15,
-    lineHeight: 18,
-    color: Color.WarmBrown,
-  },
-  stepperQty: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 14,
-    lineHeight: 17,
-    color: Color.EspressoDark,
+  badge: {
     width: 22,
-    textAlign: 'center',
-  },
-  stepperPlus: {
-    width: 28,
-    height: 28,
-    borderRadius: 4,
+    height: 22,
+    borderRadius: 11,
     backgroundColor: Color.Gold,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepperPlusLabel: {
+  badgeText: {
     fontFamily: 'Inter_600SemiBold',
-    fontSize: 15,
-    lineHeight: 18,
+    fontSize: 10,
+    lineHeight: 12,
     color: Color.White,
+    textAlign: 'center',
   },
-  itemPrice: {
-    fontFamily: 'Inter_600SemiBold',
+  itemName: {
+    fontFamily: 'Inter_500Medium',
     fontSize: 13,
     lineHeight: 16,
-    color: Color.Gold,
-    width: 50,
-    textAlign: 'right',
+    color: Color.Espresso,
+    flex: 1,
+    marginLeft: 8,
+  },
+  priceBadge: {
+    width: 68,
+    height: 26,
+    borderRadius: 5,
+    backgroundColor: Color.Linen,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  priceText: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 12,
+    lineHeight: 15,
+    color: Color.EspressoDark,
+    textAlign: 'center',
+  },
+  leftAction: {
+    width: 157,
+    height: 54,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  plusHorizontal: {
+    position: 'absolute',
+    width: 18,
+    height: 3,
+    borderRadius: 1,
+    backgroundColor: Color.White,
+  },
+  plusVertical: {
+    position: 'absolute',
+    width: 3,
+    height: 18,
+    borderRadius: 1,
+    backgroundColor: Color.White,
+  },
+  rightAction: {
+    width: 169,
+    height: 54,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  minusBar: {
+    width: 18,
+    height: 3,
+    borderRadius: 1,
+    backgroundColor: Color.White,
   },
 });

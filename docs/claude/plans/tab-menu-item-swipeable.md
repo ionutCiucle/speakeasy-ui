@@ -1,7 +1,7 @@
 # Plan: Swipeable TabMenuItem
 
 **Branch:** `feature/add-tab-detail`  
-**Status:** In progress
+**Status:** Done
 
 ---
 
@@ -72,29 +72,29 @@ The `Swipeable` ref will be stored per-item so we can call `ref.close()` after a
 ## Steps
 
 ### Step 1 — Add `Color.Danger` token
-- [ ] Add `Danger: '#C0392B'` to `src/styles.ts`
+- [x] Add `Danger: '#C0392B'` to `src/styles.ts`
 
 ### Step 2 — Rewrite `TabMenuItem`
-- [ ] Remove inline stepper (`stepperMinus`, `stepperPlus`, `stepperQty` etc.)
-- [ ] Wrap card in `<Swipeable>` with `renderLeftActions` and `renderRightActions`
-- [ ] Implement card layout:
+- [x] Remove inline stepper (`stepperMinus`, `stepperPlus`, `stepperQty` etc.)
+- [x] Wrap card in `<Swipeable>` with `renderLeftActions` and `renderRightActions`
+- [x] Implement card layout:
   - Gold quantity badge (circle + number)
   - Item name (Inter 500, 13px)
   - Price badge (Linen background)
-- [ ] Implement `renderLeftActions` → green `+` panel
-- [ ] Implement `renderRightActions` → red `−` / trash panel (branch on `quantity === 1`)
-- [ ] On action tap: call `onIncrement` / `onDecrement`, then `swipeableRef.current?.close()`
-- [ ] On card tap (`TouchableOpacity`): call `swipeableRef.current?.close()`
-- [ ] Do **not** clip the `Swipeable` container — the card intentionally slides partially off-screen as the design shows
+- [x] Implement `renderLeftActions` → green `+` panel
+- [x] Implement `renderRightActions` → red `−` / trash panel (branch on `quantity === 1`)
+- [x] On action tap: call `onIncrement` / `onDecrement`, then `swipeableRef.current?.close()`
+- [x] On card tap (`TouchableOpacity`): call `swipeableRef.current?.close()`
+- [x] Do **not** clip the `Swipeable` container — the card intentionally slides partially off-screen as the design shows
 
 ### Step 3 — Ensure `GestureHandlerRootView` wraps the app
-- [ ] Verify `Root.tsx` (or `App.tsx`) wraps with `<GestureHandlerRootView>` — required by RNGH v2 on Android
+- [x] Verify `Root.tsx` (or `App.tsx`) wraps with `<GestureHandlerRootView>` — required by RNGH v2 on Android
 
 ### Step 4 — Clean up `TabMenuItems`
-- [ ] `TabMenuItems` no longer needs to pass `onIncrement` / `onDecrement` layout — verify props still correct after TabMenuItem rewrite
+- [x] `TabMenuItems` no longer needs to pass `onIncrement` / `onDecrement` layout — verify props still correct after TabMenuItem rewrite
 
 ### Step 5 — Update price display
-- [ ] Price badge shows **unit price** × quantity (total for that item), formatted with `currencySymbol`
+- [x] Price badge shows **unit price** × quantity (total for that item), formatted with `currencySymbol`
 
 ---
 

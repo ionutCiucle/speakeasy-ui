@@ -4,15 +4,28 @@ import { useParams } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, MemberAvatars } from '@/components';
 import { useTabDetails } from '@/state-management/tabs';
-import { CurrencySymbol } from '@/enums';
-import { toItems } from './utils';
+import type { TabMemberDTO } from '@/state-management/tabs';
 import {
   TabInfoBar,
   TabMenuItems,
   TabSubtotal,
   TabViewToggle,
 } from './components';
-import type { ActiveView } from './types';
+import type { ActiveView, OrderItem } from './types';
+
+// TODO: remove — for local UI testing only
+const MOCK_MEMBERS: TabMemberDTO[] = [
+  { id: 'm1', tabId: 'mock', name: 'JD', createdAt: '' },
+  { id: 'm2', tabId: 'mock', name: 'MS', createdAt: '' },
+  { id: 'm3', tabId: 'mock', name: 'SC', createdAt: '' },
+  { id: 'm4', tabId: 'mock', name: 'TH', createdAt: '' },
+];
+
+const MOCK_ITEMS: OrderItem[] = [
+  { id: 'i1', name: 'Gin & Tonic', quantity: 2, price: 7.0 },
+  { id: 'i2', name: 'Nachos', quantity: 1, price: 8.5 },
+  { id: 'i3', name: 'Sparkling Water', quantity: 1, price: 3.0 },
+];
 
 export function TabDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -35,27 +48,26 @@ export function TabDetailPage() {
     // TODO: navigate to payment flow
   }, []);
 
-  if (!tab) {
-    return <View style={styles.screen} />;
-  }
+  // TODO: replace with real data from tab once API is wired
+  const members = tab?.members ?? MOCK_MEMBERS;
+  const items = MOCK_ITEMS;
+  const currencySymbol = '$';
+  const isActive = tab ? tab.closedAt === null : true;
+  const createdAt = tab?.createdAt ?? new Date().toISOString();
+  const venue = tab?.venue ?? "O'Brien's Pub";
 
-  const isActive = tab.closedAt === null;
-  const currencySymbol =
-    CurrencySymbol[tab.currencyCode as keyof typeof CurrencySymbol] ??
-    tab.currencyCode;
-  const items = toItems(tab);
   const subtotal = items.reduce(
-    (sum, item) => sum + item.quantity * item.price,
+    (sum: number, item: OrderItem) => sum + item.quantity * item.price,
     0,
   );
 
   return (
     <View style={styles.screen}>
       <TabInfoBar
-        venue={tab.venue ?? ''}
+        venue={venue}
         isActive={isActive}
-        createdAt={tab.createdAt}
-        memberCount={tab.members.length}
+        createdAt={createdAt}
+        memberCount={members.length}
       />
 
       <ScrollView
@@ -63,13 +75,8 @@ export function TabDetailPage() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Members */}
         <View style={styles.membersSection}>
-          <MemberAvatars
-            members={tab.members}
-            label="WHO'S IN?"
-            showSelf={true}
-          />
+          <MemberAvatars members={members} label="WHO'S IN?" showSelf={true} />
         </View>
 
         <View style={styles.sandDivider} />
@@ -109,11 +116,9 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  // Scroll content
   scrollContent: {
     paddingBottom: 24,
   },
-  // Members section
   membersSection: {
     marginTop: 22,
     marginHorizontal: 32,
@@ -124,7 +129,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 32,
     marginVertical: 16,
   },
-  // Pay button
   payButton: {
     marginHorizontal: 32,
     marginTop: 12,
