@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useParams } from 'react-router-native';
 import { Color } from '@/styles';
-import { Button, MemberAvatars } from '@/components';
+import { Button, MemberAvatars, PageContainer } from '@/components';
 import { useTabDetails } from '@/state-management/tabs';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
@@ -66,17 +66,19 @@ export function TabDetailPage() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.membersSection}>
+        <PageContainer style={styles.membersSection}>
           <MemberAvatars
             members={tab.members}
             label="WHO'S IN?"
             showSelf={true}
           />
-        </View>
+        </PageContainer>
 
         <View style={styles.sandDivider} />
 
-        <TabViewToggle activeView={activeView} onViewChange={setActiveView} />
+        <PageContainer>
+          <TabViewToggle activeView={activeView} onViewChange={setActiveView} />
+        </PageContainer>
 
         <TabMenuItems
           items={items}
@@ -88,16 +90,18 @@ export function TabDetailPage() {
 
         <View style={styles.sandDivider} />
 
-        <TabSubtotal currencySymbol={currencySymbol} subtotal={subtotal} />
+        <PageContainer>
+          <TabSubtotal currencySymbol={currencySymbol} subtotal={subtotal} />
 
-        <Button
-          label="Pay the Tab"
-          variant="tertiary"
-          rightIcon="chevron-right"
-          rightIconColor={Color.Gold}
-          style={styles.payButton}
-          onPress={handlePayTab}
-        />
+          <Button
+            label="Pay the Tab"
+            variant="tertiary"
+            rightIcon="chevron-right"
+            rightIconColor={Color.Gold}
+            style={styles.payButton}
+            onPress={handlePayTab}
+          />
+        </PageContainer>
       </ScrollView>
     </View>
   );
@@ -116,16 +120,14 @@ const styles = StyleSheet.create({
   },
   membersSection: {
     marginTop: 22,
-    marginHorizontal: 32,
   },
   sandDivider: {
     height: 1,
     backgroundColor: Color.Sand,
-    marginHorizontal: 32,
+    marginHorizontal: 20,
     marginVertical: 16,
   },
   payButton: {
-    marginHorizontal: 32,
     marginTop: 12,
     width: 'auto',
   },

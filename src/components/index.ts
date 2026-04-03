@@ -1,5 +1,7 @@
 export { AddItemForm } from './AddItemForm';
 export { Avatar } from './Avatar';
+export { ModalHeader } from './ModalHeader';
+export { PageContainer } from './PageContainer';
 export { BackButton } from './BackButton';
 export { BracketContainer } from './BracketContainer';
 export { IconButton } from './IconButton';

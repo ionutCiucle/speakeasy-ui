@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: SHEET_HEIGHT,
-    backgroundColor: Color.Ivory,
+    backgroundColor: Color.Cream,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },

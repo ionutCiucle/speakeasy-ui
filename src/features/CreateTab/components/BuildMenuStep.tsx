@@ -11,7 +11,7 @@ import { Color } from '@/styles';
 import { CurrencySymbol } from '@/enums';
 import { useCreateTabActions } from '@/state-management/create-tab';
 import { useAppSelector } from '@/state-management/providerHooks';
-import { AddItemForm } from '@/components';
+import { AddItemForm, PageContainer } from '@/components';
 
 function formatPrice(price: number, currencyCode: string): string {
   const symbol =
@@ -49,7 +49,7 @@ export function BuildMenuStep() {
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
     >
-      <View style={styles.content}>
+      <PageContainer>
         <AddItemForm currencyCode={currency.code} onAdd={handleAddItem} />
 
         {/* Divider */}
@@ -106,7 +106,7 @@ export function BuildMenuStep() {
             </Text>
           </View>
         )}
-      </View>
+      </PageContainer>
     </ScrollView>
   );
 }
@@ -117,9 +117,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 16,
-  },
-  content: {
-    paddingHorizontal: 20,
   },
   sectionHeader: {
     fontFamily: 'Inter_600SemiBold',

@@ -44,7 +44,9 @@ export function AddItemForm({
 
   return (
     <View>
-      <Text style={styles.sectionLabel}>{sectionLabel}</Text>
+      {!!sectionLabel && (
+        <Text style={styles.sectionLabel}>{sectionLabel}</Text>
+      )}
 
       <Input
         label="Item Name"

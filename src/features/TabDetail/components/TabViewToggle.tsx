@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Ivory,
     borderRadius: 6,
     height: 36,
-    marginHorizontal: 32,
   },
   toggleTab: {
     flex: 1,

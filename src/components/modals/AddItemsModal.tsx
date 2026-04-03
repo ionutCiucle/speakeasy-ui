@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Color } from '@/styles';
-import { AddItemForm } from '@/components';
+import { AddItemForm, ModalHeader } from '@/components';
 
 interface MenuItem {
   id: string;
@@ -44,18 +44,7 @@ export function AddItemsModal({ currencyCode, currencySymbol, onDone }: Props) {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Add Items</Text>
-        <TouchableOpacity
-          onPress={onDone}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <Text style={styles.done}>Done</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.divider} />
+      <ModalHeader title="Add Items" onDone={onDone} />
 
       <ScrollView
         bounces={false}
@@ -63,7 +52,11 @@ export function AddItemsModal({ currencyCode, currencySymbol, onDone }: Props) {
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.scrollContent}
       >
-        <AddItemForm currencyCode={currencyCode} onAdd={handleAdd} />
+        <AddItemForm
+          currencyCode={currencyCode}
+          onAdd={handleAdd}
+          sectionLabel=""
+        />
 
         {itemCount > 0 && (
           <>
@@ -74,7 +67,6 @@ export function AddItemsModal({ currencyCode, currencySymbol, onDone }: Props) {
               <View key={item.id}>
                 {index > 0 && <View style={styles.rowDivider} />}
                 <View style={styles.itemRow}>
-                  {/* Drag handle dots */}
                   <View style={styles.dragHandle}>
                     <View style={styles.dotRow}>
                       <View style={styles.dot} />
@@ -109,7 +101,6 @@ export function AddItemsModal({ currencyCode, currencySymbol, onDone }: Props) {
               </View>
             ))}
 
-            {/* Info banner */}
             <View style={styles.infoBanner}>
               <Ionicons
                 name="information-circle-outline"
@@ -131,30 +122,6 @@ export function AddItemsModal({ currencyCode, currencySymbol, onDone }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginTop: 14,
-    marginBottom: 16,
-  },
-  title: {
-    fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 20,
-    lineHeight: 24,
-    color: Color.Espresso,
-  },
-  done: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 14,
-    lineHeight: 17,
-    color: Color.Gold,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: Color.Linen,
   },
   scrollContent: {
     paddingHorizontal: 20,

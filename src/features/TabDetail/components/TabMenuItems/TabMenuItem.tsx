@@ -101,7 +101,7 @@ export function TabMenuItem({
 
 const styles = StyleSheet.create({
   outer: {
-    marginHorizontal: 32,
+    marginHorizontal: 20,
     marginTop: 12,
   },
   background: {

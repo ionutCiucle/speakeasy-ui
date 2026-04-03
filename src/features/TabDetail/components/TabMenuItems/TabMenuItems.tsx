@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderColor: Color.Gold,
     borderRadius: 6,
     height: 44,
-    marginHorizontal: 32,
+    marginHorizontal: 20,
     marginTop: 12,
     alignItems: 'center',
     justifyContent: 'center',
