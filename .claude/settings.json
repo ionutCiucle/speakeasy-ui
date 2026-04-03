@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "input=$(cat); cmd=$(echo \"$input\" | jq -r '.tool_input.command // empty'); if echo \"$cmd\" | grep -qE '\\bgh pr merge\\b'; then branch=$(git symbolic-ref --short HEAD 2>/dev/null); if [ -n \"$branch\" ] && [ \"$branch\" != \"main\" ] && [ \"$branch\" != \"master\" ]; then git checkout main && git pull --quiet && git branch -d \"$branch\" && echo \"Cleaned up local branch: $branch\"; fi; fi"
+            "command": "input=$(cat); cmd=$(echo \"$input\" | jq -r '.tool_input.command // empty'); if echo \"$cmd\" | grep -qE '\\bgh pr merge\\b'; then branch=$(git symbolic-ref --short HEAD 2>/dev/null); source ~/.nvm/nvm.sh && nvm use --silent 2>/dev/null; cd \"$CLAUDE_PROJECT_DIR\" && git checkout main && git pull --quiet; if [ -n \"$branch\" ] && [ \"$branch\" != \"main\" ] && [ \"$branch\" != \"master\" ]; then git branch -d \"$branch\" 2>/dev/null || git branch -D \"$branch\"; echo \"Cleaned up local branch: $branch\"; fi; fi"
           }
         ]
       },

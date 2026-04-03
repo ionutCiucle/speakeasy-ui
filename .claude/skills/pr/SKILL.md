@@ -34,3 +34,16 @@ EOF
 ```
 
 6. Return the PR URL.
+
+## Merging a PR
+
+Always merge with squash and delete the remote branch in one command:
+
+```
+gh pr merge <PR-number-or-URL> --squash --delete-branch
+```
+
+- `--squash` keeps the main branch history clean (one commit per feature/fix)
+- `--delete-branch` removes the remote branch immediately after merge
+
+The local branch is cleaned up automatically by a post-merge hook (switches to main, pulls, deletes local branch).
