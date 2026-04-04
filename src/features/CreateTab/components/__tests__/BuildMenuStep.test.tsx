@@ -25,8 +25,32 @@ jest.mock('@/state-management/providerHooks', () => ({
     }),
 }));
 
+// require() is intentional here — jest.mock factories are hoisted above imports
+// by Babel, so top-level imports are undefined when the factory runs.
+jest.mock('react-native-gesture-handler', () => {
+  const { View } = require('react-native');
+  return {
+    Swipeable: ({
+      children,
+      renderLeftActions,
+      renderRightActions,
+    }: {
+      children: React.ReactNode;
+      renderLeftActions?: () => React.ReactNode;
+      renderRightActions?: () => React.ReactNode;
+    }) => (
+      <View>
+        {renderLeftActions?.()}
+        {children}
+        {renderRightActions?.()}
+      </View>
+    ),
+  };
+});
+
 jest.mock('@expo/vector-icons', () => ({
   Feather: () => null,
+  Ionicons: () => null,
 }));
 
 describe('BuildMenuStep', () => {
@@ -74,10 +98,11 @@ describe('BuildMenuStep', () => {
     );
   });
 
-  it('defaults price to 0 when price field is empty', () => {
+  it('accepts a price of zero when 0 is entered', () => {
     const { getByPlaceholderText, getByText } = render(<BuildMenuStep />);
 
     fireEvent.changeText(getByPlaceholderText('e.g. Gin & Tonic'), 'Water');
+    fireEvent.changeText(getByPlaceholderText('0.00'), '0');
     fireEvent.press(getByText('Add to Menu'));
 
     expect(mockAddMenuItem).toHaveBeenCalledWith(
@@ -92,6 +117,7 @@ describe('BuildMenuStep', () => {
       getByPlaceholderText('e.g. Gin & Tonic'),
       '  Whisky  ',
     );
+    fireEvent.changeText(getByPlaceholderText('0.00'), '8');
     fireEvent.press(getByText('Add to Menu'));
 
     expect(mockAddMenuItem).toHaveBeenCalledWith(
@@ -128,7 +154,7 @@ describe('BuildMenuStep', () => {
     mockMenuItems = [{ id: 'abc', name: 'Bourbon', price: 10 }];
     const { UNSAFE_getAllByType } = render(<BuildMenuStep />);
 
-    // Last TouchableOpacity is the delete button for the menu item row
+    // Last TouchableOpacity is the right-swipe action (remove) rendered by MenuCard
     const touchables = UNSAFE_getAllByType(TouchableOpacity);
     const deleteButton = touchables[touchables.length - 1];
     fireEvent.press(deleteButton);

@@ -14,6 +14,7 @@ export interface OrderItem {
 interface Props {
   item: OrderItem;
   currencySymbol: string;
+  showQuantity?: boolean;
   onTapPlus?: (id: string) => void;
   onTapMinus?: (id: string) => void;
   onTapRemove?: (id: string) => void;
@@ -22,6 +23,7 @@ interface Props {
 export function MenuCard({
   item,
   currencySymbol,
+  showQuantity = true,
   onTapPlus,
   onTapMinus,
   onTapRemove,
@@ -82,14 +84,16 @@ export function MenuCard({
         containerStyle={styles.swipeableContainer}
       >
         <TouchableOpacity style={styles.card} activeOpacity={1} onPress={close}>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{item.quantity}</Text>
-          </View>
+          {showQuantity && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{item.quantity}</Text>
+            </View>
+          )}
           <Text style={styles.itemName}>{item.name}</Text>
           <View style={styles.priceBadge}>
             <Text style={styles.priceText}>
               {currencySymbol}
-              {(item.quantity * item.price).toFixed(2)}
+              {item.price.toFixed(2)}
             </Text>
           </View>
         </TouchableOpacity>
