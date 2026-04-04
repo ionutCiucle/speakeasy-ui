@@ -43,6 +43,14 @@ Exported from `src/state-management/tabs/api-hooks/index.ts` and `src/state-mana
 
 `tab.menuItems` (the defined menu) is now shown in place of `tab.items` (placed orders) in the menu list. Each row shows `quantity: 0` until ordering is wired. `handleIncrement` / `handleDecrement` remain TODOs for the ordering flow.
 
+## Per-card loading indicator
+
+`TabMenuItems` now accepts `loadingItemId?: string | null` instead of `isLoading?: boolean`. Each `MenuCard` receives `isLoading={item.id === loadingItemId}` so only the tapped card shows the spinner.
+
+`TabDetailPage` tracks `loadingItemId` in local state. `syncMemberItems` is now async — it sets `loadingItemId` to the triggering item's id before `await updateMemberItems(...)` and clears it to `null` after. The `isUpdatingMemberItems` global flag is no longer used for display.
+
+`TabDetailPage` tests added (`src/features/TabDetail/__tests__/TabDetailPage.test.tsx`) covering: initial quantity display, increment/decrement/remove, API payload shape (aggregated quantities, zero-quantity omission), and per-card spinner behaviour.
+
 ## Member item ordering
 
 Wired `+` / `-` / trash swipe actions on `MenuCard` in `TabDetailPage` to `PATCH /:tabId/members/:userId/items`.

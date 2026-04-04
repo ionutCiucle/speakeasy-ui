@@ -27,8 +27,9 @@ export function TabDetailPage() {
   const { tab, refetch } = useTabDetails(id ?? '');
   const [activeView, setActiveView] = useState<ActiveView>('mine');
   const [memberMenuItems, setMemberMenuItems] = useState<MemberMenuItem[]>([]);
+  const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
   const { showModal } = useLayoutActions();
-  const { updateMemberItems, isUpdatingMemberItems } = useTabAsyncActions();
+  const { updateMemberItems } = useTabAsyncActions();
   const activeModal = useAppSelector((state) => state.layout.activeModal);
   const userId = useAppSelector((state) => state.auth.userId);
   const prevActiveModal = useRef<ModalId | null>(null);
@@ -41,7 +42,7 @@ export function TabDetailPage() {
   }, [activeModal, refetch]);
 
   const syncMemberItems = useCallback(
-    (next: MemberMenuItem[]) => {
+    async (itemId: string, next: MemberMenuItem[]) => {
       if (!id || !userId) {
         return;
       }
@@ -52,7 +53,9 @@ export function TabDetailPage() {
       const items = Array.from(quantityMap.entries()).map(
         ([menuItemId, quantity]) => ({ menuItemId, quantity }),
       );
-      updateMemberItems(id, userId, items);
+      setLoadingItemId(itemId);
+      await updateMemberItems(id, userId, items);
+      setLoadingItemId(null);
     },
     [id, userId, updateMemberItems],
   );
@@ -84,7 +87,7 @@ export function TabDetailPage() {
         { id: itemId, name: menuItem.name, price: parseFloat(menuItem.price) },
       ];
       setMemberMenuItems(next);
-      syncMemberItems(next);
+      syncMemberItems(itemId, next);
     },
     [tab, memberMenuItems, syncMemberItems],
   );
@@ -100,7 +103,7 @@ export function TabDetailPage() {
         ...memberMenuItems.slice(idx + 1),
       ];
       setMemberMenuItems(next);
-      syncMemberItems(next);
+      syncMemberItems(itemId, next);
     },
     [memberMenuItems, syncMemberItems],
   );
@@ -116,7 +119,7 @@ export function TabDetailPage() {
         ...memberMenuItems.slice(idx + 1),
       ];
       setMemberMenuItems(next);
-      syncMemberItems(next);
+      syncMemberItems(itemId, next);
     },
     [memberMenuItems, syncMemberItems],
   );
@@ -177,7 +180,7 @@ export function TabDetailPage() {
         <TabMenuItems
           items={items}
           currencySymbol={currencySymbol}
-          isLoading={isUpdatingMemberItems}
+          loadingItemId={loadingItemId}
           onAdd={handleAddItem}
           onTapPlus={handleTapPlus}
           onTapMinus={handleTapMinus}

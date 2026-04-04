@@ -7,7 +7,7 @@ import type { OrderItem } from '../../types';
 interface Props {
   items: OrderItem[];
   currencySymbol: string;
-  isLoading?: boolean;
+  loadingItemId?: string | null;
   onAdd: () => void;
   onTapPlus?: (id: string) => void;
   onTapMinus?: (id: string) => void;
@@ -17,7 +17,7 @@ interface Props {
 export function TabMenuItems({
   items,
   currencySymbol,
-  isLoading,
+  loadingItemId,
   onAdd,
   onTapPlus,
   onTapMinus,
@@ -30,7 +30,7 @@ export function TabMenuItems({
           key={item.id}
           item={item}
           currencySymbol={currencySymbol}
-          isLoading={isLoading}
+          isLoading={item.id === loadingItemId}
           onTapPlus={onTapPlus}
           onTapMinus={onTapMinus}
           onTapRemove={onTapRemove}
