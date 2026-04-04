@@ -84,12 +84,20 @@ export function MenuCard({
         containerStyle={styles.swipeableContainer}
       >
         <TouchableOpacity style={styles.card} activeOpacity={1} onPress={close}>
+          <View style={styles.dragHandle}>
+            {[0, 1, 2].map((row) => (
+              <View key={row} style={styles.dragHandleRow}>
+                <View style={styles.dragHandleDot} />
+                <View style={styles.dragHandleDot} />
+              </View>
+            ))}
+          </View>
+          <Text style={styles.itemName}>{item.name}</Text>
           {showQuantity && (
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{item.quantity}</Text>
             </View>
           )}
-          <Text style={styles.itemName}>{item.name}</Text>
           <View style={styles.priceBadge}>
             <Text style={styles.priceText}>
               {currencySymbol}
@@ -142,6 +150,20 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
+  dragHandle: {
+    gap: 2,
+    marginRight: 8,
+  },
+  dragHandleRow: {
+    flexDirection: 'row',
+    gap: 2,
+  },
+  dragHandleDot: {
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: Color.Sand,
+  },
   badge: {
     width: 22,
     height: 22,
@@ -149,6 +171,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.Gold,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 6,
   },
   badgeText: {
     fontFamily: 'Inter_600SemiBold',
@@ -163,7 +186,6 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     color: Color.Espresso,
     flex: 1,
-    marginLeft: 8,
   },
   priceBadge: {
     width: 68,

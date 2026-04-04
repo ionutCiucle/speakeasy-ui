@@ -43,6 +43,14 @@ Exported from `src/state-management/tabs/api-hooks/index.ts` and `src/state-mana
 
 `tab.menuItems` (the defined menu) is now shown in place of `tab.items` (placed orders) in the menu list. Each row shows `quantity: 0` until ordering is wired. `handleIncrement` / `handleDecrement` remain TODOs for the ordering flow.
 
+## MenuCard layout update
+
+`src/components/MenuCard.tsx` updated to match revised Figma spec:
+
+- Added a 3×2 drag handle (sand-coloured dots, 2px gap) on the left edge of the card
+- Moved the quantity badge to sit between the item name and the price box (right side)
+- Removed `marginLeft` from item name; badge gains `marginRight: 6` for spacing
+
 ## Tooling
 
 ### savegame skill — work-history step
