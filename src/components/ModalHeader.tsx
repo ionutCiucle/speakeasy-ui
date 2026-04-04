@@ -1,22 +1,34 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
 import { Color } from '@/styles';
 
 interface Props {
   title: string;
+  isSubmitting?: boolean;
   onDone: () => void;
 }
 
-export function ModalHeader({ title, onDone }: Props) {
+export function ModalHeader({ title, isSubmitting, onDone }: Props) {
   return (
     <View>
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
         <TouchableOpacity
           onPress={onDone}
+          disabled={isSubmitting}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={styles.done}>Done</Text>
+          {isSubmitting ? (
+            <ActivityIndicator size="small" color={Color.Gold} />
+          ) : (
+            <Text style={styles.done}>Done</Text>
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.divider} />

@@ -42,8 +42,6 @@ const renderList = (
     <TabMenuItems
       items={items}
       currencySymbol="$"
-      onIncrement={jest.fn()}
-      onDecrement={jest.fn()}
       onAdd={jest.fn()}
       {...overrides}
     />,
@@ -74,10 +72,8 @@ describe('TabMenuItems', () => {
     expect(queryByText('Gin & Tonic')).toBeNull();
   });
 
-  it('passes onIncrement down to each item', () => {
-    const onIncrement = jest.fn();
-    const { getAllByText } = renderList({ onIncrement });
-    // quantity badges are rendered — confirm items are present
+  it('renders quantity badges for each item', () => {
+    const { getAllByText } = renderList();
     expect(getAllByText(/\d+/).length).toBeGreaterThan(0);
   });
 });

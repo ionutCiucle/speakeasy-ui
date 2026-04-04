@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useParams } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, MemberAvatars, PageContainer } from '@/components';
 import { useTabDetails } from '@/state-management/tabs';
 import { useLayoutActions } from '@/state-management/layout';
+import { useAppSelector } from '@/state-management/providerHooks';
 import { ModalId } from '@/state-management/layout/enums';
 import { CurrencySymbol } from '@/enums';
-import { toItems } from './utils';
 import {
   TabInfoBar,
   TabMenuItems,
@@ -18,13 +18,43 @@ import type { ActiveView } from './types';
 
 export function TabDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { tab } = useTabDetails(id ?? '');
+  const { tab, refetch } = useTabDetails(id ?? '');
   const [activeView, setActiveView] = useState<ActiveView>('mine');
   const { showModal } = useLayoutActions();
+  const activeModal = useAppSelector((state) => state.layout.activeModal);
+  const prevActiveModal = useRef<ModalId | null>(null);
+
+  useEffect(() => {
+    if (prevActiveModal.current === ModalId.AddItems && activeModal === null) {
+      refetch();
+    }
+    prevActiveModal.current = activeModal;
+  }, [activeModal, refetch]);
 
   const handleAddItem = useCallback(() => {
-    showModal(ModalId.AddItems);
-  }, [showModal]);
+    if (!tab) {
+      return;
+    }
+    showModal(ModalId.AddItems, {
+      tabId: tab.id,
+      existingMenuItems: tab.menuItems.map(({ name, price }) => ({
+        name,
+        price: parseFloat(price),
+      })),
+    });
+  }, [showModal, tab]);
+
+  const handleTapPlus = useCallback((_itemId: string) => {
+    // TODO: wire to order item action
+  }, []);
+
+  const handleTapMinus = useCallback((_itemId: string) => {
+    // TODO: wire to remove item action
+  }, []);
+
+  const handleTapRemove = useCallback((_itemId: string) => {
+    // TODO: wire to remove item action
+  }, []);
 
   const handlePayTab = useCallback(() => {
     // TODO: navigate to payment flow
@@ -38,7 +68,14 @@ export function TabDetailPage() {
   const currencySymbol =
     CurrencySymbol[tab.currencyCode as keyof typeof CurrencySymbol] ??
     tab.currencyCode;
-  const items = toItems(tab);
+
+  const items = tab.menuItems.map(({ id: itemId, name, price }) => ({
+    id: itemId,
+    name,
+    quantity: 0,
+    price: parseFloat(price),
+  }));
+
   const subtotal = items.reduce(
     (sum, item) => sum + item.quantity * item.price,
     0,
@@ -60,7 +97,10 @@ export function TabDetailPage() {
       >
         <PageContainer style={styles.membersSection}>
           <MemberAvatars
-            members={tab.members}
+            members={tab.members.map((m) => ({
+              id: m.userId,
+              name: m.userId.slice(0, 2).toUpperCase(),
+            }))}
             label="WHO'S IN?"
             showSelf={true}
           />
@@ -76,6 +116,9 @@ export function TabDetailPage() {
           items={items}
           currencySymbol={currencySymbol}
           onAdd={handleAddItem}
+          onTapPlus={handleTapPlus}
+          onTapMinus={handleTapMinus}
+          onTapRemove={handleTapRemove}
         />
 
         <View style={styles.sandDivider} />

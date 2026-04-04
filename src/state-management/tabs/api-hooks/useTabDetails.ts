@@ -25,5 +25,5 @@ export function useTabDetails(tabId: string) {
     fetchTabDetails();
   }, [fetchTabDetails]);
 
-  return { tab, isLoading, error };
+  return { tab, isLoading, error, refetch: fetchTabDetails };
 }

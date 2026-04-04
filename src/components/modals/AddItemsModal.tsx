@@ -19,11 +19,12 @@ interface MenuItem {
 interface Props {
   currencyCode: string;
   currencySymbol: string;
-  onDone: () => void;
+  onDone: (newItems: { name: string; price: number }[]) => Promise<void>;
 }
 
 export function AddItemsModal({ currencyCode, currencySymbol, onDone }: Props) {
   const [items, setItems] = useState<MenuItem[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAdd = useCallback((name: string, price: number) => {
     setItems((prev) => [
@@ -40,11 +41,21 @@ export function AddItemsModal({ currencyCode, currencySymbol, onDone }: Props) {
     setItems((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
+  const handleDone = useCallback(async () => {
+    setIsSubmitting(true);
+    await onDone(items.map(({ name, price }) => ({ name, price })));
+    setIsSubmitting(false);
+  }, [items, onDone]);
+
   const itemCount = items.length;
 
   return (
     <View style={styles.container}>
-      <ModalHeader title="Add Items" onDone={onDone} />
+      <ModalHeader
+        title="Add Items"
+        onDone={handleDone}
+        isSubmitting={isSubmitting}
+      />
 
       <ScrollView
         bounces={false}
@@ -90,6 +101,7 @@ export function AddItemsModal({ currencyCode, currencySymbol, onDone }: Props) {
                   <TouchableOpacity
                     onPress={() => handleRemove(item.id)}
                     hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    disabled={isSubmitting}
                   >
                     <Ionicons
                       name="trash-outline"

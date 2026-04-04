@@ -1,8 +1,6 @@
 export interface TabMemberDTO {
-  id: string;
   tabId: string;
-  name: string;
-  createdAt: string;
+  userId: string;
 }
 
 export interface TabMenuItemDTO {
