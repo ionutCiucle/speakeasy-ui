@@ -1,4 +1,6 @@
 export { AddItemForm } from './AddItemForm';
+export { MenuCard } from './MenuCard';
+export type { OrderItem } from './MenuCard';
 export { Avatar } from './Avatar';
 export { ModalHeader } from './ModalHeader';
 export { PageContainer } from './PageContainer';

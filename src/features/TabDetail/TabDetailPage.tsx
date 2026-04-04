@@ -26,14 +26,6 @@ export function TabDetailPage() {
     showModal(ModalId.AddItems);
   }, [showModal]);
 
-  const handleIncrement = useCallback((_itemId: string) => {
-    // TODO: wire to add item action
-  }, []);
-
-  const handleDecrement = useCallback((_itemId: string) => {
-    // TODO: wire to remove item action
-  }, []);
-
   const handlePayTab = useCallback(() => {
     // TODO: navigate to payment flow
   }, []);
@@ -83,8 +75,6 @@ export function TabDetailPage() {
         <TabMenuItems
           items={items}
           currencySymbol={currencySymbol}
-          onIncrement={handleIncrement}
-          onDecrement={handleDecrement}
           onAdd={handleAddItem}
         />
 

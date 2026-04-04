@@ -3,23 +3,25 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { Color } from '@/styles';
-import type { OrderItem } from '../../types';
+
+export interface OrderItem {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+}
 
 interface Props {
   item: OrderItem;
   currencySymbol: string;
-  onIncrement: (id: string) => void;
-  onDecrement: (id: string) => void;
   onTapPlus?: (id: string) => void;
   onTapMinus?: (id: string) => void;
   onTapRemove?: (id: string) => void;
 }
 
-export function TabMenuItem({
+export function MenuCard({
   item,
   currencySymbol,
-  onIncrement,
-  onDecrement,
   onTapPlus,
   onTapMinus,
   onTapRemove,
@@ -33,7 +35,6 @@ export function TabMenuItem({
       style={styles.leftAction}
       activeOpacity={0.8}
       onPress={() => {
-        onIncrement(item.id);
         onTapPlus?.(item.id);
         close();
       }}
@@ -48,7 +49,6 @@ export function TabMenuItem({
       style={styles.rightAction}
       activeOpacity={0.8}
       onPress={() => {
-        onDecrement(item.id);
         if (item.quantity === 1) {
           onTapRemove?.(item.id);
         } else {
@@ -67,14 +67,13 @@ export function TabMenuItem({
 
   return (
     <View style={styles.outer}>
-      {/* Split background sits behind the card; card's borderRadius reveals it */}
       <View style={styles.background} pointerEvents="none">
-        <View style={styles.leftBg} />
+        {!!onTapPlus && <View style={styles.leftBg} />}
         <View style={styles.rightBg} />
       </View>
       <Swipeable
         ref={swipeableRef}
-        renderLeftActions={renderLeftActions}
+        renderLeftActions={onTapPlus ? renderLeftActions : undefined}
         renderRightActions={renderRightActions}
         leftThreshold={40}
         rightThreshold={40}
@@ -177,7 +176,6 @@ const styles = StyleSheet.create({
     color: Color.EspressoDark,
     textAlign: 'center',
   },
-  // Left action: green, left corners rounded (spec: border-radius 8px 0 0 8px)
   leftAction: {
     width: 79,
     height: 54,
@@ -201,7 +199,6 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     backgroundColor: Color.White,
   },
-  // Right action: red, right corners rounded (spec: border-radius 0 8px 8px 0)
   rightAction: {
     width: 85,
     height: 54,
