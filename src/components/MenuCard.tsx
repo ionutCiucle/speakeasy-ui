@@ -1,5 +1,11 @@
 import React, { useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import { Color } from '@/styles';
@@ -15,6 +21,7 @@ interface Props {
   item: OrderItem;
   currencySymbol: string;
   showQuantity?: boolean;
+  isLoading?: boolean;
   onTapPlus?: (id: string) => void;
   onTapMinus?: (id: string) => void;
   onTapRemove?: (id: string) => void;
@@ -24,6 +31,7 @@ export function MenuCard({
   item,
   currencySymbol,
   showQuantity = true,
+  isLoading = false,
   onTapPlus,
   onTapMinus,
   onTapRemove,
@@ -51,7 +59,7 @@ export function MenuCard({
       style={styles.rightAction}
       activeOpacity={0.8}
       onPress={() => {
-        if (item.quantity === 1) {
+        if (item.quantity <= 1) {
           onTapRemove?.(item.id);
         } else {
           onTapMinus?.(item.id);
@@ -59,7 +67,7 @@ export function MenuCard({
         close();
       }}
     >
-      {item.quantity === 1 ? (
+      {item.quantity <= 1 ? (
         <Ionicons name="trash-outline" size={18} color={Color.White} />
       ) : (
         <View style={styles.minusBar} />
@@ -93,9 +101,13 @@ export function MenuCard({
             ))}
           </View>
           <Text style={styles.itemName}>{item.name}</Text>
-          {showQuantity && (
+          {showQuantity && (isLoading || item.quantity > 0) && (
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>{item.quantity}</Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color={Color.White} />
+              ) : (
+                <Text style={styles.badgeText}>{item.quantity}</Text>
+              )}
             </View>
           )}
           <View style={styles.priceBadge}>
@@ -168,7 +180,7 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: Color.Gold,
+    backgroundColor: Color.Flame,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 6,

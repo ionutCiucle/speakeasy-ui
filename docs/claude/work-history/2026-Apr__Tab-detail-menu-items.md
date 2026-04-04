@@ -43,6 +43,34 @@ Exported from `src/state-management/tabs/api-hooks/index.ts` and `src/state-mana
 
 `tab.menuItems` (the defined menu) is now shown in place of `tab.items` (placed orders) in the menu list. Each row shows `quantity: 0` until ordering is wired. `handleIncrement` / `handleDecrement` remain TODOs for the ordering flow.
 
+## Member item ordering
+
+Wired `+` / `-` / trash swipe actions on `MenuCard` in `TabDetailPage` to `PATCH /:tabId/members/:userId/items`.
+
+### New async action — `updateMemberItemsAsyncAction`
+
+`src/state-management/tabs/asyncActions.ts` — calls `TabAPI.patch(`/${tabId}/members/${userId}/items`, { items })` where `items` is `{ menuItemId, quantity }[]` (zero-quantity items omitted per BE validation).
+
+New action types in `enums.ts`: `UpdateMemberItemsPending/Success/Failure`. State field `isUpdatingMemberItems` added to `TabsState` and reducer.
+
+`useTabAsyncActions` now exposes `updateMemberItems` and `isUpdatingMemberItems`.
+
+### TabDetailPage ordering logic
+
+`memberMenuItems` — flat array of ordered entries. Each `+` push appends one entry; `-` and trash remove the last occurrence. Card quantity = `memberMenuItems.filter(m => m.id === cardId).length`. `syncMemberItems` derives the aggregated `{ menuItemId, quantity }[]` and calls the API after every mutation. `userId` read from `state.auth.userId`.
+
+### MenuCard loading state & UX polish
+
+- `isLoading` prop — shows `ActivityIndicator` inside the quantity badge while a PATCH is in flight
+- `showQuantity` hides the badge entirely (used in `BuildMenuStep`)
+- Badge hidden when `quantity === 0` (unless loading)
+- Quantity badge moved to right of item name; drag handle added on left
+- Badge colour changed to `Color.Flame`
+
+### Tests
+
+`src/components/__tests__/MenuCard.test.tsx` — 14 tests covering rendering, loading state (spinner shown/hidden, `showQuantity` takes precedence), and all swipe actions including quantity ≤ 1 → trash behaviour.
+
 ## MenuCard layout update
 
 `src/components/MenuCard.tsx` updated to match revised Figma spec:

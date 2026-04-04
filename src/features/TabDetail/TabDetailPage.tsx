@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { useParams } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, MemberAvatars, PageContainer } from '@/components';
-import { useTabDetails } from '@/state-management/tabs';
+import { useTabDetails, useTabAsyncActions } from '@/state-management/tabs';
 import { useLayoutActions } from '@/state-management/layout';
 import { useAppSelector } from '@/state-management/providerHooks';
 import { ModalId } from '@/state-management/layout/enums';
@@ -16,12 +16,21 @@ import {
 } from './components';
 import type { ActiveView } from './types';
 
+interface MemberMenuItem {
+  id: string;
+  name: string;
+  price: number;
+}
+
 export function TabDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { tab, refetch } = useTabDetails(id ?? '');
   const [activeView, setActiveView] = useState<ActiveView>('mine');
+  const [memberMenuItems, setMemberMenuItems] = useState<MemberMenuItem[]>([]);
   const { showModal } = useLayoutActions();
+  const { updateMemberItems, isUpdatingMemberItems } = useTabAsyncActions();
   const activeModal = useAppSelector((state) => state.layout.activeModal);
+  const userId = useAppSelector((state) => state.auth.userId);
   const prevActiveModal = useRef<ModalId | null>(null);
 
   useEffect(() => {
@@ -30,6 +39,23 @@ export function TabDetailPage() {
     }
     prevActiveModal.current = activeModal;
   }, [activeModal, refetch]);
+
+  const syncMemberItems = useCallback(
+    (next: MemberMenuItem[]) => {
+      if (!id || !userId) {
+        return;
+      }
+      const quantityMap = new Map<string, number>();
+      for (const m of next) {
+        quantityMap.set(m.id, (quantityMap.get(m.id) ?? 0) + 1);
+      }
+      const items = Array.from(quantityMap.entries()).map(
+        ([menuItemId, quantity]) => ({ menuItemId, quantity }),
+      );
+      updateMemberItems(id, userId, items);
+    },
+    [id, userId, updateMemberItems],
+  );
 
   const handleAddItem = useCallback(() => {
     if (!tab) {
@@ -44,17 +70,56 @@ export function TabDetailPage() {
     });
   }, [showModal, tab]);
 
-  const handleTapPlus = useCallback((_itemId: string) => {
-    // TODO: wire to order item action
-  }, []);
+  const handleTapPlus = useCallback(
+    (itemId: string) => {
+      if (!tab) {
+        return;
+      }
+      const menuItem = tab.menuItems.find((m) => m.id === itemId);
+      if (!menuItem) {
+        return;
+      }
+      const next: MemberMenuItem[] = [
+        ...memberMenuItems,
+        { id: itemId, name: menuItem.name, price: parseFloat(menuItem.price) },
+      ];
+      setMemberMenuItems(next);
+      syncMemberItems(next);
+    },
+    [tab, memberMenuItems, syncMemberItems],
+  );
 
-  const handleTapMinus = useCallback((_itemId: string) => {
-    // TODO: wire to remove item action
-  }, []);
+  const handleTapMinus = useCallback(
+    (itemId: string) => {
+      const idx = memberMenuItems.findLastIndex((m) => m.id === itemId);
+      if (idx === -1) {
+        return;
+      }
+      const next = [
+        ...memberMenuItems.slice(0, idx),
+        ...memberMenuItems.slice(idx + 1),
+      ];
+      setMemberMenuItems(next);
+      syncMemberItems(next);
+    },
+    [memberMenuItems, syncMemberItems],
+  );
 
-  const handleTapRemove = useCallback((_itemId: string) => {
-    // TODO: wire to remove item action
-  }, []);
+  const handleTapRemove = useCallback(
+    (itemId: string) => {
+      const idx = memberMenuItems.findLastIndex((m) => m.id === itemId);
+      if (idx === -1) {
+        return;
+      }
+      const next = [
+        ...memberMenuItems.slice(0, idx),
+        ...memberMenuItems.slice(idx + 1),
+      ];
+      setMemberMenuItems(next);
+      syncMemberItems(next);
+    },
+    [memberMenuItems, syncMemberItems],
+  );
 
   const handlePayTab = useCallback(() => {
     // TODO: navigate to payment flow
@@ -72,14 +137,11 @@ export function TabDetailPage() {
   const items = tab.menuItems.map(({ id: itemId, name, price }) => ({
     id: itemId,
     name,
-    quantity: 0,
     price: parseFloat(price),
+    quantity: memberMenuItems.filter((m) => m.id === itemId).length,
   }));
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.quantity * item.price,
-    0,
-  );
+  const subtotal = memberMenuItems.reduce((sum, m) => sum + m.price, 0);
 
   return (
     <View style={styles.screen}>
@@ -115,6 +177,7 @@ export function TabDetailPage() {
         <TabMenuItems
           items={items}
           currencySymbol={currencySymbol}
+          isLoading={isUpdatingMemberItems}
           onAdd={handleAddItem}
           onTapPlus={handleTapPlus}
           onTapMinus={handleTapMinus}

@@ -3,12 +3,18 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@/state-management/providerHooks';
-import { updateTabMenuItemsAsyncAction } from '@/state-management/tabs/asyncActions';
+import {
+  updateTabMenuItemsAsyncAction,
+  updateMemberItemsAsyncAction,
+} from '@/state-management/tabs/asyncActions';
 
 export function useTabAsyncActions() {
   const dispatch = useAppDispatch();
   const isUpdatingMenuItems = useAppSelector(
     (state) => state.tabs.isUpdatingMenuItems,
+  );
+  const isUpdatingMemberItems = useAppSelector(
+    (state) => state.tabs.isUpdatingMemberItems,
   );
 
   const updateMenuItems = useCallback(
@@ -17,5 +23,19 @@ export function useTabAsyncActions() {
     [dispatch],
   );
 
-  return { updateMenuItems, isUpdatingMenuItems };
+  const updateMemberItems = useCallback(
+    (
+      tabId: string,
+      userId: string,
+      items: { menuItemId: string; quantity: number }[],
+    ) => updateMemberItemsAsyncAction(dispatch)(tabId, userId, items),
+    [dispatch],
+  );
+
+  return {
+    updateMenuItems,
+    isUpdatingMenuItems,
+    updateMemberItems,
+    isUpdatingMemberItems,
+  };
 }
