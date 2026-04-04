@@ -1,6 +1,6 @@
 ---
 name: savegame
-description: Run ts:check and lint:check, fix any issues found, then stage, commit, and push all current changes
+description: Run ts:check and lint:check, fix any issues found, update work-history docs, then stage, commit, and push all current changes
 ---
 
 ## Steps
@@ -21,18 +21,25 @@ npm run lint:check
 
 3. Once both checks pass, run `git status` and `git diff` in parallel to understand what has changed.
 
-4. Draft a commit message:
+4. Update work-history docs:
+   - Derive the main area of work from the branch name (e.g. `feature/add-tab-detail` → "tab-detail")
+   - Look in `docs/claude/work-history/` for a doc whose filename contains that area (case-insensitive match)
+   - If a matching doc exists, update it to reflect the changes just made — add a new sub-section or extend the relevant section; do not rewrite sections unrelated to this commit
+   - If no matching doc exists, create a new file in `docs/claude/work-history/` named `<YYYY-Mon>__<Area>.md` (e.g. `2026-Apr__Tab-detail.md`) with a concise description of what was built
+   - Stage the updated or created doc file alongside the code changes
+
+5. Draft a commit message:
    - Summarise the nature of the changes (new feature, fix, refactor, etc.)
    - Keep it concise (1–2 sentences focused on the "why")
    - Follow the repo convention: `feat:`, `fix:`, or `refactor:` prefix
 
-5. Stage all modified and untracked files relevant to the work (avoid committing files that look unrelated or sensitive):
+6. Stage all modified and untracked files relevant to the work (avoid committing files that look unrelated or sensitive):
 
 ```
 git add <files>
 ```
 
-6. Commit using a HEREDOC:
+7. Commit using a HEREDOC:
 
 ```
 git commit -m "$(cat <<'EOF'
@@ -43,10 +50,10 @@ EOF
 )"
 ```
 
-7. Push to the current remote branch:
+8. Push to the current remote branch:
 
 ```
 git push
 ```
 
-8. Report the commit hash and confirm the push succeeded.
+9. Report the commit hash and confirm the push succeeded.

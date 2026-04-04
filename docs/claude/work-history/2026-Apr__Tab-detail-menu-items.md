@@ -43,6 +43,16 @@ Exported from `src/state-management/tabs/api-hooks/index.ts` and `src/state-mana
 
 `tab.menuItems` (the defined menu) is now shown in place of `tab.items` (placed orders) in the menu list. Each row shows `quantity: 0` until ordering is wired. `handleIncrement` / `handleDecrement` remain TODOs for the ordering flow.
 
+## Tooling
+
+### savegame skill — work-history step
+
+`.claude/skills/savegame/SKILL.md` updated to include a step (step 4) that automatically updates the relevant `docs/claude/work-history/` doc before committing. The skill now:
+
+- Derives the work area from the branch name
+- Finds a matching doc by filename, or creates one if none exists
+- Stages the doc alongside the code changes
+
 ## Files changed
 
 ```
