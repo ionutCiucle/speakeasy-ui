@@ -162,10 +162,12 @@ export function TabDetailPage() {
       >
         <PageContainer style={styles.membersSection}>
           <MemberAvatars
-            members={tab.members.map((m) => ({
-              id: m.userId,
-              name: m.userId.slice(0, 2).toUpperCase(),
-            }))}
+            members={tab.members
+              .filter((m) => m.userId !== userId)
+              .map((m) => ({
+                id: m.userId,
+                name: m.userId.slice(0, 2).toUpperCase(),
+              }))}
             label="WHO'S IN?"
             showSelf={true}
           />

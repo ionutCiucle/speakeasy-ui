@@ -87,6 +87,19 @@ The "add an item" form was extracted from `BuildMenuStep` into reusable shared c
 
 `BuildMenuStep` and `AddItemsModal` now both consume `AddItemForm`.
 
+### Bug fix: MemberAvatars showing current user as other member
+
+`TabDetailPage` was passing all members (including the current user) to `MemberAvatars`, which also renders a "Me" avatar separately via `showSelf={true}`. This caused:
+- The current user to appear twice
+- `members.length` never being 0, so "No other members added" never showed
+
+Fixed by filtering out the current user (`m.userId !== userId`) before mapping the members array.
+
+Tests added in `TabDetailPage.test.tsx` (`member avatars` describe block):
+- Excludes current user from members list
+- Shows empty members when only the current user is in the tab
+- Passes other members correctly while still excluding self
+
 ## Files changed
 
 ```

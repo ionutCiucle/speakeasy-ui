@@ -71,7 +71,17 @@ jest.mock('@/components', () => {
         <Text>{label}</Text>
       </TouchableOpacity>
     ),
-    MemberAvatars: () => null,
+    MemberAvatars: ({
+      members,
+    }: {
+      members: { id: string; name: string }[];
+    }) => (
+      <View testID="member-avatars">
+        {members.map((m) => (
+          <View key={m.id} testID={`member-${m.id}`} />
+        ))}
+      </View>
+    ),
     PageContainer: ({ children }: { children: React.ReactNode }) => (
       <View>{children}</View>
     ),
@@ -301,6 +311,31 @@ describe('TabDetailPage — member item ordering', () => {
         'user-1',
         [],
       );
+    });
+  });
+
+  describe('member avatars', () => {
+    it('excludes the current user from the members list', () => {
+      const { queryByTestId } = renderPage();
+      expect(queryByTestId('member-user-1')).toBeNull();
+    });
+
+    it('shows no other members when the tab has only the current user', () => {
+      const { getByTestId } = renderPage();
+      expect(getByTestId('member-avatars').props.children).toHaveLength(0);
+    });
+
+    it('passes other members to MemberAvatars when there are multiple members', () => {
+      mockTab = {
+        ...TAB,
+        members: [
+          { tabId: 'tab-1', userId: 'user-1' },
+          { tabId: 'tab-1', userId: 'user-2' },
+        ],
+      };
+      const { getByTestId, queryByTestId } = renderPage();
+      expect(getByTestId('member-user-2')).toBeTruthy();
+      expect(queryByTestId('member-user-1')).toBeNull();
     });
   });
 
