@@ -112,6 +112,14 @@ Tests updated/added in `src/components/__tests__/MenuCard.test.tsx`:
 - "calls onTapPlus when the left action is pressed" (explicit plus coverage)
 - Ionicons mock updated to render `testID="icon-{name}"` so icon visibility is assertable
 
+### BuildMenuStep — expanded test coverage
+
+Additional tests added to `src/features/CreateTab/components/__tests__/BuildMenuStep.test.tsx`:
+- Price validation: does not call `addMenuItem` when price field is empty
+- Form reset: both name and price fields clear after a successful add
+- Trash icons: one `trash-outline` icon rendered per menu item
+- `Ionicons` mock updated to render `testID="icon-{name}"` (consistent with MenuCard tests)
+
 ## Files changed
 
 ```

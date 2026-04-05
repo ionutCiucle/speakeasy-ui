@@ -48,10 +48,13 @@ jest.mock('react-native-gesture-handler', () => {
   };
 });
 
-jest.mock('@expo/vector-icons', () => ({
-  Feather: () => null,
-  Ionicons: () => null,
-}));
+jest.mock('@expo/vector-icons', () => {
+  const { View } = require('react-native');
+  return {
+    Feather: () => null,
+    Ionicons: ({ name }: { name: string }) => <View testID={`icon-${name}`} />,
+  };
+});
 
 describe('BuildMenuStep', () => {
   beforeEach(() => {
@@ -125,6 +128,26 @@ describe('BuildMenuStep', () => {
     );
   });
 
+  it('does not call addMenuItem when price is empty', () => {
+    const { getByPlaceholderText, getByText } = render(<BuildMenuStep />);
+
+    fireEvent.changeText(getByPlaceholderText('e.g. Gin & Tonic'), 'Negroni');
+    fireEvent.press(getByText('Add to Menu'));
+
+    expect(mockAddMenuItem).not.toHaveBeenCalled();
+  });
+
+  it('clears the form fields after a successful add', () => {
+    const { getByPlaceholderText, getByText } = render(<BuildMenuStep />);
+
+    fireEvent.changeText(getByPlaceholderText('e.g. Gin & Tonic'), 'Negroni');
+    fireEvent.changeText(getByPlaceholderText('0.00'), '12.50');
+    fireEvent.press(getByText('Add to Menu'));
+
+    expect(getByPlaceholderText('e.g. Gin & Tonic').props.value).toBe('');
+    expect(getByPlaceholderText('0.00').props.value).toBe('');
+  });
+
   it('renders existing menu items', () => {
     mockMenuItems = [{ id: '1', name: 'Old Fashioned', price: 14 }];
 
@@ -160,6 +183,16 @@ describe('BuildMenuStep', () => {
     fireEvent.press(deleteButton);
 
     expect(mockRemoveMenuItem).toHaveBeenCalledWith('abc');
+  });
+
+  it('renders a trash icon for each menu item', () => {
+    mockMenuItems = [
+      { id: '1', name: 'Negroni', price: 12 },
+      { id: '2', name: 'Spritz', price: 10 },
+    ];
+    const { getAllByTestId } = render(<BuildMenuStep />);
+
+    expect(getAllByTestId('icon-trash-outline')).toHaveLength(2);
   });
 
   it('does not show the info box when there are no items', () => {
