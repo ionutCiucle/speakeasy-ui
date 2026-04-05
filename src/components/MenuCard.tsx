@@ -59,7 +59,7 @@ export function MenuCard({
       style={styles.rightAction}
       activeOpacity={0.8}
       onPress={() => {
-        if (item.quantity <= 1) {
+        if (item.quantity === 0) {
           onTapRemove?.(item.id);
         } else {
           onTapMinus?.(item.id);
@@ -67,7 +67,7 @@ export function MenuCard({
         close();
       }}
     >
-      {item.quantity <= 1 ? (
+      {item.quantity === 0 ? (
         <Ionicons name="trash-outline" size={18} color={Color.White} />
       ) : (
         <View style={styles.minusBar} />

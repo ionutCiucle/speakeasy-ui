@@ -27,9 +27,12 @@ jest.mock('react-native-gesture-handler', () => {
   };
 });
 
-jest.mock('@expo/vector-icons', () => ({
-  Ionicons: () => null,
-}));
+jest.mock('@expo/vector-icons', () => {
+  const { View } = require('react-native');
+  return {
+    Ionicons: ({ name }: { name: string }) => <View testID={`icon-${name}`} />,
+  };
+});
 
 const item: OrderItem = {
   id: 'i1',
@@ -127,7 +130,7 @@ describe('MenuCard', () => {
       expect(onTapRemove).not.toHaveBeenCalled();
     });
 
-    it('calls onTapRemove when quantity is 1 and right action is pressed', () => {
+    it('calls onTapMinus when quantity is 1 and right action is pressed', () => {
       const onTapMinus = jest.fn();
       const onTapRemove = jest.fn();
       const { UNSAFE_getAllByType } = renderCard({
@@ -137,8 +140,8 @@ describe('MenuCard', () => {
       });
       const touchables = UNSAFE_getAllByType(TouchableOpacity);
       fireEvent.press(touchables[touchables.length - 1]);
-      expect(onTapRemove).toHaveBeenCalledWith('i1');
-      expect(onTapMinus).not.toHaveBeenCalled();
+      expect(onTapMinus).toHaveBeenCalledWith('i1');
+      expect(onTapRemove).not.toHaveBeenCalled();
     });
 
     it('calls onTapRemove when quantity is 0 and right action is pressed', () => {
@@ -153,6 +156,43 @@ describe('MenuCard', () => {
       fireEvent.press(touchables[touchables.length - 1]);
       expect(onTapRemove).toHaveBeenCalledWith('i1');
       expect(onTapMinus).not.toHaveBeenCalled();
+    });
+
+    it('shows the trash icon and calls onTapRemove when quantity is 0', () => {
+      const onTapRemove = jest.fn();
+      const onTapMinus = jest.fn();
+      const { getByTestId, UNSAFE_getAllByType } = renderCard({
+        item: { ...item, quantity: 0 },
+        onTapRemove,
+        onTapMinus,
+      });
+      expect(getByTestId('icon-trash-outline')).toBeTruthy();
+      const touchables = UNSAFE_getAllByType(TouchableOpacity);
+      fireEvent.press(touchables[touchables.length - 1]);
+      expect(onTapRemove).toHaveBeenCalledWith('i1');
+      expect(onTapMinus).not.toHaveBeenCalled();
+    });
+
+    it('shows no trash icon and calls onTapMinus when quantity is greater than 0', () => {
+      const onTapRemove = jest.fn();
+      const onTapMinus = jest.fn();
+      const { queryByTestId, UNSAFE_getAllByType } = renderCard({
+        item: { ...item, quantity: 1 },
+        onTapRemove,
+        onTapMinus,
+      });
+      expect(queryByTestId('icon-trash-outline')).toBeNull();
+      const touchables = UNSAFE_getAllByType(TouchableOpacity);
+      fireEvent.press(touchables[touchables.length - 1]);
+      expect(onTapMinus).toHaveBeenCalledWith('i1');
+      expect(onTapRemove).not.toHaveBeenCalled();
+    });
+
+    it('calls onTapPlus when the left action is pressed', () => {
+      const onTapPlus = jest.fn();
+      const { UNSAFE_getAllByType } = renderCard({ onTapPlus });
+      fireEvent.press(UNSAFE_getAllByType(TouchableOpacity)[0]);
+      expect(onTapPlus).toHaveBeenCalledWith('i1');
     });
 
     it('does not render the left action when onTapPlus is not provided', () => {

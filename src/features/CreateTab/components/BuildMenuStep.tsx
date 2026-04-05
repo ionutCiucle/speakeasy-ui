@@ -54,7 +54,7 @@ export function BuildMenuStep() {
       {menuItems.map((item) => (
         <MenuCard
           key={item.id}
-          item={{ ...item, quantity: 1 }}
+          item={{ ...item, quantity: 0 }}
           currencySymbol={currencySymbol}
           showQuantity={false}
           onTapRemove={handleRemoveItem}

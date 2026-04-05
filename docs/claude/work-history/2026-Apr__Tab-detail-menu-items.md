@@ -97,6 +97,21 @@ New action types in `enums.ts`: `UpdateMemberItemsPending/Success/Failure`. Stat
 - Finds a matching doc by filename, or creates one if none exists
 - Stages the doc alongside the code changes
 
+## Bug fixes
+
+### MenuCard trash icon shown at wrong quantity
+
+`MenuCard` was using `quantity <= 1` to decide whether to show the trash icon, so the trash appeared at quantity 1 when minus should have been shown instead. Fixed to `quantity === 0` — trash only appears when there is nothing left to decrement.
+
+`BuildMenuStep` was passing `quantity: 1` to each `MenuCard`, which masked the bug in that context. Changed to `quantity: 0` since `BuildMenuStep` has no quantity tracking (`showQuantity={false}`) and always wants the trash icon.
+
+Tests updated/added in `src/components/__tests__/MenuCard.test.tsx`:
+- "calls onTapMinus when quantity is 1" (was onTapRemove — corrected)
+- "shows the trash icon and calls onTapRemove when quantity is 0" (visual + callback combined)
+- "shows no trash icon and calls onTapMinus when quantity is greater than 0" (visual + callback combined)
+- "calls onTapPlus when the left action is pressed" (explicit plus coverage)
+- Ionicons mock updated to render `testID="icon-{name}"` so icon visibility is assertable
+
 ## Files changed
 
 ```
