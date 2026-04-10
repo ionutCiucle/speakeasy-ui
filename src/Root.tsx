@@ -12,6 +12,7 @@ import {
 import { PlayfairDisplay_400Regular_Italic } from '@expo-google-fonts/playfair-display';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AppProvider } from '@/state-management/Provider';
 import { AppRoutes } from '@/AppRoutes';
 
@@ -30,14 +31,16 @@ export const Root = () => {
   }
 
   return (
-    <SafeAreaProvider>
-      <AppProvider>
-        <NavigationContainer>
-          <NativeRouter>
-            <AppRoutes />
-          </NativeRouter>
-        </NavigationContainer>
-      </AppProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <AppProvider>
+          <NavigationContainer>
+            <NativeRouter>
+              <AppRoutes />
+            </NativeRouter>
+          </NavigationContainer>
+        </AppProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };

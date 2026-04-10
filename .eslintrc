@@ -7,9 +7,24 @@
     "browser": true,
     "node": true
   },
+  "overrides": [
+    {
+      "files": ["**/__tests__/**/*", "**/*.test.*"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+    {
+      "files": ["*.config.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ],
   "rules": {
     "@typescript-eslint/no-explicit-any": [1],
     "@typescript-eslint/ban-ts-comment": [1],
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "curly": ["error", "all"],
     "unicorn/switch-case-braces": ["error", "always"]
   }

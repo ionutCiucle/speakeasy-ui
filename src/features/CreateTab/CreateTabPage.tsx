@@ -83,6 +83,8 @@ export function CreateTabPage() {
           <Button
             label="Start Tab"
             variant="tertiary"
+            rightIcon="chevron-right"
+            rightIconColor={Color.Gold}
             showSpinner={isSubmitting}
             onPress={handleStartTab}
           />

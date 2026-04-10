@@ -2,7 +2,8 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
 import { useTabs } from '@/state-management/tabs';
-import { TabList, NoTabs } from './components';
+import { TabListPage } from './TabListPage';
+import { NoTabsPage } from './NoTabsPage';
 
 export function HomePage() {
   const { tabs, isLoading } = useTabs();
@@ -13,7 +14,7 @@ export function HomePage() {
 
   return (
     <View style={styles.screen}>
-      {tabs.length > 0 ? <TabList tabs={tabs} /> : <NoTabs />}
+      {tabs.length > 0 ? <TabListPage tabs={tabs} /> : <NoTabsPage />}
     </View>
   );
 }

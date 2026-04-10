@@ -6,4 +6,7 @@ export type {
   TabParticipantDTO,
   TabSettlementDTO,
 } from './dto';
-export { useTabs } from './api-hooks';
+export { useTabs, useTabDetails } from './api-hooks';
+export { useTabAsyncActions } from './hooks';
+export type { TabsState, TabsAction } from './types';
+export { tabsReducer, tabsInitialState } from './reducer';

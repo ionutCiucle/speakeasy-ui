@@ -126,7 +126,7 @@ For read-only list fetching where the data only needs to live for the lifetime o
 They live in `<slice>/hooks/use<Resource>.ts` and are the preferred approach when you just need to display a list and optionally re-fetch when parameters change.
 
 ```ts
-// src/state-management/tabs/hooks/useTabs.ts
+// src/state-management/tabs/api-hooks/useTabs.ts
 export function useTabs() {
   const [tabs, setTabs] = useState<TabDTO[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -153,16 +153,33 @@ export function useTabs() {
 }
 ```
 
-When the hook needs to re-fetch based on changing inputs (e.g. a `tabId`), pass them into `useCallback`'s dependency array:
+When the hook needs to re-fetch based on changing inputs (e.g. a `tabId`), pass the param into `useCallback`'s dependency array:
 
 ```ts
-export function useTabItems(tabId: string) {
-  // ...
-  const fetchItems = useCallback(async () => {
-    const { data } = await TabAPI.get<TabItemDTO[]>(`/${tabId}/items`);
-    setItems(data);
+// src/state-management/tabs/api-hooks/useTabDetails.ts
+export function useTabDetails(tabId: string) {
+  const [tab, setTab] = useState<TabDTO | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTabDetails = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const { data } = await TabAPI.get<TabDTO>(`/${tabId}`);
+      setTab(data);
+    } catch {
+      setError('Failed to load tab details');
+    } finally {
+      setIsLoading(false);
+    }
   }, [tabId]);
-  // ...
+
+  useEffect(() => {
+    fetchTabDetails();
+  }, [fetchTabDetails]);
+
+  return { tab, isLoading, error };
 }
 ```
 

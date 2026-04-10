@@ -13,12 +13,14 @@
     "format": "prettier --write .",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "storybook": "EXPO_PUBLIC_STORYBOOK=true expo start",
     "prepare": "husky install"
   },
   "dependencies": {
     "@expo-google-fonts/cormorant-garamond": "^0.4.1",
     "@expo-google-fonts/inter": "^0.4.2",
     "@expo-google-fonts/playfair-display": "^0.4.2",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
     "axios": "1.13.6",
@@ -37,6 +39,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@storybook/addon-ondevice-actions": "^10.3.1",
+    "@storybook/addon-ondevice-controls": "^10.3.1",
+    "@storybook/react-native": "^10.3.1",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.2.10",

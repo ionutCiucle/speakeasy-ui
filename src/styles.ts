@@ -17,6 +17,7 @@ export const Color = {
   Sand: '#D4C9B0',
   Linen: '#EDE8DC',
   ActiveGreen: '#42904C',
+  Danger: '#C0392B',
 };
 
 export const flex = (
