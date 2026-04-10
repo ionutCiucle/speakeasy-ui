@@ -22,6 +22,7 @@ interface Props {
   currencySymbol: string;
   showQuantity?: boolean;
   isLoading?: boolean;
+  canRemoveFromMenu?: boolean;
   onTapPlus?: (id: string) => void;
   onTapMinus?: (id: string) => void;
   onTapRemove?: (id: string) => void;
@@ -32,6 +33,7 @@ export function MenuCard({
   currencySymbol,
   showQuantity = true,
   isLoading = false,
+  canRemoveFromMenu = true,
   onTapPlus,
   onTapMinus,
   onTapRemove,
@@ -54,12 +56,14 @@ export function MenuCard({
     </TouchableOpacity>
   );
 
+  const showTrash = canRemoveFromMenu && item.quantity === 0;
+
   const renderRightActions = () => (
     <TouchableOpacity
       style={styles.rightAction}
       activeOpacity={0.8}
       onPress={() => {
-        if (item.quantity === 0) {
+        if (showTrash) {
           onTapRemove?.(item.id);
         } else {
           onTapMinus?.(item.id);
@@ -67,7 +71,7 @@ export function MenuCard({
         close();
       }}
     >
-      {item.quantity === 0 ? (
+      {showTrash ? (
         <Ionicons name="trash-outline" size={18} color={Color.White} />
       ) : (
         <View style={styles.minusBar} />

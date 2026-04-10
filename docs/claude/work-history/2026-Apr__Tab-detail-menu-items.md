@@ -112,6 +112,23 @@ Tests updated/added in `src/components/__tests__/MenuCard.test.tsx`:
 - "calls onTapPlus when the left action is pressed" (explicit plus coverage)
 - Ionicons mock updated to render `testID="icon-{name}"` so icon visibility is assertable
 
+### Trash icon removes item from tab menu (gated by addedBy)
+
+Tapping the trash icon on a `MenuCard` in `TabDetailPage` now removes that item from the tab's menu entirely via `PATCH /:tabId` (`updateMenuItems`), rather than just decrementing member quantity.
+
+The trash icon is only shown when `canRemoveFromMenu` is true — which is gated by whether the current user added that item (`tab.menuItems.filter(m => m.addedBy === userId)`). Items added by other members show the minus icon at quantity 0 with no remove action.
+
+**Changes:**
+- `src/state-management/tabs/dto.ts` — added `addedBy: string` to `TabMenuItemDTO` (field already returned by BE)
+- `src/components/MenuCard.tsx` — restored `canRemoveFromMenu?: boolean` prop; `showTrash = canRemoveFromMenu && quantity === 0`
+- `src/features/TabDetail/components/TabMenuItems/TabMenuItems.tsx` — added `removableItemIds?: Set<string>` prop; passes `canRemoveFromMenu` to each `MenuCard`
+- `src/features/TabDetail/TabDetailPage.tsx`:
+  - Destructures `updateMenuItems` from `useTabAsyncActions`
+  - Computes `removableItemIds` from `tab.menuItems.filter(m => m.addedBy === userId)`
+  - `handleTapRemove` now calls `updateMenuItems(tab.id, filteredMenu)` and `refetch()` instead of `syncMemberItems`
+  - Passes `removableItemIds` to `TabMenuItems`
+- `TabDetailPage.test.tsx` — updated mocks and tests: `mockUpdateMenuItems` added; `addedBy` in TAB fixture; new test "calls updateMenuItems with the item removed when trash is pressed"
+
 ### BuildMenuStep — expanded test coverage
 
 Additional tests added to `src/features/CreateTab/components/__tests__/BuildMenuStep.test.tsx`:

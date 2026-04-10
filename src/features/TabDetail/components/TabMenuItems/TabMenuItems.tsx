@@ -8,6 +8,7 @@ interface Props {
   items: OrderItem[];
   currencySymbol: string;
   loadingItemId?: string | null;
+  removableItemIds?: Set<string>;
   onAdd: () => void;
   onTapPlus?: (id: string) => void;
   onTapMinus?: (id: string) => void;
@@ -18,6 +19,7 @@ export function TabMenuItems({
   items,
   currencySymbol,
   loadingItemId,
+  removableItemIds,
   onAdd,
   onTapPlus,
   onTapMinus,
@@ -31,6 +33,7 @@ export function TabMenuItems({
           item={item}
           currencySymbol={currencySymbol}
           isLoading={item.id === loadingItemId}
+          canRemoveFromMenu={!removableItemIds || removableItemIds.has(item.id)}
           onTapPlus={onTapPlus}
           onTapMinus={onTapMinus}
           onTapRemove={onTapRemove}

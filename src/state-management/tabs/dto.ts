@@ -8,6 +8,7 @@ export interface TabMenuItemDTO {
   tabId: string;
   name: string;
   price: string;
+  addedBy: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -8,6 +8,7 @@ let mockTab: Record<string, unknown> | null = null;
 const mockRefetch = jest.fn();
 const mockShowModal = jest.fn();
 const mockUpdateMemberItems = jest.fn();
+const mockUpdateMenuItems = jest.fn();
 let mockActiveModal: string | null = null;
 let mockUserId = 'user-1';
 
@@ -19,7 +20,10 @@ jest.mock('react-router-native', () => ({
 
 jest.mock('@/state-management/tabs', () => ({
   useTabDetails: () => ({ tab: mockTab, refetch: mockRefetch }),
-  useTabAsyncActions: () => ({ updateMemberItems: mockUpdateMemberItems }),
+  useTabAsyncActions: () => ({
+    updateMemberItems: mockUpdateMemberItems,
+    updateMenuItems: mockUpdateMenuItems,
+  }),
 }));
 
 jest.mock('@/state-management/layout', () => ({
@@ -179,6 +183,7 @@ const TAB = {
       tabId: 'tab-1',
       name: 'Gin & Tonic',
       price: '8.50',
+      addedBy: 'user-1',
       createdAt: '',
       updatedAt: '',
     },
@@ -187,6 +192,7 @@ const TAB = {
       tabId: 'tab-1',
       name: 'Negroni',
       price: '9.00',
+      addedBy: 'user-1',
       createdAt: '',
       updatedAt: '',
     },
@@ -206,6 +212,7 @@ describe('TabDetailPage — member item ordering', () => {
     mockActiveModal = null;
     mockUserId = 'user-1';
     mockUpdateMemberItems.mockResolvedValue(true);
+    mockUpdateMenuItems.mockResolvedValue(true);
   });
 
   describe('quantity display', () => {
@@ -252,7 +259,7 @@ describe('TabDetailPage — member item ordering', () => {
       expect(getByTestId('qty-m1').props.children).toBe(1);
     });
 
-    it('decrements quantity to 0 when remove is pressed', async () => {
+    it('clears member quantity for an item when remove is pressed', async () => {
       const { getByTestId } = renderPage();
       await act(async () => {
         fireEvent.press(getByTestId('plus-m1'));
@@ -298,19 +305,29 @@ describe('TabDetailPage — member item ordering', () => {
       );
     });
 
-    it('omits items with quantity 0 from the API payload', async () => {
+    it('omits items with quantity 0 from the member items payload', async () => {
       const { getByTestId } = renderPage();
       await act(async () => {
         fireEvent.press(getByTestId('plus-m1'));
       });
       await act(async () => {
-        fireEvent.press(getByTestId('remove-m1'));
+        fireEvent.press(getByTestId('minus-m1'));
       });
       expect(mockUpdateMemberItems).toHaveBeenLastCalledWith(
         'tab-1',
         'user-1',
         [],
       );
+    });
+
+    it('calls updateMenuItems with the item removed when trash is pressed', async () => {
+      const { getByTestId } = renderPage();
+      await act(async () => {
+        fireEvent.press(getByTestId('remove-m1'));
+      });
+      expect(mockUpdateMenuItems).toHaveBeenCalledWith('tab-1', [
+        { name: 'Negroni', price: 9 },
+      ]);
     });
   });
 

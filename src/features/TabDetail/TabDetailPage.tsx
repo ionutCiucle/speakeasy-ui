@@ -29,7 +29,7 @@ export function TabDetailPage() {
   const [memberMenuItems, setMemberMenuItems] = useState<MemberMenuItem[]>([]);
   const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
   const { showModal } = useLayoutActions();
-  const { updateMemberItems } = useTabAsyncActions();
+  const { updateMemberItems, updateMenuItems } = useTabAsyncActions();
   const activeModal = useAppSelector((state) => state.layout.activeModal);
   const userId = useAppSelector((state) => state.auth.userId);
   const prevActiveModal = useRef<ModalId | null>(null);
@@ -109,19 +109,20 @@ export function TabDetailPage() {
   );
 
   const handleTapRemove = useCallback(
-    (itemId: string) => {
-      const idx = memberMenuItems.findLastIndex((m) => m.id === itemId);
-      if (idx === -1) {
+    async (itemId: string) => {
+      if (!tab) {
         return;
       }
-      const next = [
-        ...memberMenuItems.slice(0, idx),
-        ...memberMenuItems.slice(idx + 1),
-      ];
-      setMemberMenuItems(next);
-      syncMemberItems(itemId, next);
+      setMemberMenuItems((prev) => prev.filter((m) => m.id !== itemId));
+      const newMenu = tab.menuItems
+        .filter((m) => m.id !== itemId)
+        .map(({ name, price }) => ({ name, price: parseFloat(price) }));
+      setLoadingItemId(itemId);
+      await updateMenuItems(tab.id, newMenu);
+      setLoadingItemId(null);
+      refetch();
     },
-    [memberMenuItems, syncMemberItems],
+    [tab, updateMenuItems, refetch],
   );
 
   const handlePayTab = useCallback(() => {
@@ -136,6 +137,10 @@ export function TabDetailPage() {
   const currencySymbol =
     CurrencySymbol[tab.currencyCode as keyof typeof CurrencySymbol] ??
     tab.currencyCode;
+
+  const removableItemIds = new Set(
+    tab.menuItems.filter((m) => m.addedBy === userId).map((m) => m.id),
+  );
 
   const items = tab.menuItems.map(({ id: itemId, name, price }) => ({
     id: itemId,
@@ -183,6 +188,7 @@ export function TabDetailPage() {
           items={items}
           currencySymbol={currencySymbol}
           loadingItemId={loadingItemId}
+          removableItemIds={removableItemIds}
           onAdd={handleAddItem}
           onTapPlus={handleTapPlus}
           onTapMinus={handleTapMinus}
