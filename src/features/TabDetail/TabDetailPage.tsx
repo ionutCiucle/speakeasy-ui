@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { useParams } from 'react-router-native';
+import { useNavigate, useParams } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, MemberAvatars, PageContainer } from '@/components';
 import { useTabDetails, useTabAsyncActions } from '@/state-management/tabs';
@@ -24,6 +24,7 @@ interface MemberMenuItem {
 
 export function TabDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { tab, refetch } = useTabDetails(id ?? '');
   const [activeView, setActiveView] = useState<ActiveView>('mine');
   const [memberMenuItems, setMemberMenuItems] = useState<MemberMenuItem[]>([]);
@@ -126,8 +127,8 @@ export function TabDetailPage() {
   );
 
   const handlePayTab = useCallback(() => {
-    // TODO: navigate to payment flow
-  }, []);
+    navigate(`/tab/${id}/photograph-receipt`);
+  }, [navigate, id]);
 
   if (!tab) {
     return <View style={styles.screen} />;

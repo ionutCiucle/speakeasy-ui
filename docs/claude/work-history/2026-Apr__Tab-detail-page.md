@@ -100,6 +100,24 @@ Tests added in `TabDetailPage.test.tsx` (`member avatars` describe block):
 - Shows empty members when only the current user is in the tab
 - Passes other members correctly while still excluding self
 
+### Payment flow — photograph & confirm
+
+Two new full-screen routes added outside the `AppLayout` shell (no app header/nav override):
+
+- **`PhotographReceiptPage`** (`/tab/:id/photograph-receipt`) — camera viewfinder using `expo-camera`. Captures a photo and navigates to `ConfirmPaymentPage`, passing the photo URI in router state. Reads any pre-existing photos from `location.state.photos` (accumulated across "Add another photo" taps) and appends to them. Upload to BE is deferred to a separate task.
+
+- **`ConfirmPaymentPage`** (`/tab/:id/confirm-payment`) — review screen before confirming payment.
+  - Reads `location.state.photos` (array of local URIs) passed from `PhotographReceiptPage`.
+  - Shows thumbnails as a horizontal `ScrollView` of 100×146px `Image` tiles inside a `Linen` card; falls back to a receipt icon placeholder if no photos.
+  - Photo count label ("Receipt · N photo/photos") reflects the real array length.
+  - "Retake" (`onBack`) uses `navigate(-1)` to pop back to the camera screen.
+  - "+ Add another photo" pushes a new `PhotographReceiptPage` with the current photos in state so the next capture appends to the list.
+  - Receipt totals section (hardcoded placeholders — amounts will be wired to BE receipt parsing in a future task).
+  - "Confirm I Paid" CTA navigates back to `TabDetailPage`.
+  - Uses `PageHeader` + `MainNav` directly (not `AppLayout`).
+
+`TabDetailPage.handlePayTab` now navigates to `/tab/:id/photograph-receipt`.
+
 ## Files changed
 
 ```
