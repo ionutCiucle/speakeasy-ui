@@ -39,14 +39,14 @@ describe('createApi', () => {
       expect(result.data).toEqual([{ id: 1 }]);
     });
 
-    it('sends Content-Type application/json header', async () => {
+    it('does not send Content-Type on a bodyless request', async () => {
       mockResponse({});
 
       const api = createApi('https://api.example.com');
       await api.get('/users');
 
       const headers = mockFetch.mock.calls[0][1].headers;
-      expect(headers['Content-Type']).toBe('application/json');
+      expect(headers['Content-Type']).toBeUndefined();
     });
 
     it('does not send a body', async () => {
@@ -89,6 +89,16 @@ describe('createApi', () => {
       expect(mockFetch.mock.calls[0][1].body).toBe(
         JSON.stringify({ name: 'Alice' }),
       );
+    });
+
+    it('sends Content-Type application/json when a body is present', async () => {
+      mockResponse({ id: 1 });
+
+      const api = createApi('https://api.example.com');
+      await api.post('/users', { name: 'Alice' });
+
+      const headers = mockFetch.mock.calls[0][1].headers;
+      expect(headers['Content-Type']).toBe('application/json');
     });
 
     it('returns { data } from the response body', async () => {
@@ -269,14 +279,14 @@ describe('createApi', () => {
       expect(headers['Authorization']).toBe('Bearer token123');
     });
 
-    it('getHeaders can override Content-Type', async () => {
+    it('getHeaders can override Content-Type on requests with a body', async () => {
       mockResponse({});
 
       const api = createApi('https://api.example.com', async () => ({
         'Content-Type': 'text/plain',
       }));
 
-      await api.get('/me');
+      await api.post('/data', { x: 1 });
 
       const headers = mockFetch.mock.calls[0][1].headers;
       expect(headers['Content-Type']).toBe('text/plain');

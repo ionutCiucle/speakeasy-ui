@@ -7,9 +7,9 @@ import {
 } from '@/state-management/store';
 import { createLoggerReducer } from '@/state-management/loggerMiddleware';
 
-export const AppStateContext = createContext<AppState>(appInitialState);
+export const AppStateContext = createContext<AppState>(undefined!);
 export const AppDispatchContext = createContext<React.Dispatch<AppAction>>(
-  () => undefined,
+  undefined!,
 );
 
 interface AppProviderProps {

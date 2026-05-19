@@ -25,9 +25,36 @@ jest.mock('@/state-management/providerHooks', () => ({
     }),
 }));
 
-jest.mock('@expo/vector-icons', () => ({
-  Feather: () => null,
-}));
+// require() is intentional here — jest.mock factories are hoisted above imports
+// by Babel, so top-level imports are undefined when the factory runs.
+jest.mock('react-native-gesture-handler', () => {
+  const { View } = require('react-native');
+  return {
+    Swipeable: ({
+      children,
+      renderLeftActions,
+      renderRightActions,
+    }: {
+      children: React.ReactNode;
+      renderLeftActions?: () => React.ReactNode;
+      renderRightActions?: () => React.ReactNode;
+    }) => (
+      <View>
+        {renderLeftActions?.()}
+        {children}
+        {renderRightActions?.()}
+      </View>
+    ),
+  };
+});
+
+jest.mock('@expo/vector-icons', () => {
+  const { View } = require('react-native');
+  return {
+    Feather: () => null,
+    Ionicons: ({ name }: { name: string }) => <View testID={`icon-${name}`} />,
+  };
+});
 
 describe('BuildMenuStep', () => {
   beforeEach(() => {
@@ -74,10 +101,11 @@ describe('BuildMenuStep', () => {
     );
   });
 
-  it('defaults price to 0 when price field is empty', () => {
+  it('accepts a price of zero when 0 is entered', () => {
     const { getByPlaceholderText, getByText } = render(<BuildMenuStep />);
 
     fireEvent.changeText(getByPlaceholderText('e.g. Gin & Tonic'), 'Water');
+    fireEvent.changeText(getByPlaceholderText('0.00'), '0');
     fireEvent.press(getByText('Add to Menu'));
 
     expect(mockAddMenuItem).toHaveBeenCalledWith(
@@ -92,11 +120,32 @@ describe('BuildMenuStep', () => {
       getByPlaceholderText('e.g. Gin & Tonic'),
       '  Whisky  ',
     );
+    fireEvent.changeText(getByPlaceholderText('0.00'), '8');
     fireEvent.press(getByText('Add to Menu'));
 
     expect(mockAddMenuItem).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'Whisky' }),
     );
+  });
+
+  it('does not call addMenuItem when price is empty', () => {
+    const { getByPlaceholderText, getByText } = render(<BuildMenuStep />);
+
+    fireEvent.changeText(getByPlaceholderText('e.g. Gin & Tonic'), 'Negroni');
+    fireEvent.press(getByText('Add to Menu'));
+
+    expect(mockAddMenuItem).not.toHaveBeenCalled();
+  });
+
+  it('clears the form fields after a successful add', () => {
+    const { getByPlaceholderText, getByText } = render(<BuildMenuStep />);
+
+    fireEvent.changeText(getByPlaceholderText('e.g. Gin & Tonic'), 'Negroni');
+    fireEvent.changeText(getByPlaceholderText('0.00'), '12.50');
+    fireEvent.press(getByText('Add to Menu'));
+
+    expect(getByPlaceholderText('e.g. Gin & Tonic').props.value).toBe('');
+    expect(getByPlaceholderText('0.00').props.value).toBe('');
   });
 
   it('renders existing menu items', () => {
@@ -128,12 +177,22 @@ describe('BuildMenuStep', () => {
     mockMenuItems = [{ id: 'abc', name: 'Bourbon', price: 10 }];
     const { UNSAFE_getAllByType } = render(<BuildMenuStep />);
 
-    // Last TouchableOpacity is the delete button for the menu item row
+    // Last TouchableOpacity is the right-swipe action (remove) rendered by MenuCard
     const touchables = UNSAFE_getAllByType(TouchableOpacity);
     const deleteButton = touchables[touchables.length - 1];
     fireEvent.press(deleteButton);
 
     expect(mockRemoveMenuItem).toHaveBeenCalledWith('abc');
+  });
+
+  it('renders a trash icon for each menu item', () => {
+    mockMenuItems = [
+      { id: '1', name: 'Negroni', price: 12 },
+      { id: '2', name: 'Spritz', price: 10 },
+    ];
+    const { getAllByTestId } = render(<BuildMenuStep />);
+
+    expect(getAllByTestId('icon-trash-outline')).toHaveLength(2);
   });
 
   it('does not show the info box when there are no items', () => {

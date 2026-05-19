@@ -5,7 +5,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { Color } from '@/styles';
 import { Button } from '@/components';
 
-export function NoTabs() {
+export function NoTabsPage() {
   const navigate = useNavigate();
 
   const handleStartTab = useCallback(() => {

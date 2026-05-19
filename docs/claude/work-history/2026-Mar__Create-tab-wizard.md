@@ -370,3 +370,62 @@ Replaced axios with a zero-dependency `fetch`-based API client. Call-site contra
 - `TabAPI` — constructed with `getAuthHeaders`
 
 **Tests** — `src/services/__tests__/createApi.test.ts` (renamed from `apiClient.test.ts`): covers all five HTTP methods plus the `getHeaders` constructor argument.
+
+---
+
+### Step 27 — TabDetailPage ✅
+
+**`src/features/TabDetail/TabDetailPage.tsx`** — self-contained page route (sibling to `HomePage`) rendered inside `AppLayout`.
+
+- Uses `useParams` for the tab id; looks up the tab from `useTabs()`
+- Info bar: tab name, venue, currency
+- "WHO'S JOINING?" panel via `MemberAvatars`
+- My Items / All Members toggle (`activeView` local state)
+- Item rows with quantity stepper, subtotal, Pay button
+- Helper functions local to the file: `toInitials`, `toMembers`, `toItems` (groups by label)
+- No header or MainNav — owned by `AppLayout`
+
+**`src/AppRoutes.tsx`** — added `<Route path="/tab/:id" element={<TabDetailPage />} />` inside the `AppLayout` routes.
+
+**`src/AppLayout.tsx`** — added `/tab` to `ROUTE_CONFIG`; prefix match for `/tab/`; dynamic title from `location.state.title`.
+
+**`src/features/Home/components/TabList/TabList.tsx`** — tapping a `TabCard` calls `navigate('/tab/${id}', { state: { title } })`.
+
+**`src/features/Home/components/TabCard.tsx`** — added `onPress?: () => void` prop.
+
+---
+
+### Step 28 — MemberAvatars shared component ✅
+
+Extracted the "WHO'S JOINING?" panel from `AddMemberStep` into a reusable shared component.
+
+**`src/components/MemberAvatars.tsx`** — new component:
+- Props: `members: { id: string; name: string }[]`, `onAdd?: () => void`
+- Renders "WHO'S JOINING?" section header + Linen panel containing the "Me" self-avatar, member avatars (initials via `toInitials`), "+" add circle, and empty-state text
+- `toInitials` helper is local to the file
+
+**`src/components/index.ts`** — added `export { MemberAvatars }`.
+
+**`src/features/CreateTab/components/AddMemberStep.tsx`** — replaced the inline "WHO'S JOINING?" block (Avatar imports, manual initials, panel styles) with `<MemberAvatars members={members} />`. Removed `Avatar` import and the now-redundant `membersPanel`, `addAvatarCircle`, `addAvatarPlus`, `noMembersText` styles.
+
+---
+
+### Step 29 — Fix: new tab creation blocked by stale wizard state ✅
+
+After a successful tab submission the store was not reset, and `AppLayout` derived "in-progress" state from a route ref rather than the store — so tapping the New Tab nav icon resumed the stale wizard instead of starting fresh.
+
+**`src/state-management/create-tab/reducer.ts`** — `SubmitSuccess` now returns `createTabInitialState` (full reset) instead of only clearing `isSubmitting`.
+
+**`src/AppLayout.tsx`**:
+- Replaced `useState`/`useEffect` + route ref for `createTabInProgress` with `useAppSelector((state) => state.createTab.tabName !== '')` — reacts automatically when the store resets
+- `handleTabPress` for `newTab` now navigates to `/create-tab` (fresh start) when `createTabInProgress` is false, or resumes `lastCreateTabRoute.current` when true
+
+---
+
+### Step 30 — Fix: wizard back button always goes to previous step ✅
+
+`handleBack` was calling `navigate(-1)` for all wizard routes, which followed browser history rather than step order.
+
+**`src/AppLayout.tsx`**:
+- Added `WIZARD_PREV_ROUTE` map: `add-members → tab-details`, `build-menu → add-members`, `review → build-menu`
+- `handleBack` checks `WIZARD_PREV_ROUTE[location.pathname]` first; if found, calls `navigate(prevRoute, { replace: true })` (replace prevents history accumulation); otherwise falls back to `navigate(-1)` for non-wizard back navigation

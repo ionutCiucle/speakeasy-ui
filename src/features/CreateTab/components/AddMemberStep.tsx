@@ -10,7 +10,7 @@ import {
 import { Feather } from '@expo/vector-icons';
 import { useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
-import { Avatar } from '@/components';
+import { MemberAvatars } from '@/components';
 import { useAppSelector } from '@/state-management/providerHooks';
 
 // Placeholder until a real friends list exists in state
@@ -35,30 +35,7 @@ export function AddMemberStep() {
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.content}>
-        {/* WHO'S JOINING? */}
-        <Text style={styles.sectionHeader}>WHO'S JOINING?</Text>
-        <View style={styles.membersPanel}>
-          <Avatar label="Me" variant="self" size={44} />
-          {members.map((member) => (
-            <Avatar
-              key={member.id}
-              label={member.name
-                .split(' ')
-                .map((w) => w[0] ?? '')
-                .join('')
-                .toUpperCase()
-                .slice(0, 2)}
-              variant="member"
-              size={44}
-            />
-          ))}
-          <TouchableOpacity style={styles.addAvatarCircle} activeOpacity={0.7}>
-            <Text style={styles.addAvatarPlus}>+</Text>
-          </TouchableOpacity>
-          {members.length === 0 && (
-            <Text style={styles.noMembersText}>No other members added</Text>
-          )}
-        </View>
+        <MemberAvatars members={members} />
 
         {/* Search */}
         <View
@@ -128,36 +105,6 @@ const styles = StyleSheet.create({
   },
   sectionHeaderSpaced: {
     marginTop: 16,
-  },
-  membersPanel: {
-    backgroundColor: Color.Linen,
-    borderRadius: 10,
-    height: 70,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    marginBottom: 12,
-    gap: 8,
-  },
-  addAvatarCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: Color.Sand,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  addAvatarPlus: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 18,
-    lineHeight: 22,
-    color: Color.WarmBrown,
-  },
-  noMembersText: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 11,
-    lineHeight: 13,
-    color: Color.WarmBrown,
   },
   searchBar: {
     flexDirection: 'row',

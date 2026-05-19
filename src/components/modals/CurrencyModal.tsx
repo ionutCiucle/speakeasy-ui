@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
+import { ModalHeader } from '@/components';
 
 interface CurrencyEntry {
   code: string;
@@ -105,16 +106,7 @@ export function CurrencyModal({ selectedCode, onSelect, onDone }: Props) {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Select Currency</Text>
-        <TouchableOpacity
-          onPress={onDone}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <Text style={styles.done}>Done</Text>
-        </TouchableOpacity>
-      </View>
+      <ModalHeader title="Select Currency" onDone={onDone} />
 
       {/* Search bar */}
       <View style={styles.searchBar}>
@@ -183,25 +175,6 @@ export function CurrencyModal({ selectedCode, onSelect, onDone }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginTop: 14,
-  },
-  title: {
-    fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 22,
-    lineHeight: 27,
-    color: Color.Espresso,
-  },
-  done: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 14,
-    lineHeight: 17,
-    color: Color.Gold,
   },
   searchBar: {
     flexDirection: 'row',

@@ -1,8 +1,6 @@
 export interface TabMemberDTO {
-  id: string;
   tabId: string;
-  name: string;
-  createdAt: string;
+  userId: string;
 }
 
 export interface TabMenuItemDTO {
@@ -10,6 +8,7 @@ export interface TabMenuItemDTO {
   tabId: string;
   name: string;
   price: string;
+  addedBy: string;
   createdAt: string;
   updatedAt: string;
 }

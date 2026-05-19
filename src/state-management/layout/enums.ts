@@ -5,4 +5,5 @@ export enum LayoutActionType {
 
 export enum ModalId {
   CurrencyPicker = 'CurrencyPicker',
+  AddItems = 'AddItems',
 }

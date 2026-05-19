@@ -14,6 +14,7 @@ interface Props {
   label: string;
   variant?: 'primary' | 'secondary' | 'tertiary';
   rightIcon?: React.ComponentProps<typeof Feather>['name'];
+  rightIconColor?: string;
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
   showSpinner?: boolean;
@@ -30,6 +31,7 @@ export function Button({
   label,
   variant = 'primary',
   rightIcon,
+  rightIconColor,
   style,
   disabled,
   showSpinner,
@@ -56,7 +58,7 @@ export function Button({
             <Feather
               name={rightIcon}
               size={16}
-              color={VARIANT_COLOR[variant]}
+              color={rightIconColor ?? VARIANT_COLOR[variant]}
               style={styles.rightIcon}
             />
           )}

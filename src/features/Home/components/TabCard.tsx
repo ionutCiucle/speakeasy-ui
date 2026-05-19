@@ -21,16 +21,17 @@ export interface TabCardData {
 
 interface Props {
   tab: TabCardData;
+  onPress?: () => void;
 }
 
-export function TabCard({ tab }: Props) {
+export function TabCard({ tab, onPress }: Props) {
   const isActive = tab.status === 'active';
   const isHost = tab.role === 'host';
 
   const accentColor = isActive ? Color.ActiveGreen : Color.Gold;
 
   return (
-    <TouchableOpacity activeOpacity={0.8}>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
       <AccentCard
         accentColor={accentColor}
         style={isActive ? styles.cardActive : styles.cardClosed}

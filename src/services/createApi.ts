@@ -18,7 +18,7 @@ async function _request<T>(
   const extraHeaders = getHeaders ? await getHeaders() : {};
 
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+    ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
     ...extraHeaders,
   };
 

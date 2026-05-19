@@ -2,31 +2,15 @@ import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Color } from '@/styles';
+import { toInitials } from '@/utils';
+import { CurrencySymbol } from '@/enums';
 import { Avatar } from '@/components';
 import { useAppSelector } from '@/state-management/providerHooks';
 
-const CURRENCY_SYMBOLS: Record<string, string> = {
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  CAD: 'CA$',
-  AUD: 'A$',
-  JPY: '¥',
-  MXN: 'MX$',
-};
-
 function formatPrice(price: number, currencyCode: string): string {
-  const symbol = CURRENCY_SYMBOLS[currencyCode] ?? currencyCode;
+  const symbol =
+    CurrencySymbol[currencyCode as keyof typeof CurrencySymbol] ?? currencyCode;
   return `${symbol}${price.toFixed(2)}`;
-}
-
-function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .map((w) => w[0] ?? '')
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
 }
 
 export function ReviewStep() {
@@ -85,7 +69,7 @@ export function ReviewStep() {
             {members.slice(0, 3).map((member) => (
               <Avatar
                 key={member.id}
-                label={getInitials(member.name)}
+                label={toInitials(member.name)}
                 variant="member"
                 size={26}
                 style={styles.avatarOverlap}

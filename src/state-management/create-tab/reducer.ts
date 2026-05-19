@@ -53,7 +53,7 @@ export function createTabReducer(
       return { ...state, isSubmitting: true };
     }
     case CreateTabActionType.SubmitSuccess: {
-      return { ...state, isSubmitting: false };
+      return createTabInitialState;
     }
     case CreateTabActionType.SubmitFailure: {
       return { ...state, isSubmitting: false };

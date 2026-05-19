@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { useNavigate } from 'react-router-native';
 import { Color } from '@/styles';
 import { useAppSelector } from '@/state-management/providerHooks';
-import { FilterPills } from '../FilterPills';
-import { TabCard } from '../TabCard';
+import { FilterPills } from '../components/FilterPills';
+import { TabCard } from '../components/TabCard';
 import { toCardData } from './utils';
 import { FILTERS } from './constants';
 import { TabFilter } from './enums';
@@ -13,13 +14,21 @@ interface Props {
   tabs: TabDTO[];
 }
 
-export function TabList({ tabs }: Props) {
+export function TabListPage({ tabs }: Props) {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState<TabFilter>(TabFilter.All);
   const userId = useAppSelector((state) => state.auth.userId);
 
   const handleFilterChange = useCallback((key: string) => {
     setFilter(key as TabFilter);
   }, []);
+
+  const handleTabPress = useCallback(
+    (id: string, title: string) => {
+      navigate(`/tab/${id}`, { state: { title } });
+    },
+    [navigate],
+  );
 
   const cardData = tabs.map((tab) => toCardData(tab, userId));
 
@@ -60,7 +69,11 @@ export function TabList({ tabs }: Props) {
           <>
             <Text style={styles.sectionHeader}>ACTIVE</Text>
             {activeTabs.map((tab) => (
-              <TabCard key={tab.id} tab={tab} />
+              <TabCard
+                key={tab.id}
+                tab={tab}
+                onPress={() => handleTabPress(tab.id, tab.title)}
+              />
             ))}
           </>
         )}
@@ -77,7 +90,11 @@ export function TabList({ tabs }: Props) {
               CLOSED
             </Text>
             {closedTabs.map((tab) => (
-              <TabCard key={tab.id} tab={tab} />
+              <TabCard
+                key={tab.id}
+                tab={tab}
+                onPress={() => handleTabPress(tab.id, tab.title)}
+              />
             ))}
           </>
         )}

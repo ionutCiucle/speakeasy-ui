@@ -12,23 +12,26 @@ import { useAppSelector } from '@/state-management/providerHooks';
 import { useLayoutActions } from '@/state-management/layout';
 import { ModalId } from '@/state-management/layout/enums';
 import { useCreateTabActions } from '@/state-management/create-tab';
+import { useTabAsyncActions } from '@/state-management/tabs';
+import { CurrencySymbol } from '@/enums';
 import { CurrencyModal } from '@/components/modals/CurrencyModal';
+import { AddItemsModal } from '@/components/modals/AddItemsModal';
+import type { AddItemsModalPayload } from '@/state-management/layout/types';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
 const DURATION = 240;
 
 export function ModalRoot() {
   const activeModal = useAppSelector((state) => state.layout.activeModal);
+  const modalPayload = useAppSelector((state) => state.layout.modalPayload);
   const currency = useAppSelector((state) => state.createTab.currency);
   const { setCurrency } = useCreateTabActions();
   const { hideModal } = useLayoutActions();
+  const { updateMenuItems } = useTabAsyncActions();
 
-  // renderedModal trails activeModal so the closing animation fully plays
-  // before the content is unmounted. The ref mirrors the state so the effect
-  // can read the current value without it appearing in the deps array (which
-  // would cause a double-fire on every state update).
   const [renderedModal, setRenderedModal] = useState<ModalId | null>(null);
   const renderedModalRef = useRef<ModalId | null>(null);
+  const modalPayloadRef = useRef<AddItemsModalPayload | null>(null);
 
   const translateY = useRef(new Animated.Value(SHEET_HEIGHT)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
@@ -75,15 +78,24 @@ export function ModalRoot() {
       translateY.setValue(SHEET_HEIGHT);
       overlayOpacity.setValue(0);
       renderedModalRef.current = activeModal;
+      modalPayloadRef.current = modalPayload;
       setRenderedModal(activeModal);
       animateIn();
     } else if (renderedModalRef.current !== null) {
       animateOut(() => {
         renderedModalRef.current = null;
+        modalPayloadRef.current = null;
         setRenderedModal(null);
       });
     }
-  }, [activeModal, animateIn, animateOut, translateY, overlayOpacity]);
+  }, [
+    activeModal,
+    modalPayload,
+    animateIn,
+    animateOut,
+    translateY,
+    overlayOpacity,
+  ]);
 
   if (renderedModal === null) {
     return null;
@@ -91,15 +103,20 @@ export function ModalRoot() {
 
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
-      {/* Overlay */}
       <TouchableWithoutFeedback onPress={hideModal}>
         <Animated.View style={[styles.overlay, { opacity: overlayOpacity }]} />
       </TouchableWithoutFeedback>
 
-      {/* Sheet */}
       <Animated.View style={[styles.sheet, { transform: [{ translateY }] }]}>
         <View style={styles.handle} />
-        {renderContent(renderedModal, hideModal, currency, setCurrency)}
+        {renderContent(
+          renderedModal,
+          hideModal,
+          currency,
+          setCurrency,
+          modalPayloadRef.current,
+          updateMenuItems,
+        )}
       </Animated.View>
     </View>
   );
@@ -110,6 +127,11 @@ function renderContent(
   onDone: () => void,
   currency: { code: string; name: string },
   onSelectCurrency: (code: string, name: string) => void,
+  modalPayload: AddItemsModalPayload | null,
+  updateMenuItems: (
+    tabId: string,
+    menuItems: { name: string; price: number }[],
+  ) => Promise<boolean>,
 ): React.ReactNode {
   switch (modalId) {
     case ModalId.CurrencyPicker: {
@@ -118,6 +140,33 @@ function renderContent(
           selectedCode={currency.code}
           onSelect={onSelectCurrency}
           onDone={onDone}
+        />
+      );
+    }
+    case ModalId.AddItems: {
+      const currencySymbol =
+        CurrencySymbol[currency.code as keyof typeof CurrencySymbol] ??
+        currency.code;
+
+      const handleDone = async (
+        newItems: { name: string; price: number }[],
+      ) => {
+        if (!modalPayload) {
+          onDone();
+          return;
+        }
+        const merged = [...modalPayload.existingMenuItems, ...newItems];
+        const success = await updateMenuItems(modalPayload.tabId, merged);
+        if (success) {
+          onDone();
+        }
+      };
+
+      return (
+        <AddItemsModal
+          currencyCode={currency.code}
+          currencySymbol={currencySymbol}
+          onDone={handleDone}
         />
       );
     }
@@ -135,7 +184,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: SHEET_HEIGHT,
-    backgroundColor: Color.Ivory,
+    backgroundColor: Color.Cream,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },

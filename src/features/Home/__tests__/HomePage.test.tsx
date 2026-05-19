@@ -18,8 +18,8 @@ jest.mock('@expo/vector-icons', () => ({
   FontAwesome6: () => null,
 }));
 
-jest.mock('../components/TabList', () => ({
-  TabList: () => null,
+jest.mock('../TabListPage', () => ({
+  TabListPage: () => null,
 }));
 
 describe('HomePage', () => {
