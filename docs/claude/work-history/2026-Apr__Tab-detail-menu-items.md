@@ -89,6 +89,10 @@ New action types in `enums.ts`: `UpdateMemberItemsPending/Success/Failure`. Stat
 
 ## Tooling
 
+### Skill file reorganisation
+
+`.claude/skills/savegame/` renamed to `.claude/skills/save-game/` (kebab-case to match other skill names). `.claude/skills/start-game/` added as a companion skill for creating and checking out feature branches.
+
 ### savegame skill — work-history step
 
 `.claude/skills/savegame/SKILL.md` updated to include a step (step 4) that automatically updates the relevant `docs/claude/work-history/` doc before committing. The skill now:

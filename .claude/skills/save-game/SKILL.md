@@ -1,5 +1,5 @@
 ---
-name: savegame
+name: save-game
 description: Run ts:check and lint:check, fix any issues found, update work-history docs, then stage, commit, and push all current changes
 ---
 
