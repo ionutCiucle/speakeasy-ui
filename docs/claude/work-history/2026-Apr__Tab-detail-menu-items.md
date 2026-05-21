@@ -212,6 +212,10 @@ Wired via `ModalId.EditTip` and `EditTipModalPayload { receiptTotal, currentTip,
 
 `ConfirmPaymentPage` tip card updated to `flexDirection: 'row', justifyContent: 'space-between'` with an "Edit" `TouchableOpacity` alongside the tip amount.
 
+## Compact modal size
+
+`ModalRoot` now supports a compact sheet variant for modals that need less vertical space. `COMPACT_SHEET_HEIGHT = SHEET_HEIGHT * 0.7` (30% shorter). A `COMPACT_MODALS` set controls which `ModalId`s use it — currently `EditReceiptTotal` and `EditTip`. The `sheetHeightFor(id)` helper drives both the sheet style and the slide-in/out animation start/end values so the animation always matches the rendered height.
+
 ## Modal sheet background fix
 
 `ModalRoot` sheet background corrected from `Color.Cream` (`#F5F0E8`) to `Color.White` (`#FFFFFF`) to match the Figma spec.

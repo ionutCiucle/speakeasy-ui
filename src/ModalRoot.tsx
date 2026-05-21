@@ -26,7 +26,19 @@ import type {
 } from '@/state-management/layout/types';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
+const COMPACT_SHEET_HEIGHT = SHEET_HEIGHT * 0.7;
 const DURATION = 240;
+
+const COMPACT_MODALS = new Set<ModalId>([
+  ModalId.EditReceiptTotal,
+  ModalId.EditTip,
+]);
+
+function sheetHeightFor(id: ModalId | null): number {
+  return id !== null && COMPACT_MODALS.has(id)
+    ? COMPACT_SHEET_HEIGHT
+    : SHEET_HEIGHT;
+}
 
 export function ModalRoot() {
   const activeModal = useAppSelector((state) => state.layout.activeModal);
@@ -61,10 +73,10 @@ export function ModalRoot() {
   }, [translateY, overlayOpacity]);
 
   const animateOut = useCallback(
-    (onDone: () => void) => {
+    (targetY: number, onDone: () => void) => {
       Animated.parallel([
         Animated.timing(translateY, {
-          toValue: SHEET_HEIGHT,
+          toValue: targetY,
           duration: DURATION,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
@@ -82,14 +94,14 @@ export function ModalRoot() {
 
   useEffect(() => {
     if (activeModal !== null) {
-      translateY.setValue(SHEET_HEIGHT);
+      translateY.setValue(sheetHeightFor(activeModal));
       overlayOpacity.setValue(0);
       renderedModalRef.current = activeModal;
       modalPayloadRef.current = modalPayload;
       setRenderedModal(activeModal);
       animateIn();
     } else if (renderedModalRef.current !== null) {
-      animateOut(() => {
+      animateOut(sheetHeightFor(renderedModalRef.current), () => {
         renderedModalRef.current = null;
         modalPayloadRef.current = null;
         setRenderedModal(null);
@@ -114,7 +126,15 @@ export function ModalRoot() {
         <Animated.View style={[styles.overlay, { opacity: overlayOpacity }]} />
       </TouchableWithoutFeedback>
 
-      <Animated.View style={[styles.sheet, { transform: [{ translateY }] }]}>
+      <Animated.View
+        style={[
+          styles.sheet,
+          {
+            height: sheetHeightFor(renderedModal),
+            transform: [{ translateY }],
+          },
+        ]}
+      >
         <View style={styles.handle} />
         {renderContent(
           renderedModal,
@@ -212,7 +232,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: SHEET_HEIGHT,
     backgroundColor: Color.White,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
