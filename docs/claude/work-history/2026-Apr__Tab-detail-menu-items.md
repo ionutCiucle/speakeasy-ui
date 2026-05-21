@@ -212,6 +212,10 @@ Wired via `ModalId.EditTip` and `EditTipModalPayload { receiptTotal, currentTip,
 
 `ConfirmPaymentPage` tip card updated to `flexDirection: 'row', justifyContent: 'space-between'` with an "Edit" `TouchableOpacity` alongside the tip amount.
 
+## Modal sheet background fix
+
+`ModalRoot` sheet background corrected from `Color.Cream` (`#F5F0E8`) to `Color.White` (`#FFFFFF`) to match the Figma spec.
+
 ## Files changed
 
 ```
