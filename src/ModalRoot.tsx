@@ -16,7 +16,14 @@ import { useTabAsyncActions } from '@/state-management/tabs';
 import { CurrencySymbol } from '@/enums';
 import { CurrencyModal } from '@/components/modals/CurrencyModal';
 import { AddItemsModal } from '@/components/modals/AddItemsModal';
-import type { AddItemsModalPayload } from '@/state-management/layout/types';
+import { EditReceiptTotalModal } from '@/components/modals/EditReceiptTotalModal';
+import { EditTipModal } from '@/components/modals/EditTipModal';
+import type {
+  AddItemsModalPayload,
+  EditReceiptTotalModalPayload,
+  EditTipModalPayload,
+  ModalPayload,
+} from '@/state-management/layout/types';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
 const DURATION = 240;
@@ -31,7 +38,7 @@ export function ModalRoot() {
 
   const [renderedModal, setRenderedModal] = useState<ModalId | null>(null);
   const renderedModalRef = useRef<ModalId | null>(null);
-  const modalPayloadRef = useRef<AddItemsModalPayload | null>(null);
+  const modalPayloadRef = useRef<ModalPayload | null>(null);
 
   const translateY = useRef(new Animated.Value(SHEET_HEIGHT)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
@@ -127,7 +134,7 @@ function renderContent(
   onDone: () => void,
   currency: { code: string; name: string },
   onSelectCurrency: (code: string, name: string) => void,
-  modalPayload: AddItemsModalPayload | null,
+  modalPayload: ModalPayload | null,
   updateMenuItems: (
     tabId: string,
     menuItems: { name: string; price: number }[],
@@ -144,6 +151,7 @@ function renderContent(
       );
     }
     case ModalId.AddItems: {
+      const payload = modalPayload as AddItemsModalPayload | null;
       const currencySymbol =
         CurrencySymbol[currency.code as keyof typeof CurrencySymbol] ??
         currency.code;
@@ -151,12 +159,12 @@ function renderContent(
       const handleDone = async (
         newItems: { name: string; price: number }[],
       ) => {
-        if (!modalPayload) {
+        if (!payload) {
           onDone();
           return;
         }
-        const merged = [...modalPayload.existingMenuItems, ...newItems];
-        const success = await updateMenuItems(modalPayload.tabId, merged);
+        const merged = [...payload.existingMenuItems, ...newItems];
+        const success = await updateMenuItems(payload.tabId, merged);
         if (success) {
           onDone();
         }
@@ -167,6 +175,27 @@ function renderContent(
           currencyCode={currency.code}
           currencySymbol={currencySymbol}
           onDone={handleDone}
+        />
+      );
+    }
+    case ModalId.EditReceiptTotal: {
+      const payload = modalPayload as EditReceiptTotalModalPayload | null;
+      return (
+        <EditReceiptTotalModal
+          currentTotal={payload?.currentTotal ?? 0}
+          currencyCode={payload?.currencyCode ?? currency.code}
+          onDone={onDone}
+        />
+      );
+    }
+    case ModalId.EditTip: {
+      const payload = modalPayload as EditTipModalPayload | null;
+      return (
+        <EditTipModal
+          receiptTotal={payload?.receiptTotal ?? 0}
+          currentTip={payload?.currentTip ?? 0}
+          currencyCode={payload?.currencyCode ?? currency.code}
+          onDone={onDone}
         />
       );
     }

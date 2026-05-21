@@ -9,27 +9,17 @@ import {
 } from 'react-native';
 import { useNavigate, useParams, useLocation } from 'react-router-native';
 import { Color } from '@/styles';
-import { MainNav, PageHeader } from '@/components';
-import type { MainNavTab } from '@/components';
-
-const TAB_ROUTES: Record<MainNavTab, string> = {
-  home: '/home',
-  newTab: '/create-tab',
-  friends: '/friends',
-  profile: '/profile',
-};
+import { useLayoutActions } from '@/state-management/layout';
+import { ModalId } from '@/state-management/layout/enums';
 
 export function ConfirmPaymentPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const { showModal } = useLayoutActions();
 
   const photos: string[] =
     (location.state as { photos?: string[] } | null)?.photos ?? [];
-
-  const handleRetake = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
 
   const handleAddPhoto = useCallback(() => {
     navigate(`/tab/${id}/photograph-receipt`, { state: { photos } });
@@ -39,17 +29,23 @@ export function ConfirmPaymentPage() {
     navigate(`/tab/${id}/summary`, { state: { photos } });
   }, [navigate, id, photos]);
 
-  const handleTabPress = useCallback(
-    (tab: MainNavTab) => {
-      navigate(TAB_ROUTES[tab]);
-    },
-    [navigate],
-  );
+  const handleEditTotal = useCallback(() => {
+    showModal(ModalId.EditReceiptTotal, {
+      currentTotal: 87.5,
+      currencyCode: 'EUR',
+    });
+  }, [showModal]);
+
+  const handleEditTip = useCallback(() => {
+    showModal(ModalId.EditTip, {
+      receiptTotal: 87.5,
+      currentTip: 12.5,
+      currencyCode: 'EUR',
+    });
+  }, [showModal]);
 
   return (
     <View style={styles.screen}>
-      <PageHeader title="Confirm Payment" onBack={handleRetake} />
-
       <ScrollView
         style={styles.flex}
         contentContainerStyle={styles.scrollContent}
@@ -96,14 +92,19 @@ export function ConfirmPaymentPage() {
             <Text style={styles.cardHeaderLabel}>RECEIPT TOTAL</Text>
             <Text style={styles.cardAmount}>€ 87.50</Text>
           </View>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity activeOpacity={0.7} onPress={handleEditTotal}>
             <Text style={styles.editText}>Edit</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.tipCard}>
-          <Text style={styles.cardHeaderLabel}>TIP</Text>
-          <Text style={styles.cardAmount}>€ 12.50</Text>
+          <View>
+            <Text style={styles.cardHeaderLabel}>TIP</Text>
+            <Text style={styles.cardAmount}>€ 12.50</Text>
+          </View>
+          <TouchableOpacity activeOpacity={0.7} onPress={handleEditTip}>
+            <Text style={styles.editText}>Edit</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.sandDivider} />
@@ -131,8 +132,6 @@ export function ConfirmPaymentPage() {
           <Text style={styles.confirmButtonText}>Confirm I Paid</Text>
         </TouchableOpacity>
       </ScrollView>
-
-      <MainNav activeTab="home" onTabPress={handleTabPress} />
     </View>
   );
 }
@@ -230,7 +229,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     height: 56,
     paddingHorizontal: 16,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   cardHeaderLabel: {
     fontFamily: 'Inter_600SemiBold',

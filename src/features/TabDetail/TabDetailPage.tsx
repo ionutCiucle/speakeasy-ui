@@ -135,7 +135,13 @@ export function TabDetailPage() {
   }
 
   if (tab.closedAt !== null) {
-    return <Navigate replace to={`/tab/${id}/summary`} />;
+    return (
+      <Navigate
+        replace
+        to={`/tab/${id}/summary`}
+        state={{ title: tab.title }}
+      />
+    );
   }
 
   const isActive = tab.closedAt === null;

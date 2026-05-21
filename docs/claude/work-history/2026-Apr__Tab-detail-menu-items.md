@@ -155,8 +155,62 @@ Additional tests added to `src/features/CreateTab/components/__tests__/BuildMenu
 ### Navigation wiring
 
 - `ConfirmPaymentPage.handleConfirmPaid` now navigates to `/tab/:id/summary` instead of `/tab/:id`, forwarding `photos` in state.
-- `TabDetailPage` renders `<Navigate replace to="/tab/:id/summary" />` when `tab.closedAt !== null`, so opening a closed tab goes directly to the summary.
-- Route registered in `AppRoutes.tsx` as a full-screen route outside `AppLayout` (same pattern as photograph-receipt and confirm-payment).
+- `TabDetailPage` renders `<Navigate replace to="/tab/:id/summary" state={{ title: tab.title }} />` when `tab.closedAt !== null`.
+
+## Routing refactor — confirm-payment and summary inside AppLayout
+
+Moved `ConfirmPaymentPage` and `TabClosedSummaryPage` inside the `AppLayout` layout route so they can access the global modal infrastructure (`ModalRoot`). `PhotographReceiptPage` remains outside as a full-screen route (portal candidate for the future).
+
+### AppRoutes.tsx change
+
+`/tab/:id` is now a pathless parent route (no `element`) with three child routes registered under it:
+
+```
+<Route element={<AppLayout />}>
+  ...
+  <Route path="/tab/:id">
+    <Route index element={<TabDetailPage />} />
+    <Route path="confirm-payment" element={<ConfirmPaymentPage />} />
+    <Route path="summary" element={<TabClosedSummaryPage />} />
+  </Route>
+</Route>
+```
+
+### AppLayout title resolution
+
+Added `endsWith('/confirm-payment')` check so the header shows "Confirm Payment". The summary route falls through to the empty `/tab/` config and picks up `state.title` forwarded from `TabDetailPage`'s redirect.
+
+## Edit Receipt Total modal
+
+`src/components/modals/EditReceiptTotalModal.tsx` — bottom-sheet modal triggered from the "Edit" button on the receipt total card in `ConfirmPaymentPage`.
+
+- `ModalHeader` ("Edit Total") — Done button dismisses without applying
+- "RECEIPT TOTAL" label (Inter 600, 10px, 0.8 letter-spacing, WarmBrown)
+- Linen input card (60px height, radius 8): small currency symbol (Inter 400 13px) + large `TextInput` (Inter 600 24px Espresso), digits-only filtering
+- Helper text: "Changes will update the grand total"
+- Sand divider + Gold "Apply" button (52px, radius 10, Inter 600 16px white)
+- Phase 2: `handleApply` is a no-op beyond closing; persistence to tab state deferred
+
+Wired via `ModalId.EditReceiptTotal` and `EditReceiptTotalModalPayload { currentTotal, currencyCode }`.
+
+## Edit Tip modal
+
+`src/components/modals/EditTipModal.tsx` — bottom-sheet modal triggered from the new "Edit" button on the tip card in `ConfirmPaymentPage`.
+
+- `ModalHeader` ("Edit Tip")
+- "TIP PERCENTAGE" label + pill row: 10%, 15%, 18%, 20%, Custom (62×36px, radius 18)
+  - Active: Gold bg, white Inter 600; Inactive: Linen bg, WarmBrown Inter 400
+- `deriveInitialOption(total, tip)` — matches current tip to a preset within 0.01 tolerance
+- "TIP AMOUNT" label + Linen input card (same design as EditReceiptTotalModal)
+  - `TextInput` disabled when a preset is active; re-enabled on Custom selection
+  - Presets auto-calculate: `(receiptTotal * pct / 100).toFixed(2)`
+- Helper text (preset only): "15% of € 87.50"
+- Sand divider + Gold "Apply" button
+- Phase 2: persistence deferred
+
+Wired via `ModalId.EditTip` and `EditTipModalPayload { receiptTotal, currentTip, currencyCode }`.
+
+`ConfirmPaymentPage` tip card updated to `flexDirection: 'row', justifyContent: 'space-between'` with an "Edit" `TouchableOpacity` alongside the tip amount.
 
 ## Files changed
 

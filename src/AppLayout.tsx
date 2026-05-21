@@ -51,6 +51,9 @@ export function AppLayout() {
     (location.pathname.startsWith('/create-tab')
       ? ROUTE_CONFIG['/create-tab']
       : undefined) ??
+    (location.pathname.endsWith('/confirm-payment')
+      ? { title: 'Confirm Payment', tab: 'home' as MainNavTab }
+      : undefined) ??
     (location.pathname.startsWith('/tab/')
       ? ROUTE_CONFIG['/tab']
       : undefined) ??

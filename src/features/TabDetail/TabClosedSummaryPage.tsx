@@ -10,22 +10,14 @@ import {
   NativeScrollEvent,
   useWindowDimensions,
 } from 'react-native';
-import { useNavigate, useParams, useLocation } from 'react-router-native';
+import { useParams, useLocation } from 'react-router-native';
 import { Color } from '@/styles';
-import { Avatar, MainNav, PageHeader } from '@/components';
-import type { MainNavTab } from '@/components';
+import { Avatar } from '@/components';
 import { useTabDetails } from '@/state-management/tabs';
 import { useAppSelector } from '@/state-management/providerHooks';
 
 const DARK_FOREST = '#141F14';
 const PAYER_SUBTITLE_GREEN = '#8CD18C';
-
-const TAB_ROUTES: Record<MainNavTab, string> = {
-  home: '/home',
-  newTab: '/create-tab',
-  friends: '/friends',
-  profile: '/profile',
-};
 
 function formatClosedDate(iso: string): string {
   return new Intl.DateTimeFormat('en-US', {
@@ -47,7 +39,6 @@ interface MemberRow {
 
 export function TabClosedSummaryPage() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const location = useLocation();
   const { tab } = useTabDetails(id ?? '');
   const userId = useAppSelector((state) => state.auth.userId);
@@ -68,13 +59,6 @@ export function TabClosedSummaryPage() {
       }
     },
     [],
-  );
-
-  const handleTabPress = useCallback(
-    (navTab: MainNavTab) => {
-      navigate(TAB_ROUTES[navTab]);
-    },
-    [navigate],
   );
 
   if (!tab) {
@@ -125,8 +109,6 @@ export function TabClosedSummaryPage() {
 
   return (
     <View style={styles.screen}>
-      <PageHeader title={tab.title} />
-
       <ScrollView
         style={styles.flex}
         contentContainerStyle={styles.scrollContent}
@@ -208,8 +190,6 @@ export function TabClosedSummaryPage() {
           <Text style={styles.repeatButtonText}>Repeat this Tab</Text>
         </TouchableOpacity>
       </ScrollView>
-
-      <MainNav activeTab="home" onTabPress={handleTabPress} />
     </View>
   );
 }

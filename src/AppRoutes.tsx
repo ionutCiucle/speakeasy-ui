@@ -36,18 +36,23 @@ export function AppRoutes() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-      {/* Full-screen routes — no app shell */}
+      {/* Full-screen routes — no app shell (portal candidate for future) */}
       <Route
         path="/tab/:id/photograph-receipt"
         element={<PhotographReceiptPage />}
       />
-      <Route path="/tab/:id/confirm-payment" element={<ConfirmPaymentPage />} />
-      <Route path="/tab/:id/summary" element={<TabClosedSummaryPage />} />
 
       {/* Authenticated shell — pathless layout route */}
       <Route element={<AppLayout />}>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/tab/:id" element={<TabDetailPage />} />
+
+        {/* Tab detail and its sub-screens */}
+        <Route path="/tab/:id">
+          <Route index element={<TabDetailPage />} />
+          <Route path="confirm-payment" element={<ConfirmPaymentPage />} />
+          <Route path="summary" element={<TabClosedSummaryPage />} />
+        </Route>
+
         <Route path="/profile" element={<ProfilePage />} />
 
         {/* Create Tab wizard — each step is a subroute */}
