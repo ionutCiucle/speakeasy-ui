@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.speakeasy.ui"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +32,9 @@
     },
     "plugins": [
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-camera",
+      "expo-dev-client"
     ]
   }
 }
