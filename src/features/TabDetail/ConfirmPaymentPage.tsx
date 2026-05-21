@@ -36,8 +36,8 @@ export function ConfirmPaymentPage() {
   }, [navigate, id, photos]);
 
   const handleConfirmPaid = useCallback(() => {
-    navigate(`/tab/${id}`);
-  }, [navigate, id]);
+    navigate(`/tab/${id}/summary`, { state: { photos } });
+  }, [navigate, id, photos]);
 
   const handleTabPress = useCallback(
     (tab: MainNavTab) => {

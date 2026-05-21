@@ -141,6 +141,23 @@ Additional tests added to `src/features/CreateTab/components/__tests__/BuildMenu
 - Trash icons: one `trash-outline` icon rendered per menu item
 - `Ionicons` mock updated to render `testID="icon-{name}"` (consistent with MenuCard tests)
 
+## Tab Closed Summary screen
+
+`src/features/TabDetail/TabClosedSummaryPage.tsx` — new full-screen route at `/tab/:id/summary` displayed after the user confirms payment and when navigating to an already-closed tab.
+
+### Layout
+
+- **Closed banner** — dark forest (`#141F14`) card with a green check circle (`Color.ActiveGreen`), "Tab closed — [date]" in white, and "Paid by [name]" in a light sage green (`#8CD18C`). Close date is stored in component state (`useState(() => new Date())`) on mount so the exact time is captured for future BE submission; falls back to `tab.closedAt` when the tab was already closed server-side.
+- **Receipt carousel** — paged horizontal `ScrollView` consuming `photos` from `location.state` (passed forward from `ConfirmPaymentPage`). Dots indicator is overlaid inside the card via `position: 'absolute'`; active dot is `Color.Gold`, inactive is `Color.Sand`. Falls back to a placeholder receipt icon when no photos are present.
+- **Settlement section** — renders one card per tab member. The payer row (derived from `tab.settlements[0].payerId`, falling back to the current user) uses a gold avatar and a "Payer" linen badge. Other members show an amount derived from `TabSettlementDTO.amount` and either a "Pending" (gold) or "✓ Settled" (dark forest + green) badge.
+- **Footer** — "Notifications sent to all members" note + "Repeat this Tab" outline button (no-op placeholder for the repeat flow).
+
+### Navigation wiring
+
+- `ConfirmPaymentPage.handleConfirmPaid` now navigates to `/tab/:id/summary` instead of `/tab/:id`, forwarding `photos` in state.
+- `TabDetailPage` renders `<Navigate replace to="/tab/:id/summary" />` when `tab.closedAt !== null`, so opening a closed tab goes directly to the summary.
+- Route registered in `AppRoutes.tsx` as a full-screen route outside `AppLayout` (same pattern as photograph-receipt and confirm-payment).
+
 ## Files changed
 
 ```

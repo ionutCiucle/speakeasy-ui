@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { useNavigate, useParams } from 'react-router-native';
+import { Navigate, useNavigate, useParams } from 'react-router-native';
 import { Color } from '@/styles';
 import { Button, MemberAvatars, PageContainer } from '@/components';
 import { useTabDetails, useTabAsyncActions } from '@/state-management/tabs';
@@ -132,6 +132,10 @@ export function TabDetailPage() {
 
   if (!tab) {
     return <View style={styles.screen} />;
+  }
+
+  if (tab.closedAt !== null) {
+    return <Navigate replace to={`/tab/${id}/summary`} />;
   }
 
   const isActive = tab.closedAt === null;

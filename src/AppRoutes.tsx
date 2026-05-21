@@ -10,6 +10,7 @@ import { HomePage } from '@/features/Home/HomePage';
 import { TabDetailPage } from '@/features/TabDetail/TabDetailPage';
 import { PhotographReceiptPage } from '@/features/TabDetail/PhotographReceiptPage';
 import { ConfirmPaymentPage } from '@/features/TabDetail/ConfirmPaymentPage';
+import { TabClosedSummaryPage } from '@/features/TabDetail/TabClosedSummaryPage';
 import { ProfilePage } from '@/features/Profile/ProfilePage';
 import {
   CreateTabPage,
@@ -41,6 +42,7 @@ export function AppRoutes() {
         element={<PhotographReceiptPage />}
       />
       <Route path="/tab/:id/confirm-payment" element={<ConfirmPaymentPage />} />
+      <Route path="/tab/:id/summary" element={<TabClosedSummaryPage />} />
 
       {/* Authenticated shell — pathless layout route */}
       <Route element={<AppLayout />}>
