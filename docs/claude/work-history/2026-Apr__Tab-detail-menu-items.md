@@ -198,7 +198,7 @@ Wired via `ModalId.EditReceiptTotal` and `EditReceiptTotalModalPayload { current
 `src/components/modals/EditTipModal.tsx` — bottom-sheet modal triggered from the new "Edit" button on the tip card in `ConfirmPaymentPage`.
 
 - `ModalHeader` ("Edit Tip")
-- "TIP PERCENTAGE" label + pill row: 10%, 15%, 18%, 20%, Custom (62×36px, radius 18)
+- "TIP PERCENTAGE" label + pill row: 5%, 10%, 15%, 20%, Custom (62×36px, radius 18)
   - Active: Gold bg, white Inter 600; Inactive: Linen bg, WarmBrown Inter 400
 - `deriveInitialOption(total, tip)` — matches current tip to a preset within 0.01 tolerance
 - "TIP AMOUNT" label + Linen input card (same design as EditReceiptTotalModal)

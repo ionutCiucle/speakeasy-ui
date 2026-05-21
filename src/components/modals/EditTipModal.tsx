@@ -10,7 +10,7 @@ import { Color } from '@/styles';
 import { ModalHeader } from '@/components';
 import { CurrencySymbol } from '@/enums';
 
-const PRESETS = [10, 15, 18, 20] as const;
+const PRESETS = [5, 10, 15, 20] as const;
 type PresetPct = (typeof PRESETS)[number];
 type TipOption = PresetPct | 'custom';
 
