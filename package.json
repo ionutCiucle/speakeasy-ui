@@ -13,7 +13,10 @@
     "format": "prettier --write .",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "build:dev": "eas build --profile development --platform ios",
+    "build:preview": "eas build --profile preview --platform ios",
+    "build:prod": "eas build --profile production --platform ios"
   },
   "dependencies": {
     "@expo-google-fonts/cormorant-garamond": "^0.4.1",
@@ -23,6 +26,8 @@
     "@react-navigation/stack": "^6.3.20",
     "axios": "1.13.6",
     "expo": "^55.0.9",
+    "expo-camera": "~55.0.19",
+    "expo-dev-client": "~55.0.35",
     "expo-font": "~55.0.4",
     "expo-secure-store": "~55.0.9",
     "expo-status-bar": "~55.0.4",
