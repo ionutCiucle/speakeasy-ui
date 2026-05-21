@@ -16,12 +16,10 @@ import { useTabAsyncActions } from '@/state-management/tabs';
 import { CurrencySymbol } from '@/enums';
 import { CurrencyModal } from '@/components/modals/CurrencyModal';
 import { AddItemsModal } from '@/components/modals/AddItemsModal';
-import { EditReceiptTotalModal } from '@/components/modals/EditReceiptTotalModal';
-import { EditTipModal } from '@/components/modals/EditTipModal';
+import { EditReceiptTotalsModal } from '@/components/modals/EditReceiptTotalsModal';
 import type {
   AddItemsModalPayload,
-  EditReceiptTotalModalPayload,
-  EditTipModalPayload,
+  EditReceiptTotalsModalPayload,
   ModalPayload,
 } from '@/state-management/layout/types';
 
@@ -29,10 +27,7 @@ const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
 const COMPACT_SHEET_HEIGHT = SHEET_HEIGHT * 0.7;
 const DURATION = 240;
 
-const COMPACT_MODALS = new Set<ModalId>([
-  ModalId.EditReceiptTotal,
-  ModalId.EditTip,
-]);
+const COMPACT_MODALS = new Set<ModalId>();
 
 function sheetHeightFor(id: ModalId | null): number {
   return id !== null && COMPACT_MODALS.has(id)
@@ -198,21 +193,11 @@ function renderContent(
         />
       );
     }
-    case ModalId.EditReceiptTotal: {
-      const payload = modalPayload as EditReceiptTotalModalPayload | null;
+    case ModalId.EditReceiptTotals: {
+      const payload = modalPayload as EditReceiptTotalsModalPayload | null;
       return (
-        <EditReceiptTotalModal
+        <EditReceiptTotalsModal
           currentTotal={payload?.currentTotal ?? 0}
-          currencyCode={payload?.currencyCode ?? currency.code}
-          onDone={onDone}
-        />
-      );
-    }
-    case ModalId.EditTip: {
-      const payload = modalPayload as EditTipModalPayload | null;
-      return (
-        <EditTipModal
-          receiptTotal={payload?.receiptTotal ?? 0}
           currentTip={payload?.currentTip ?? 0}
           currencyCode={payload?.currencyCode ?? currency.code}
           onDone={onDone}

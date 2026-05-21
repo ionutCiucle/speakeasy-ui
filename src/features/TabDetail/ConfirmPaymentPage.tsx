@@ -29,16 +29,9 @@ export function ConfirmPaymentPage() {
     navigate(`/tab/${id}/summary`, { state: { photos } });
   }, [navigate, id, photos]);
 
-  const handleEditTotal = useCallback(() => {
-    showModal(ModalId.EditReceiptTotal, {
+  const handleEditReceiptTotals = useCallback(() => {
+    showModal(ModalId.EditReceiptTotals, {
       currentTotal: 87.5,
-      currencyCode: 'EUR',
-    });
-  }, [showModal]);
-
-  const handleEditTip = useCallback(() => {
-    showModal(ModalId.EditTip, {
-      receiptTotal: 87.5,
       currentTip: 12.5,
       currencyCode: 'EUR',
     });
@@ -92,7 +85,10 @@ export function ConfirmPaymentPage() {
             <Text style={styles.cardHeaderLabel}>RECEIPT TOTAL</Text>
             <Text style={styles.cardAmount}>€ 87.50</Text>
           </View>
-          <TouchableOpacity activeOpacity={0.7} onPress={handleEditTotal}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleEditReceiptTotals}
+          >
             <Text style={styles.editText}>Edit</Text>
           </TouchableOpacity>
         </View>
@@ -102,7 +98,10 @@ export function ConfirmPaymentPage() {
             <Text style={styles.cardHeaderLabel}>TIP</Text>
             <Text style={styles.cardAmount}>€ 12.50</Text>
           </View>
-          <TouchableOpacity activeOpacity={0.7} onPress={handleEditTip}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleEditReceiptTotals}
+          >
             <Text style={styles.editText}>Edit</Text>
           </TouchableOpacity>
         </View>

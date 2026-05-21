@@ -6,6 +6,5 @@ export enum LayoutActionType {
 export enum ModalId {
   CurrencyPicker = 'CurrencyPicker',
   AddItems = 'AddItems',
-  EditReceiptTotal = 'EditReceiptTotal',
-  EditTip = 'EditTip',
+  EditReceiptTotals = 'EditReceiptTotals',
 }

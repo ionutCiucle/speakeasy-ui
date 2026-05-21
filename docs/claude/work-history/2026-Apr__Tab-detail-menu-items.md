@@ -212,6 +212,14 @@ Wired via `ModalId.EditTip` and `EditTipModalPayload { receiptTotal, currentTip,
 
 `ConfirmPaymentPage` tip card updated to `flexDirection: 'row', justifyContent: 'space-between'` with an "Edit" `TouchableOpacity` alongside the tip amount.
 
+## Consolidated Edit Receipt Totals modal
+
+Replaced the separate `EditReceiptTotalModal` and `EditTipModal` with a single `EditReceiptTotalsModal` that covers both the receipt total input and the tip percentage/amount selectors. Both the "Edit" button on the receipt total card and the "Edit" button on the tip card in `ConfirmPaymentPage` now open `ModalId.EditReceiptTotals` with a unified `EditReceiptTotalsModalPayload { currentTotal, currentTip, currencyCode }`.
+
+The modal uses a `ScrollView` internally and runs at full sheet height. When a preset percentage is active and the user edits the receipt total, the tip amount auto-recalculates via a `useEffect`.
+
+Old files deleted: `EditReceiptTotalModal.tsx`, `EditTipModal.tsx`. `COMPACT_MODALS` in `ModalRoot` is now an empty set (all modals use full height).
+
 ## Compact modal size
 
 `ModalRoot` now supports a compact sheet variant for modals that need less vertical space. `COMPACT_SHEET_HEIGHT = SHEET_HEIGHT * 0.7` (30% shorter). A `COMPACT_MODALS` set controls which `ModalId`s use it — currently `EditReceiptTotal` and `EditTip`. The `sheetHeightFor(id)` helper drives both the sheet style and the slide-in/out animation start/end values so the animation always matches the rendered height.

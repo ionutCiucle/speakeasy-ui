@@ -5,21 +5,13 @@ export interface AddItemsModalPayload {
   existingMenuItems: { name: string; price: number }[];
 }
 
-export interface EditReceiptTotalModalPayload {
+export interface EditReceiptTotalsModalPayload {
   currentTotal: number;
-  currencyCode: string;
-}
-
-export interface EditTipModalPayload {
-  receiptTotal: number;
   currentTip: number;
   currencyCode: string;
 }
 
-export type ModalPayload =
-  | AddItemsModalPayload
-  | EditReceiptTotalModalPayload
-  | EditTipModalPayload;
+export type ModalPayload = AddItemsModalPayload | EditReceiptTotalsModalPayload;
 
 export interface LayoutState {
   activeModal: ModalId | null;

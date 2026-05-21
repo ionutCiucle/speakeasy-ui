@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import { Color } from '@/styles';
 import { ModalHeader } from '@/components';
@@ -24,33 +25,45 @@ function deriveInitialOption(total: number, tip: number): TipOption {
 }
 
 interface Props {
-  receiptTotal: number;
+  currentTotal: number;
   currentTip: number;
   currencyCode: string;
   onDone: () => void;
 }
 
-export function EditTipModal({
-  receiptTotal,
+export function EditReceiptTotalsModal({
+  currentTotal,
   currentTip,
   currencyCode,
   onDone,
 }: Props) {
+  const [totalValue, setTotalValue] = useState(currentTotal.toFixed(2));
   const [selectedOption, setSelectedOption] = useState<TipOption>(() =>
-    deriveInitialOption(receiptTotal, currentTip),
+    deriveInitialOption(currentTotal, currentTip),
   );
   const [tipValue, setTipValue] = useState(currentTip.toFixed(2));
 
   const currencySymbol =
     CurrencySymbol[currencyCode as keyof typeof CurrencySymbol] ?? currencyCode;
 
-  const handleSelectPreset = useCallback(
-    (pct: PresetPct) => {
-      setSelectedOption(pct);
-      setTipValue(((receiptTotal * pct) / 100).toFixed(2));
-    },
-    [receiptTotal],
-  );
+  useEffect(() => {
+    if (selectedOption !== 'custom') {
+      const parsed = parseFloat(totalValue) || 0;
+      setTipValue(((parsed * selectedOption) / 100).toFixed(2));
+    }
+  }, [totalValue, selectedOption]);
+
+  const handleChangeTotal = useCallback((text: string) => {
+    const digits = text.replace(/[^0-9.]/g, '');
+    const parts = digits.split('.');
+    const cleaned =
+      parts.length > 2 ? `${parts[0]}.${parts.slice(1).join('')}` : digits;
+    setTotalValue(cleaned);
+  }, []);
+
+  const handleSelectPreset = useCallback((pct: PresetPct) => {
+    setSelectedOption(pct);
+  }, []);
 
   const handleSelectCustom = useCallback(() => {
     setSelectedOption('custom');
@@ -65,20 +78,44 @@ export function EditTipModal({
   }, []);
 
   const handleApply = useCallback(() => {
-    // Phase 2: persist tip to tab state before closing
+    // Phase 2: persist updated total and tip to tab state before closing
     onDone();
   }, [onDone]);
 
-  const helperText =
+  const parsedTotal = parseFloat(totalValue) || 0;
+  const tipHelperText =
     selectedOption !== 'custom'
-      ? `${selectedOption}% of ${currencySymbol} ${receiptTotal.toFixed(2)}`
+      ? `${selectedOption}% of ${currencySymbol} ${parsedTotal.toFixed(2)}`
       : null;
 
   return (
     <View style={styles.container}>
-      <ModalHeader title="Edit Tip" onDone={onDone} />
+      <ModalHeader title="Edit Receipt Totals" onDone={onDone} />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={styles.sectionLabel}>RECEIPT TOTAL</Text>
 
-      <View style={styles.content}>
+        <View style={styles.inputCard}>
+          <Text style={styles.currencySymbol}>{currencySymbol}</Text>
+          <TextInput
+            style={styles.amountInput}
+            value={totalValue}
+            onChangeText={handleChangeTotal}
+            keyboardType="decimal-pad"
+            selectTextOnFocus
+          />
+        </View>
+
+        <Text style={styles.helperText}>
+          Changes will update the grand total
+        </Text>
+
+        <View style={styles.divider} />
+
         <Text style={styles.sectionLabel}>TIP PERCENTAGE</Text>
 
         <View style={styles.pillRow}>
@@ -134,8 +171,8 @@ export function EditTipModal({
           />
         </View>
 
-        {helperText !== null && (
-          <Text style={styles.helperText}>{helperText}</Text>
+        {tipHelperText !== null && (
+          <Text style={styles.helperText}>{tipHelperText}</Text>
         )}
 
         <View style={styles.divider} />
@@ -147,7 +184,7 @@ export function EditTipModal({
         >
           <Text style={styles.applyButtonText}>Apply</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -156,9 +193,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  scroll: {
+    flex: 1,
+  },
   content: {
     paddingHorizontal: 20,
     paddingTop: 16,
+    paddingBottom: 24,
   },
   sectionLabel: {
     fontFamily: 'Inter_600SemiBold',
@@ -167,38 +208,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     color: Color.WarmBrown,
     marginBottom: 12,
-  },
-  pillRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  pill: {
-    width: 62,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Color.Linen,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pillActive: {
-    backgroundColor: Color.Gold,
-  },
-  pillText: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 13,
-    lineHeight: 16,
-    color: Color.WarmBrown,
-    textAlign: 'center',
-  },
-  pillTextActive: {
-    fontFamily: 'Inter_600SemiBold',
-    color: Color.White,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: Color.Sand,
-    marginTop: 16,
-    marginBottom: 16,
   },
   inputCard: {
     height: 60,
@@ -229,6 +238,38 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
     color: Color.WarmBrown,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: Color.Sand,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+  pillRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  pill: {
+    width: 62,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: Color.Linen,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pillActive: {
+    backgroundColor: Color.Gold,
+  },
+  pillText: {
+    fontFamily: 'Inter_400Regular',
+    fontSize: 13,
+    lineHeight: 16,
+    color: Color.WarmBrown,
+    textAlign: 'center',
+  },
+  pillTextActive: {
+    fontFamily: 'Inter_600SemiBold',
+    color: Color.White,
   },
   applyButton: {
     height: 52,

@@ -6,7 +6,6 @@ export type {
   ShowModalAction,
   HideModalAction,
   ModalPayload,
-  EditReceiptTotalModalPayload,
-  EditTipModalPayload,
+  EditReceiptTotalsModalPayload,
 } from './types';
 export { useLayoutActions } from './hooks';
