@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { Color } from '@/styles';
-import { ModalHeader } from '@/components';
+import { Button, ModalHeader } from '@/components';
 import { CurrencySymbol } from '@/enums';
 
 const PRESETS = [5, 10, 15, 20] as const;
@@ -90,7 +90,7 @@ export function EditReceiptTotalsModal({
 
   return (
     <View style={styles.container}>
-      <ModalHeader title="Edit Receipt Totals" onDone={onDone} />
+      <ModalHeader title="Edit Receipt Totals" hideDone onDone={onDone} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -177,29 +177,21 @@ export function EditReceiptTotalsModal({
 
         <View style={styles.divider} />
 
-        <TouchableOpacity
-          style={styles.applyButton}
-          onPress={handleApply}
-          activeOpacity={0.85}
-        >
-          <Text style={styles.applyButtonText}>Apply</Text>
-        </TouchableOpacity>
+        <Button label="Apply" onPress={handleApply} />
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
   scroll: {
-    flex: 1,
+    flexShrink: 1,
   },
   content: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 24,
+    paddingBottom: 44,
   },
   sectionLabel: {
     fontFamily: 'Inter_600SemiBold',
@@ -269,19 +261,6 @@ const styles = StyleSheet.create({
   },
   pillTextActive: {
     fontFamily: 'Inter_600SemiBold',
-    color: Color.White,
-  },
-  applyButton: {
-    height: 52,
-    backgroundColor: Color.Gold,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  applyButtonText: {
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 16,
-    lineHeight: 19,
     color: Color.White,
   },
 });

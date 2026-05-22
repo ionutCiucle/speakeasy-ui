@@ -11,25 +11,28 @@ import { Color } from '@/styles';
 interface Props {
   title: string;
   isSubmitting?: boolean;
+  hideDone?: boolean;
   onDone: () => void;
 }
 
-export function ModalHeader({ title, isSubmitting, onDone }: Props) {
+export function ModalHeader({ title, isSubmitting, hideDone, onDone }: Props) {
   return (
     <View>
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
-        <TouchableOpacity
-          onPress={onDone}
-          disabled={isSubmitting}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          {isSubmitting ? (
-            <ActivityIndicator size="small" color={Color.Gold} />
-          ) : (
-            <Text style={styles.done}>Done</Text>
-          )}
-        </TouchableOpacity>
+        {!hideDone && (
+          <TouchableOpacity
+            onPress={onDone}
+            disabled={isSubmitting}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            {isSubmitting ? (
+              <ActivityIndicator size="small" color={Color.Gold} />
+            ) : (
+              <Text style={styles.done}>Done</Text>
+            )}
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.divider} />
     </View>

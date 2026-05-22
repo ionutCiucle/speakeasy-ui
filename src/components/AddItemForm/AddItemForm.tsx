@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
-import { Button } from './Button';
-import { Input, useValidatedTextField } from './Input';
-import { PriceInput } from './PriceInput';
+import { Button } from '../Button';
+import { Input, useValidatedTextField } from '../Input';
+import { PriceInput } from '../PriceInput';
 
 interface Props {
   currencyCode: string;

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Color } from '@/styles';
-import { IconButton } from './IconButton';
+import { IconButton } from '../IconButton';
 
 interface Props {
   children: React.ReactNode;

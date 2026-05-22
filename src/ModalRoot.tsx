@@ -24,16 +24,9 @@ import type {
 } from '@/state-management/layout/types';
 
 const SHEET_HEIGHT = Dimensions.get('window').height * 0.75;
-const COMPACT_SHEET_HEIGHT = SHEET_HEIGHT * 0.7;
 const DURATION = 240;
 
-const COMPACT_MODALS = new Set<ModalId>();
-
-function sheetHeightFor(id: ModalId | null): number {
-  return id !== null && COMPACT_MODALS.has(id)
-    ? COMPACT_SHEET_HEIGHT
-    : SHEET_HEIGHT;
-}
+const INTRINSIC_HEIGHT_MODALS = new Set<ModalId>([ModalId.EditReceiptTotals]);
 
 export function ModalRoot() {
   const activeModal = useAppSelector((state) => state.layout.activeModal);
@@ -68,10 +61,10 @@ export function ModalRoot() {
   }, [translateY, overlayOpacity]);
 
   const animateOut = useCallback(
-    (targetY: number, onDone: () => void) => {
+    (onDone: () => void) => {
       Animated.parallel([
         Animated.timing(translateY, {
-          toValue: targetY,
+          toValue: SHEET_HEIGHT,
           duration: DURATION,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
@@ -89,14 +82,14 @@ export function ModalRoot() {
 
   useEffect(() => {
     if (activeModal !== null) {
-      translateY.setValue(sheetHeightFor(activeModal));
+      translateY.setValue(SHEET_HEIGHT);
       overlayOpacity.setValue(0);
       renderedModalRef.current = activeModal;
       modalPayloadRef.current = modalPayload;
       setRenderedModal(activeModal);
       animateIn();
     } else if (renderedModalRef.current !== null) {
-      animateOut(sheetHeightFor(renderedModalRef.current), () => {
+      animateOut(() => {
         renderedModalRef.current = null;
         modalPayloadRef.current = null;
         setRenderedModal(null);
@@ -124,10 +117,10 @@ export function ModalRoot() {
       <Animated.View
         style={[
           styles.sheet,
-          {
-            height: sheetHeightFor(renderedModal),
-            transform: [{ translateY }],
-          },
+          renderedModal !== null && INTRINSIC_HEIGHT_MODALS.has(renderedModal)
+            ? { maxHeight: SHEET_HEIGHT }
+            : { height: SHEET_HEIGHT },
+          { transform: [{ translateY }] },
         ]}
       >
         <View style={styles.handle} />

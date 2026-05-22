@@ -212,6 +212,29 @@ Wired via `ModalId.EditTip` and `EditTipModalPayload { receiptTotal, currentTip,
 
 `ConfirmPaymentPage` tip card updated to `flexDirection: 'row', justifyContent: 'space-between'` with an "Edit" `TouchableOpacity` alongside the tip amount.
 
+## Components folder restructure
+
+Each flat component file (`Button.tsx`, `ModalHeader.tsx`, etc.) was moved into its own subdirectory following the existing `Input/` and `MainNav/` convention:
+
+```
+Button/
+  Button.tsx          ← component
+  Button.stories.tsx  ← story
+  index.ts            ← export * from './Button'
+  __tests__/
+    Button.test.tsx   ← test (if one existed)
+```
+
+17 components migrated: AccentCard, AddItemForm, Avatar, BackButton, BracketContainer, Button, CurrencySelector, IconButton, LocationSelector, Logo, MemberAvatars, MenuCard, ModalHeader, PageContainer, PageHeader, PriceInput, Wizard. The root `src/components/__tests__/` directory was dissolved — test files now live inside each component's own `__tests__/`. The top-level `src/components/index.ts` was unchanged; import paths still resolve because `'./Button'` now hits `Button/index.ts`. Cross-component relative imports (`'./IconButton'`, `'./Avatar'`, etc.) were updated to `'../IconButton'` etc.
+
+## EditReceiptTotalsModal polish
+
+- Done button hidden via new `hideDone` prop on `ModalHeader` (Apply button is present)
+- Apply button replaced with shared `<Button label="Apply" />` from `@/components`
+- Bottom padding increased to 44px
+- `COMPACT_MODALS` replaced by `INTRINSIC_HEIGHT_MODALS` in `ModalRoot` — modals in this set use `maxHeight` (content-sized) rather than a fixed height; `EditReceiptTotals` is the first member
+- Container `flex: 1` removed from the modal; `ScrollView` uses `flexShrink: 1` so the sheet shrinks to content
+
 ## Consolidated Edit Receipt Totals modal
 
 Replaced the separate `EditReceiptTotalModal` and `EditTipModal` with a single `EditReceiptTotalsModal` that covers both the receipt total input and the tip percentage/amount selectors. Both the "Edit" button on the receipt total card and the "Edit" button on the tip card in `ConfirmPaymentPage` now open `ModalId.EditReceiptTotals` with a unified `EditReceiptTotalsModalPayload { currentTotal, currentTip, currencyCode }`.

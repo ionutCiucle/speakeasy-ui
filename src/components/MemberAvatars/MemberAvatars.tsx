@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
 import { toInitials } from '@/utils';
-import { Avatar } from './Avatar';
+import { Avatar } from '../Avatar';
 
 interface Member {
   id: string;
