@@ -3,12 +3,11 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   StyleSheet,
   ScrollView,
 } from 'react-native';
 import { Color } from '@/styles';
-import { Button, ModalHeader } from '@/components';
+import { Button, ModalHeader, PriceInput } from '@/components';
 import { CurrencySymbol } from '@/enums';
 
 const PRESETS = [5, 10, 15, 20] as const;
@@ -53,28 +52,12 @@ export function EditReceiptTotalsModal({
     }
   }, [totalValue, selectedOption]);
 
-  const handleChangeTotal = useCallback((text: string) => {
-    const digits = text.replace(/[^0-9.]/g, '');
-    const parts = digits.split('.');
-    const cleaned =
-      parts.length > 2 ? `${parts[0]}.${parts.slice(1).join('')}` : digits;
-    setTotalValue(cleaned);
-  }, []);
-
   const handleSelectPreset = useCallback((pct: PresetPct) => {
     setSelectedOption(pct);
   }, []);
 
   const handleSelectCustom = useCallback(() => {
     setSelectedOption('custom');
-  }, []);
-
-  const handleChangeTip = useCallback((text: string) => {
-    const digits = text.replace(/[^0-9.]/g, '');
-    const parts = digits.split('.');
-    const cleaned =
-      parts.length > 2 ? `${parts[0]}.${parts.slice(1).join('')}` : digits;
-    setTipValue(cleaned);
   }, []);
 
   const handleApply = useCallback(() => {
@@ -99,16 +82,11 @@ export function EditReceiptTotalsModal({
       >
         <Text style={styles.sectionLabel}>RECEIPT TOTAL</Text>
 
-        <View style={styles.inputCard}>
-          <Text style={styles.currencySymbol}>{currencySymbol}</Text>
-          <TextInput
-            style={styles.amountInput}
-            value={totalValue}
-            onChangeText={handleChangeTotal}
-            keyboardType="decimal-pad"
-            selectTextOnFocus
-          />
-        </View>
+        <PriceInput
+          currencyCode={currencyCode}
+          value={totalValue}
+          onChangeValue={setTotalValue}
+        />
 
         <Text style={styles.helperText}>
           Changes will update the grand total
@@ -159,17 +137,12 @@ export function EditReceiptTotalsModal({
 
         <Text style={styles.sectionLabel}>TIP AMOUNT</Text>
 
-        <View style={styles.inputCard}>
-          <Text style={styles.currencySymbol}>{currencySymbol}</Text>
-          <TextInput
-            style={styles.amountInput}
-            value={tipValue}
-            onChangeText={handleChangeTip}
-            keyboardType="decimal-pad"
-            editable={selectedOption === 'custom'}
-            selectTextOnFocus
-          />
-        </View>
+        <PriceInput
+          currencyCode={currencyCode}
+          value={tipValue}
+          disabled={selectedOption !== 'custom'}
+          onChangeValue={setTipValue}
+        />
 
         {tipHelperText !== null && (
           <Text style={styles.helperText}>{tipHelperText}</Text>
@@ -200,29 +173,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     color: Color.WarmBrown,
     marginBottom: 12,
-  },
-  inputCard: {
-    height: 60,
-    backgroundColor: Color.Linen,
-    borderRadius: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    gap: 4,
-  },
-  currencySymbol: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 13,
-    lineHeight: 16,
-    color: Color.WarmBrown,
-  },
-  amountInput: {
-    flex: 1,
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 24,
-    lineHeight: 29,
-    color: Color.Espresso,
-    padding: 0,
   },
   helperText: {
     marginTop: 12,

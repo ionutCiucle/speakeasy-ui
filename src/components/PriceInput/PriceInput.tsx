@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Color } from '@/styles';
 
@@ -7,6 +7,7 @@ interface Props {
   value: string;
   invalid?: boolean;
   error?: string;
+  disabled?: boolean;
   onChangeValue: (text: string) => void;
 }
 
@@ -15,8 +16,11 @@ export function PriceInput({
   value,
   invalid,
   error,
+  disabled,
   onChangeValue,
 }: Props) {
+  const [isFocused, setIsFocused] = useState(false);
+
   const handleChangeText = useCallback(
     (text: string) => {
       const digits = text.replace(/[^0-9.]/g, '');
@@ -28,9 +32,19 @@ export function PriceInput({
     [onChangeValue],
   );
 
+  const handleFocus = useCallback(() => setIsFocused(true), []);
+  const handleBlur = useCallback(() => setIsFocused(false), []);
+
   return (
     <View>
-      <View style={[styles.priceFrame, invalid && styles.priceFrameInvalid]}>
+      <View
+        style={[
+          styles.priceFrame,
+          isFocused && styles.priceFrameFocused,
+          invalid && styles.priceFrameInvalid,
+          disabled && styles.priceFrameDisabled,
+        ]}
+      >
         <View style={styles.currencyBadgeContainer}>
           <Text style={styles.currencyCode}>{currencyCode}</Text>
         </View>
@@ -41,7 +55,10 @@ export function PriceInput({
           placeholderTextColor="#C3B99A"
           value={value}
           onChangeText={handleChangeText}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           keyboardType="decimal-pad"
+          editable={!disabled}
         />
       </View>
       {error && <Text style={styles.error}>{error}</Text>}
@@ -51,7 +68,7 @@ export function PriceInput({
 
 const styles = StyleSheet.create({
   priceFrame: {
-    height: 42,
+    height: 44,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
@@ -59,8 +76,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: Color.Ivory,
   },
+  priceFrameFocused: {
+    borderWidth: 1.5,
+    borderColor: Color.Gold,
+  },
   priceFrameInvalid: {
     borderColor: Color.Flame,
+  },
+  priceFrameDisabled: {
+    opacity: 0.5,
   },
   currencyBadgeContainer: {
     width: 46,
@@ -79,7 +103,7 @@ const styles = StyleSheet.create({
   },
   priceDivider: {
     width: 1,
-    height: 42,
+    alignSelf: 'stretch',
     backgroundColor: Color.Sand,
   },
   priceInput: {

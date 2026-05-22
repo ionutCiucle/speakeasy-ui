@@ -212,6 +212,19 @@ Wired via `ModalId.EditTip` and `EditTipModalPayload { receiptTotal, currentTip,
 
 `ConfirmPaymentPage` tip card updated to `flexDirection: 'row', justifyContent: 'space-between'` with an "Edit" `TouchableOpacity` alongside the tip amount.
 
+## PriceInput improvements and EditReceiptTotalsModal integration
+
+`PriceInput` updated:
+- Height `42 → 44` to match `Input` small variant
+- Divider uses `alignSelf: 'stretch'` instead of hardcoded height
+- Focus state: gold `1.5px` border via `isFocused` state (same pattern as `Input`)
+- New `disabled` prop: sets `editable={false}` and `opacity: 0.5` on the frame
+
+`EditReceiptTotalsModal` updated:
+- Both Receipt Total and Tip Amount inputs now use `<PriceInput>` from `@/components`
+- Tip field passes `disabled={selectedOption !== 'custom'}` — read-only when a preset is active
+- Removed inline `inputCard`, `currencySymbol`, `amountInput` styles and filtering handlers
+
 ## Components folder restructure
 
 Each flat component file (`Button.tsx`, `ModalHeader.tsx`, etc.) was moved into its own subdirectory following the existing `Input/` and `MainNav/` convention:
