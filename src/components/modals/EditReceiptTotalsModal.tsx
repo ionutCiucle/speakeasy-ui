@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Color } from '@/styles';
-import { Button, ModalHeader, PriceInput } from '@/components';
+import { Button, ModalHeader, Pill, PriceInput } from '@/components';
 import { CurrencySymbol } from '@/enums';
 
 const PRESETS = [5, 10, 15, 20] as const;
@@ -97,40 +91,21 @@ export function EditReceiptTotalsModal({
         <Text style={styles.sectionLabel}>TIP PERCENTAGE</Text>
 
         <View style={styles.pillRow}>
-          {PRESETS.map((pct) => {
-            const active = selectedOption === pct;
-            return (
-              <TouchableOpacity
-                key={pct}
-                style={[styles.pill, active && styles.pillActive]}
-                onPress={() => handleSelectPreset(pct)}
-                activeOpacity={0.7}
-              >
-                <Text
-                  style={[styles.pillText, active && styles.pillTextActive]}
-                >
-                  {pct}%
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-          <TouchableOpacity
-            style={[
-              styles.pill,
-              selectedOption === 'custom' && styles.pillActive,
-            ]}
+          {PRESETS.map((pct) => (
+            <Pill
+              key={pct}
+              label={`${pct}%`}
+              active={selectedOption === pct}
+              variant="preset"
+              onPress={() => handleSelectPreset(pct)}
+            />
+          ))}
+          <Pill
+            label="Custom"
+            active={selectedOption === 'custom'}
+            variant="preset"
             onPress={handleSelectCustom}
-            activeOpacity={0.7}
-          >
-            <Text
-              style={[
-                styles.pillText,
-                selectedOption === 'custom' && styles.pillTextActive,
-              ]}
-            >
-              Custom
-            </Text>
-          </TouchableOpacity>
+          />
         </View>
 
         <View style={styles.divider} />
@@ -190,27 +165,5 @@ const styles = StyleSheet.create({
   pillRow: {
     flexDirection: 'row',
     gap: 10,
-  },
-  pill: {
-    width: 62,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Color.Linen,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pillActive: {
-    backgroundColor: Color.Gold,
-  },
-  pillText: {
-    fontFamily: 'Inter_400Regular',
-    fontSize: 13,
-    lineHeight: 16,
-    color: Color.WarmBrown,
-    textAlign: 'center',
-  },
-  pillTextActive: {
-    fontFamily: 'Inter_600SemiBold',
-    color: Color.White,
   },
 });

@@ -212,6 +212,18 @@ Wired via `ModalId.EditTip` and `EditTipModalPayload { receiptTotal, currentTip,
 
 `ConfirmPaymentPage` tip card updated to `flexDirection: 'row', justifyContent: 'space-between'` with an "Edit" `TouchableOpacity` alongside the tip amount.
 
+## Pill component
+
+`src/components/Pill/Pill.tsx` — shared pill component used across filter rows and preset selectors.
+
+Two variants via `variant` prop:
+- `'filter'` (default): `height: 32`, `paddingHorizontal: 16`, `borderRadius: 16`, `Color.Cream` inactive bg, `1.5px Color.Sand` border. Used in MyTabs filter row.
+- `'preset'`: fixed `62×36px`, `borderRadius: 18`, `Color.Linen` inactive bg, no border. Used in EditReceiptTotalsModal tip percentage row.
+
+Active state is identical for both: `Color.Gold` bg, white `Inter_600SemiBold` text; filter variant also switches border to Gold.
+
+`FilterPills` (MyTabs) refactored to use `<Pill variant="filter">` — row layout and gap are all that remains in the wrapper. `EditReceiptTotalsModal` pill row now uses `<Pill variant="preset">`, removing ~30 lines of inline styles.
+
 ## PriceInput improvements and EditReceiptTotalsModal integration
 
 `PriceInput` updated:
